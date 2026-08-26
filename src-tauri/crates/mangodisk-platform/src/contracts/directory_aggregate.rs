@@ -1,5 +1,8 @@
 use std::path::PathBuf;
 
+// Only the macOS and Windows native traversal implementations batch progress
+// callbacks; the portable walker reports through Core directly.
+#[cfg(any(windows, target_os = "macos"))]
 const PROGRESS_ENTRY_BATCH: u64 = 4_096;
 
 /// Aggregates files that share one direct child of a scanned directory.
@@ -54,6 +57,7 @@ pub enum DirectoryTreeAggregateError {
 /// Coalesces hot-path traversal observations before they reach Core's own
 /// time-based progress throttle. Keeping the entry batch identical on each
 /// platform avoids millions of callbacks while still refreshing long scans.
+#[cfg(any(windows, target_os = "macos"))]
 pub(crate) struct DirectoryAggregateProgress<'a> {
     callback: &'a (dyn Fn(&std::path::Path, u64, u64) + Sync),
     pending_entries: u64,
@@ -61,6 +65,7 @@ pub(crate) struct DirectoryAggregateProgress<'a> {
     pending_bytes: u64,
 }
 
+#[cfg(any(windows, target_os = "macos"))]
 impl<'a> DirectoryAggregateProgress<'a> {
     pub(crate) fn new(callback: &'a (dyn Fn(&std::path::Path, u64, u64) + Sync)) -> Self {
         Self {
@@ -107,7 +112,7 @@ impl<'a> DirectoryAggregateProgress<'a> {
     }
 }
 
-#[cfg(test)]
+#[cfg(all(test, any(windows, target_os = "macos")))]
 pub(crate) fn reference_directory_tree_aggregate(root: &std::path::Path) -> DirectoryTreeAggregate {
     use std::{collections::BTreeMap, fs, time::UNIX_EPOCH};
 
@@ -193,7 +198,7 @@ pub(crate) fn reference_directory_tree_aggregate(root: &std::path::Path) -> Dire
     }
 }
 
-#[cfg(test)]
+#[cfg(all(test, any(windows, target_os = "macos")))]
 mod tests {
     use std::sync::atomic::{AtomicU64, Ordering};
 

@@ -7,8 +7,14 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { APP_NAME, PRIMARY_NAV_GROUPS, SECONDARY_NAV_ITEMS } from '@/lib/models/application-shell';
 import type { PageId } from '@/lib/models/application-shell';
 import { ICON_NAMES } from '@/lib/models/ui';
+import { OperatingSystemService } from '@/lib/services/operating-system-service';
 
 const { t } = useI18n({ useScope: 'global' });
+// Application uninstall, startup, and system optimization have no Linux
+// platform adapter yet, so the whole system group stays out of the sidebar.
+const primaryNavGroups = OperatingSystemService.isLinux()
+  ? PRIMARY_NAV_GROUPS.filter(group => group.id !== 'system')
+  : PRIMARY_NAV_GROUPS;
 
 const props = withDefaults(
   defineProps<{
@@ -70,7 +76,7 @@ watch(
 
     <nav class="nav-list" :aria-label="APP_NAME">
       <div
-        v-for="group in PRIMARY_NAV_GROUPS"
+        v-for="group in primaryNavGroups"
         :key="group.id"
         class="nav-group"
         role="group"

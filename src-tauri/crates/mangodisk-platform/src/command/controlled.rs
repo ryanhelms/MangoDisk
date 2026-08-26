@@ -12,6 +12,18 @@ use std::{
 };
 
 const PROCESS_POLL_INTERVAL: Duration = Duration::from_millis(10);
+// PATH stays excluded for parity with macOS: isolated tool commands launch
+// from a captured absolute executable, and child lookup through PATH would
+// weaken the isolation boundary.
+#[cfg(target_os = "linux")]
+const CONTROLLED_ENV_ALLOWLIST: &[&str] = &[
+    "HOME",
+    "TMPDIR",
+    "XDG_CACHE_HOME",
+    "XDG_CONFIG_HOME",
+    "XDG_DATA_HOME",
+    "XDG_STATE_HOME",
+];
 #[cfg(target_os = "macos")]
 const CONTROLLED_ENV_ALLOWLIST: &[&str] = &["HOME", "TMPDIR"];
 #[cfg(windows)]
@@ -85,6 +97,7 @@ impl ControlledExecutable {
     /// Captures an executable found by the platform tool inventory. The
     /// canonical path and file identity are stored together so a different
     /// regular file at the same path cannot pass pre-launch validation.
+    #[cfg(any(test, windows, target_os = "macos"))]
     pub(crate) fn capture(path: &Path) -> Result<Self, ControlledCommandError> {
         let (canonical_path, identity) = executable_identity(path)?;
         Ok(Self {

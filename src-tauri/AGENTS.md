@@ -5,7 +5,7 @@ This file applies only to `src-tauri/` and inherits the repository-wide rules in
 ## Workspace boundaries
 
 - `crates/mangodisk-core`: platform-neutral product domains, use cases, safety policy, persistence, and reporting. It must not depend on Tauri or a WebView.
-- `crates/mangodisk-platform`: OS contracts and macOS/Windows implementations. It reports typed capabilities and safe fallbacks; it does not decide product workflows.
+- `crates/mangodisk-platform`: OS contracts and macOS/Windows/Linux implementations. It reports typed capabilities and safe fallbacks; it does not decide product workflows.
 - `src/`: thin Tauri adapter. Commands validate transport input, call Core, translate typed errors, and publish events.
 - `plugins/`: isolated Tauri plugin integration only when a capability genuinely needs a plugin.
 - A formal CLI is a separate console binary over Core. Engineering-only maintenance commands belong in `xtask`, not in the GUI binary or public CLI.

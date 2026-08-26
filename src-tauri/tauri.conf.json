@@ -24,13 +24,7 @@
         "minWidth": 1000,
         "minHeight": 700,
         "center": true,
-        "visible": false,
-        "titleBarStyle": "Overlay",
-        "hiddenTitle": true,
-        "trafficLightPosition": {
-          "x": 14,
-          "y": 16
-        }
+        "visible": false
       }
     ]
   },

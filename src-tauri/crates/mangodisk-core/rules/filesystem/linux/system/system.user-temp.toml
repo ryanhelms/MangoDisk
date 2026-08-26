@@ -1,0 +1,38 @@
+# `${temp}` on Linux resolves to the shared system `/tmp` when TMPDIR is unset,
+# unlike the per-user temporary directories on macOS and Windows. The rule stays
+# opt-in: the shared tree contains session sockets, lock files, and private
+# mount namespaces owned by other accounts.
+id = "system.user-temp"
+schema_version = 3
+rule_version = 1
+platform = "linux"
+category = "system"
+risk = "recoverable"
+default_selected = false
+required_stopped_processes = []
+
+[[applicability]]
+kind = "anyRootExists"
+
+[[roots]]
+template = "${temp}"
+
+[matcher]
+kind = "allOf"
+items = [
+  { kind = "olderThan", days = 7 },
+  { kind = "not", item = { kind = "extensionIn", values = ["db", "sqlite", "sqlite3"] } },
+  { kind = "not", item = { kind = "pathSegmentIn", values = [".X11-unix", ".ICE-unix", ".font-unix", ".TEST-unix"] } },
+  { kind = "not", item = { kind = "nameGlob", values = ["systemd-private-*", "snap-private-*", ".X*-lock"] } },
+]
+
+[execution]
+kind = "deleteMatchingContents"
+requires_app_close = false
+
+[verification]
+lifecycle = "verified"
+evidence = "A shared /tmp holds other accounts' session sockets, lock files, and private mount namespaces; the matcher adds a seven-day age gate and excludes database files, socket directories, systemd/snap private trees, and X lock files"
+verified_at = "2026-08-26"
+verified_platform = "linux"
+references = ["https://specifications.freedesktop.org/basedir-spec/latest/"]

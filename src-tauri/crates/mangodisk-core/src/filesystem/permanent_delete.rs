@@ -24,12 +24,14 @@ pub(crate) struct AnalysisDeleteOutcome {
 
 static NEXT_DELETE_STAGING_ID: AtomicU64 = AtomicU64::new(1);
 // Small directories remain serial because thread startup can cost more than
-// their filesystem work. Larger batches use conservative platform caps chosen
-// from repeated release benchmarks; higher concurrency caused unstable delete
-// latency, especially on macOS and Windows systems with active file indexing.
+// their filesystem work. Larger batches use conservative platform caps. Release
+// benchmarks found unstable delete latency at higher concurrency on indexed
+// macOS and Windows systems; Linux initially uses the smaller cap.
 const PARALLEL_DELETE_ENTRY_THRESHOLD: usize = 512;
 const PARALLEL_DELETE_BATCH_SIZE: usize = 8_192;
 #[cfg(target_os = "macos")]
+const MAX_PARALLEL_DELETE_WORKERS: usize = 2;
+#[cfg(target_os = "linux")]
 const MAX_PARALLEL_DELETE_WORKERS: usize = 2;
 #[cfg(windows)]
 const MAX_PARALLEL_DELETE_WORKERS: usize = 4;

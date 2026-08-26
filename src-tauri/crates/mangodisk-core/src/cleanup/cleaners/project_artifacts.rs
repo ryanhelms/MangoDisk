@@ -2203,6 +2203,11 @@ const fn current_platform_name() -> &'static str {
     "macos"
 }
 
+#[cfg(target_os = "linux")]
+const fn current_platform_name() -> &'static str {
+    "linux"
+}
+
 #[cfg(windows)]
 const fn current_platform_name() -> &'static str {
     "windows"

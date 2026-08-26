@@ -1,0 +1,37 @@
+# Firefox profiles, bookmarks, credentials, and session data live under
+# ~/.mozilla and must never be selected. Only the XDG cache tree is eligible.
+id = "browser.firefox-cache"
+schema_version = 3
+rule_version = 1
+platform = "linux"
+category = "browser"
+risk = "safe"
+default_selected = true
+required_stopped_processes = ["firefox"]
+
+[[applicability]]
+kind = "anyOf"
+items = [
+  { kind = "applicationInstalled", identifiers = ["org.mozilla.firefox", "Mozilla Firefox", "Firefox"] },
+  { kind = "anyRootExists" },
+]
+
+[[roots]]
+template = "${xdg_cache_home}/mozilla/firefox"
+
+[matcher]
+kind = "all"
+
+[execution]
+kind = "deleteMatchingContents"
+requires_app_close = true
+
+[verification]
+lifecycle = "verified"
+evidence = "Firefox stores its Linux disk cache under the XDG cache mozilla/firefox tree, separate from the ~/.mozilla profile that contains bookmarks, credentials, history, and settings"
+verified_at = "2026-08-26"
+verified_platform = "linux"
+references = [
+  "https://support.mozilla.org/en-US/kb/how-clear-firefox-cache",
+  "https://support.mozilla.org/en-US/kb/profiles-where-firefox-stores-user-data",
+]

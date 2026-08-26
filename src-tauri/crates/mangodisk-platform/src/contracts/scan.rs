@@ -142,6 +142,7 @@ pub struct FilesystemChangeMonitor {
 }
 
 impl FilesystemChangeMonitor {
+    #[cfg(any(windows, target_os = "macos"))]
     pub(crate) fn new(backend: Arc<dyn FilesystemChangeMonitorBackend>) -> Self {
         Self { backend }
     }

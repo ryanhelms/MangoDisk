@@ -6,10 +6,13 @@ use std::{
 
 use mangodisk_platform::{current_platform, Platform};
 
-#[cfg(not(target_os = "windows"))]
+#[cfg(any(target_os = "macos", all(test, not(target_os = "windows"))))]
 use mangodisk_platform::ScanPurpose;
 
-#[cfg(not(target_os = "windows"))]
+// Only macOS consumes metadata snapshots in production (the user-cache
+// inventory revalidates before deletion); tests keep the platform-neutral
+// snapshot logic covered everywhere except Windows, as before.
+#[cfg(any(target_os = "macos", all(test, not(target_os = "windows"))))]
 const METADATA_OBSERVER_BATCH_FILES: u64 = 256;
 
 pub(crate) struct MetadataFingerprintEntry {
@@ -18,7 +21,7 @@ pub(crate) struct MetadataFingerprintEntry {
 }
 
 #[derive(Default)]
-#[cfg(not(target_os = "windows"))]
+#[cfg(any(target_os = "macos", all(test, not(target_os = "windows"))))]
 pub(crate) struct MetadataTreeSnapshot {
     pub(crate) bytes: u64,
     pub(crate) file_count: u64,
@@ -32,7 +35,7 @@ pub(crate) struct MetadataTreeSnapshot {
 /// initial scan so equal-sized replacements cannot pass validation. It avoids
 /// reading file contents because doing so could repeat full-scan I/O for a
 /// large directory immediately before permanent deletion.
-#[cfg(not(target_os = "windows"))]
+#[cfg(any(target_os = "macos", all(test, not(target_os = "windows"))))]
 pub(crate) fn snapshot_metadata_tree(
     path: &Path,
     scan_root: &Path,
@@ -47,7 +50,7 @@ pub(crate) fn snapshot_metadata_tree(
 /// several seconds to fingerprint. Bounded batches keep progress visibly
 /// active without adding an atomic update for every file. Each file is still
 /// reported exactly once, so adapters can aggregate counts without overlap.
-#[cfg(not(target_os = "windows"))]
+#[cfg(any(target_os = "macos", all(test, not(target_os = "windows"))))]
 pub(crate) fn snapshot_metadata_tree_with_observer(
     path: &Path,
     scan_root: &Path,

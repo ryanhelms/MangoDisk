@@ -1,10 +1,9 @@
+#[cfg(target_os = "linux")]
+pub use crate::linux::LinuxPlatform as CurrentPlatform;
 #[cfg(target_os = "macos")]
 pub use crate::macos::MacOsPlatform as CurrentPlatform;
 #[cfg(windows)]
 pub use crate::windows::WindowsPlatform as CurrentPlatform;
-
-#[cfg(not(any(windows, target_os = "macos")))]
-compile_error!("MangoDisk currently supports Windows and macOS");
 
 /// Returns the stateless adapter for the current operating system.
 pub fn current_platform() -> CurrentPlatform {
@@ -28,6 +27,10 @@ pub fn application_directories(
     #[cfg(target_os = "macos")]
     {
         crate::macos::application_directories(identifier)
+    }
+    #[cfg(target_os = "linux")]
+    {
+        crate::linux::application_directories(identifier)
     }
     #[cfg(windows)]
     {

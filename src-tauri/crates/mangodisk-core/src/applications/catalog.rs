@@ -6,8 +6,8 @@ use std::{
 
 use mangodisk_platform::InstalledApplication;
 use mangodisk_platform::{
-    current_platform, ControlledExecutable, Platform, PlatformCancellation, RunningProcessIdentity,
-    SystemInventory,
+    current_platform, ControlledExecutable, Platform, PlatformCancellation, PlatformErrorCode,
+    RunningProcessIdentity, SystemInventory,
 };
 
 use crate::filesystem::metadata::display_path;
@@ -243,10 +243,15 @@ fn cached_system_inventory(
             if cancellation.is_cancelled() {
                 return (SystemInventory::default(), false, None);
             }
-            log::warn!(
-                "application_inventory_capture_failed error_digest={}",
-                blake3::hash(error.as_bytes()).to_hex()
-            );
+            // Platforms without an inventory adapter report Unsupported on
+            // every scan by design; only genuine capture failures are worth a
+            // warning.
+            if error.code() != PlatformErrorCode::Unsupported {
+                log::warn!(
+                    "application_inventory_capture_failed error_digest={}",
+                    blake3::hash(error.as_bytes()).to_hex()
+                );
+            }
             // A stale inventory is more useful than an empty one after a
             // revision-probe failure, but only positive matches remain safe.
             if let Ok(guard) = cache.lock() {

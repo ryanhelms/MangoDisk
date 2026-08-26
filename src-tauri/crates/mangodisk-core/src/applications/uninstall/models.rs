@@ -14,6 +14,7 @@ pub const APPLICATION_UNINSTALL_BATCH_PLAN_SCHEMA_VERSION: u32 = 1;
 #[serde(rename_all = "camelCase")]
 pub enum ApplicationUninstallPlatform {
     MacosBundle,
+    Unsupported,
     WindowsRegistry,
 }
 

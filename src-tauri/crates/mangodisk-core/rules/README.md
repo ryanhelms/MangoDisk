@@ -20,7 +20,9 @@ rules/
 │   │   ├── development/
 │   │   ├── ai/
 │   │   └── container/
-│   └── windows/
+│   ├── windows/
+│   │   └── ...
+│   └── linux/
 │       └── ...
 └── project-artifacts/
     ├── rust.toml
@@ -81,7 +83,7 @@ See [`filesystem/macos/development/dev.pnpm-cache.toml`](filesystem/macos/develo
 
 - `id` must use lowercase ASCII letters, digits, `.`, `-`, or `_`, and the file name must be `<id>.toml`.
 - `rule_version` must be positive. Increment it when a change alters roots, matching, execution, risk, applicability, or verification semantics.
-- `platform` is `macos` or `windows`.
+- `platform` is `macos`, `windows`, or `linux`.
 - `category` is `system`, `browser`, `application`, `development`, `ai`, or `container`.
 - `risk` is `safe`, `recoverable`, or `highImpact`.
 - `default_selected = true` is allowed only for `safe` rules. `recommended_selected` controls the shared recommendation used by the desktop app and the CLI `recommended` selection. A `recoverable` rule may be recommended only when every root has `verified_rebuildable = true`.
@@ -121,6 +123,7 @@ Every root template must begin with one controlled, lowercase variable and use `
 - All platforms: `${home}`, `${temp}`, `${system_root}`
 - macOS: `${user_library}`, `${application_support}`, `${darwin_user_cache}`
 - Windows: `${local_app_data}`, `${roaming_app_data}`, `${program_files}`, `${program_data}`
+- Linux: `${xdg_cache_home}`, `${xdg_config_home}`, `${xdg_data_home}`, `${xdg_state_home}`
 
 A static root needs only `template`. Use `kind = "childDirectories"` only when the rule must expand direct child directories through `child_names`, `child_prefixes`, `include_all_children`, or fixed `suffixes`. The validator rejects parent traversal, uncontrolled variables, duplicate roots, protected locations, unsafe expansion, and broad matching outside recognized cache or verified rebuildable boundaries.
 
@@ -187,7 +190,7 @@ See [`project-artifacts/node.toml`](project-artifacts/node.toml) for a real rule
 Project artifact constraints are intentionally narrow:
 
 - `id` must start with `project.` and use lowercase ASCII tokens separated by dots.
-- `platforms` must contain one or both of `macos` and `windows`, without duplicates.
+- `platforms` must contain at least one of `macos`, `windows`, and `linux`, without duplicates.
 - `category`, `risk`, and `default_selected` must remain `development`, `recoverable`, and `false`.
 - `[match]` must identify the project with at least one `file_names_any` or extension-like `file_suffixes_any` value. Use `relative_paths_all` and `relative_paths_any` only for additional project evidence.
 - Every rule needs at least one artifact. `relativeDirectory` selects a normalized relative path. `descendantDirectory` selects one directory name below the project and requires `max_depth` from 1 through 64.

@@ -409,7 +409,11 @@ fn capture_catalog(operation: &OperationGuard) -> CoreResult<CatalogSession> {
         let cancelled = operation.cancellation_flag();
         move || cancelled.load(std::sync::atomic::Ordering::Relaxed)
     });
-    let states = current_platform().scan_system_settings(&setting_ids, &cancellation)?;
+    let states = if setting_ids.is_empty() {
+        Vec::new()
+    } else {
+        current_platform().scan_system_settings(&setting_ids, &cancellation)?
+    };
     operation.ensure_not_cancelled()?;
     let states = states
         .into_iter()
@@ -549,6 +553,10 @@ fn current_platform_kind() -> SystemSettingsPlatform {
     #[cfg(target_os = "macos")]
     {
         SystemSettingsPlatform::Macos
+    }
+    #[cfg(target_os = "linux")]
+    {
+        SystemSettingsPlatform::Linux
     }
     #[cfg(windows)]
     {

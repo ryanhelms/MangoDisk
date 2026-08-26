@@ -48,6 +48,7 @@ pub(crate) struct DeclarativeRuleSource {
 #[serde(rename_all = "lowercase")]
 pub(crate) enum SourcePlatform {
     Macos,
+    Linux,
     Windows,
 }
 
@@ -55,6 +56,7 @@ impl SourcePlatform {
     pub(crate) const fn as_str(self) -> &'static str {
         match self {
             Self::Macos => "macos",
+            Self::Linux => "linux",
             Self::Windows => "windows",
         }
     }
@@ -240,6 +242,10 @@ pub(crate) enum SourceLifecycle {
 pub(crate) enum RootVariable {
     Home,
     Temp,
+    XdgCacheHome,
+    XdgConfigHome,
+    XdgDataHome,
+    XdgStateHome,
     LocalAppData,
     RoamingAppData,
     SystemRoot,
@@ -255,6 +261,10 @@ impl RootVariable {
         match self {
             Self::Home => "home",
             Self::Temp => "temp",
+            Self::XdgCacheHome => "xdg_cache_home",
+            Self::XdgConfigHome => "xdg_config_home",
+            Self::XdgDataHome => "xdg_data_home",
+            Self::XdgStateHome => "xdg_state_home",
             Self::LocalAppData => "local_app_data",
             Self::RoamingAppData => "roaming_app_data",
             Self::SystemRoot => "system_root",
@@ -480,7 +490,11 @@ fn verified_rebuildable_root_allowed(parts: &RootTemplateParts) -> bool {
             RootVariable::UserLibrary
             | RootVariable::LocalAppData
             | RootVariable::RoamingAppData
-            | RootVariable::ApplicationSupport => true,
+            | RootVariable::ApplicationSupport
+            | RootVariable::XdgCacheHome
+            | RootVariable::XdgConfigHome
+            | RootVariable::XdgDataHome
+            | RootVariable::XdgStateHome => true,
             RootVariable::Temp
             | RootVariable::SystemRoot
             | RootVariable::ProgramFiles
@@ -687,6 +701,10 @@ fn validate_protected_root_policy(rule_id: &str, parts: &RootTemplateParts) -> R
             }
         }
         RootVariable::Temp
+        | RootVariable::XdgCacheHome
+        | RootVariable::XdgConfigHome
+        | RootVariable::XdgDataHome
+        | RootVariable::XdgStateHome
         | RootVariable::LocalAppData
         | RootVariable::RoamingAppData
         | RootVariable::ApplicationSupport
@@ -865,6 +883,10 @@ pub(crate) fn parse_root_template(template: &str) -> Result<RootTemplateParts, S
     let variable = match variable_name {
         "home" => RootVariable::Home,
         "temp" => RootVariable::Temp,
+        "xdg_cache_home" => RootVariable::XdgCacheHome,
+        "xdg_config_home" => RootVariable::XdgConfigHome,
+        "xdg_data_home" => RootVariable::XdgDataHome,
+        "xdg_state_home" => RootVariable::XdgStateHome,
         "local_app_data" => RootVariable::LocalAppData,
         "roaming_app_data" => RootVariable::RoamingAppData,
         "system_root" => RootVariable::SystemRoot,
@@ -929,6 +951,16 @@ const fn root_variable_allowed_for_platform(
                 | RootVariable::ApplicationSupport
                 | RootVariable::DarwinUserCache
         ),
+        SourcePlatform::Linux => matches!(
+            variable,
+            RootVariable::Home
+                | RootVariable::Temp
+                | RootVariable::SystemRoot
+                | RootVariable::XdgCacheHome
+                | RootVariable::XdgConfigHome
+                | RootVariable::XdgDataHome
+                | RootVariable::XdgStateHome
+        ),
         SourcePlatform::Windows => matches!(
             variable,
             RootVariable::Home
@@ -990,11 +1022,14 @@ fn all_matcher_root_allowed(parts: &RootTemplateParts) -> bool {
     match parts.variable {
         // Shared temporary roots always require an age, name, or exclusion gate.
         RootVariable::Temp => false,
-        RootVariable::DarwinUserCache => true,
+        RootVariable::DarwinUserCache | RootVariable::XdgCacheHome => true,
         RootVariable::UserLibrary
         | RootVariable::LocalAppData
         | RootVariable::RoamingAppData
-        | RootVariable::ApplicationSupport => contains_rebuildable_boundary(&parts.suffix),
+        | RootVariable::ApplicationSupport
+        | RootVariable::XdgConfigHome
+        | RootVariable::XdgDataHome
+        | RootVariable::XdgStateHome => contains_rebuildable_boundary(&parts.suffix),
         RootVariable::Home => {
             !is_personal_home_directory(&parts.suffix[0])
                 && contains_rebuildable_boundary(&parts.suffix)
@@ -1305,6 +1340,29 @@ verified_platform = "{platform}"
         assert!(parse_root_template("${home}/${temp}").is_err());
         assert!(parse_root_template("${home}/Library//Caches").is_err());
         assert!(parse_root_template(" ${home}/Library/Caches").is_err());
+    }
+
+    #[test]
+    fn linux_rules_accept_only_linux_root_variables() {
+        for variable in [
+            "xdg_cache_home",
+            "xdg_config_home",
+            "xdg_data_home",
+            "xdg_state_home",
+        ] {
+            let root = format!("${{{variable}}}/FixtureCache");
+            let source = fixture_source(
+                "fixture.rule",
+                "linux",
+                &root,
+                "verified",
+                r#"kind = "all""#,
+            );
+            assert!(parse_catalog(&[("linux/system/fixture.rule.toml", &source)]).is_ok());
+
+            let macos_source = source.replace("linux", "macos");
+            assert!(parse_catalog(&[("macos/system/fixture.rule.toml", &macos_source)]).is_err());
+        }
     }
 
     #[test]

@@ -68,7 +68,7 @@ export interface ApplicationLeftoverResult {
   historySaved: boolean;
 }
 
-export type ApplicationUninstallPlatform = 'macosBundle' | 'windowsRegistry';
+export type ApplicationUninstallPlatform = 'macosBundle' | 'windowsRegistry' | 'unsupported';
 export type ApplicationUninstallInstallerKind =
   'windowsMsi' | 'windowsAppx' | 'windowsScoop' | 'windowsChocolatey' | 'windowsRegistered';
 export type ApplicationUninstallInventorySource =

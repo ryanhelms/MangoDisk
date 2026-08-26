@@ -17,8 +17,9 @@ pub use applications::{
     MacosPrivilegedApplicationRemovalOutcome, SystemInventory, WindowsRegisteredUninstallKind,
     WindowsRegistryView,
 };
-#[cfg(test)]
+#[cfg(all(test, any(windows, target_os = "macos")))]
 pub(crate) use directory_aggregate::reference_directory_tree_aggregate;
+#[cfg(any(windows, target_os = "macos"))]
 pub(crate) use directory_aggregate::DirectoryAggregateProgress;
 pub use directory_aggregate::{
     DirectPhysicalDirectoryEnumeration, DirectoryTreeAggregate, DirectoryTreeAggregateError,
@@ -34,6 +35,7 @@ pub use processes::{
     ApplicationProcessCloseMode, ApplicationProcessCloseResult, ApplicationProcessTarget,
     RunningProcessIdentity,
 };
+#[cfg(any(windows, target_os = "macos"))]
 pub(crate) use scan::FilesystemChangeMonitorBackend;
 pub use scan::{
     DirectoryEntryIdentities, FastAnalysisQuery, FastAnalysisRecord, FastAnalysisScanError,

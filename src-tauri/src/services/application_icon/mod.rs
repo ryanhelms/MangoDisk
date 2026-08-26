@@ -2,6 +2,7 @@ use std::path::PathBuf;
 
 use serde::Serialize;
 
+#[cfg(any(windows, target_os = "macos"))]
 mod cache;
 #[cfg(target_os = "macos")]
 mod macos;
@@ -62,6 +63,7 @@ fn load_application_icons(
 }
 
 impl ApplicationIcon {
+    #[cfg(any(windows, target_os = "macos"))]
     fn new(path: String, data_url: String) -> Self {
         Self { path, data_url }
     }

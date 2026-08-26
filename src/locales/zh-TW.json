@@ -1774,7 +1774,7 @@
     "entries": {
       "system.user-temp": {
         "name": "使用者暫存檔案",
-        "description": "Windows 與應用程式寫入的暫存工作檔案",
+        "description": "作業系統與應用程式寫入的暫存工作檔案",
         "impact": "佔用中的檔案會被跳過；應用程式需要時會重新建立暫存內容。"
       },
       "system.darwin-user-cache": {
@@ -1819,8 +1819,8 @@
       },
       "system.thumbnail-cache": {
         "name": "縮圖與圖示快取",
-        "description": "檔案總管為檔案預覽和圖示產生的快取資料庫",
-        "impact": "下次瀏覽資料夾時，Windows 會視需要重新產生預覽和圖示。"
+        "description": "檔案管理員為檔案預覽和圖示產生的可重建快取",
+        "impact": "原始檔案不會受影響；下次瀏覽資料夾時會視需要重新產生預覽和圖示。"
       },
       "system.directx-shader-cache": {
         "name": "DirectX 著色器快取",
@@ -2307,6 +2307,11 @@
         "description": "Yarn 已下載的套件快取",
         "impact": "不會刪除專案或已安裝的相依套件；後續安裝時可能重新下載套件。"
       },
+      "dev.bun-cache": {
+        "name": "Bun 下載快取",
+        "description": "Bun 已下載的套件快取",
+        "impact": "不會刪除專案或已安裝的相依套件；後續安裝時可能重新下載套件。"
+      },
       "dev.pip-cache": {
         "name": "pip 下載快取",
         "description": "Python pip 已下載的套件與 wheel 快取",
@@ -2346,6 +2351,11 @@
         "name": "Cargo 與 Rustup 快取",
         "description": "Cargo 登錄資料、Git 相依套件及 Rustup 下載快取",
         "impact": "不會刪除專案原始碼或已安裝的工具鏈；後續建置可能重新下載相依套件。"
+      },
+      "dev.hex-cache": {
+        "name": "Hex 下載快取",
+        "description": "Hex 已下載的套件快取",
+        "impact": "不會刪除專案或 Hex 設定；後續安裝時可能重新下載套件。"
       },
       "dev.cargo-extracted-sources": {
         "name": "Cargo 解壓原始碼快取",
@@ -2426,6 +2436,11 @@
         "name": "NuGet 套件與要求快取",
         "description": "NuGet 儲存的全域套件與 HTTP 要求快取",
         "impact": "不會刪除專案原始碼；後續還原相依套件時可能重新下載。"
+      },
+      "dev.composer-cache": {
+        "name": "Composer 下載快取",
+        "description": "Composer 已下載的套件與儲存庫中繼資料快取",
+        "impact": "不會刪除專案、vendor 目錄或 Composer 設定；後續安裝時可能重新下載套件。"
       },
       "dev.qclaw-compile-cache": {
         "name": "QClaw 編譯快取",

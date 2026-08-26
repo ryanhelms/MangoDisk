@@ -8,6 +8,7 @@ pub const SYSTEM_SETTINGS_CHANGE_PLAN_SCHEMA_VERSION: u32 = 3;
 #[serde(rename_all = "camelCase")]
 pub enum SystemSettingsPlatform {
     Macos,
+    Linux,
     Windows,
 }
 

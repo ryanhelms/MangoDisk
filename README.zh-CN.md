@@ -216,8 +216,11 @@ mangodisk clean --help
 - macOS：Xcode Command Line Tools
 - Windows：Visual Studio 2022 Build Tools，并安装“使用 C++ 的桌面开发”
 - Windows：Microsoft Edge WebView2 Runtime
+- Linux（Debian/Ubuntu）：`sudo apt install libwebkit2gtk-4.1-dev libgtk-3-dev libsoup-3.0-dev libayatana-appindicator3-dev librsvg2-dev libxdo-dev`
 
 平台依赖也可以参考 [Tauri 2 前置依赖说明](https://v2.tauri.app/start/prerequisites/)。
+
+在 Linux 上请通过 `corepack pnpm` 运行 pnpm，以使用 `package.json` 中固定的版本。发行版自带的其他版本 pnpm 可能会以 "packages field missing or empty" 错误拒绝 `pnpm-workspace.yaml`。
 
 ### 获取源码并启动桌面应用
 

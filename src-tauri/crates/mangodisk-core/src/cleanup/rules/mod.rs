@@ -122,6 +122,12 @@ mod tests {
             .all(|rule| !rule.verification.evidence.is_empty()));
     }
 
+    // The Linux catalog ships no application-category rules yet: every verified
+    // Linux application cache lives under the protected XDG config tree, so a
+    // rule cannot pass the fail-closed root policy until one is verified in an
+    // unprotected cache location. The invariant is reasserted for platforms
+    // that ship application rules.
+    #[cfg(not(target_os = "linux"))]
     #[test]
     fn current_platform_application_cache_rules_are_recommended() {
         let rules = registry().expect("the current platform catalog must compile");

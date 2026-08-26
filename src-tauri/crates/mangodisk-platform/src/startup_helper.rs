@@ -3,6 +3,9 @@ use std::{
     fs::{self, OpenOptions},
     io::{Read, Write},
     path::{Path, PathBuf},
+};
+#[cfg(any(test, windows, target_os = "macos"))]
+use std::{
     sync::atomic::{AtomicU64, Ordering},
     time::{SystemTime, UNIX_EPOCH},
 };
@@ -10,10 +13,11 @@ use std::{
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    PlatformError, PlatformErrorCode, PlatformResult, PlatformStartupArtifact,
-    PlatformStartupChangeRequest, PlatformStartupChangeResult, PlatformStartupConfiguredState,
-    PlatformStartupDesiredState,
+    PlatformError, PlatformErrorCode, PlatformResult, PlatformStartupChangeResult,
+    PlatformStartupConfiguredState, PlatformStartupDesiredState,
 };
+#[cfg(any(windows, target_os = "macos"))]
+use crate::{PlatformStartupArtifact, PlatformStartupChangeRequest};
 
 const HELPER_FLAG: &str = "--mangodisk-startup-helper-v2";
 const PROTOCOL: &str = "mangodisk-startup-helper-v2";
@@ -21,6 +25,7 @@ const MAX_MESSAGE_BYTES: u64 = 1024 * 1024;
 const MAX_BATCH_ITEMS: usize = 128;
 const HELPER_SUCCESS_EXIT_CODE: i32 = 0;
 const HELPER_FAILURE_EXIT_CODE: i32 = 70;
+#[cfg(any(test, windows, target_os = "macos"))]
 static NEXT_REQUEST_ID: AtomicU64 = AtomicU64::new(1);
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -44,9 +49,15 @@ struct HelperRequestItem {
 
 #[derive(Debug, Clone)]
 pub(crate) struct StartupHelperChangeRequest {
+    // The helper dispatch protocol constructs these values on every platform,
+    // but only the macOS and Windows platform change paths read them.
+    #[cfg(any(windows, target_os = "macos"))]
     pub(crate) source_id: String,
+    #[cfg(any(windows, target_os = "macos"))]
     pub(crate) provider_item_id: String,
+    #[cfg(any(windows, target_os = "macos"))]
     pub(crate) expected_artifact_digest: String,
+    #[cfg(any(windows, target_os = "macos"))]
     pub(crate) desired_state: PlatformStartupDesiredState,
 }
 
@@ -118,6 +129,7 @@ where
     Some(exit_code)
 }
 
+#[cfg(any(windows, target_os = "macos"))]
 pub(crate) fn change_with_privileges(
     request: &PlatformStartupChangeRequest,
     authorization_prompt: Option<&str>,
@@ -136,6 +148,7 @@ pub(crate) fn change_with_privileges(
 /// Each item is still independently allowlisted, re-read, mutated, and verified by the helper.
 /// Sharing only the process boundary prevents repeated authorization prompts without granting the
 /// desktop process reusable administrator authority.
+#[cfg(any(windows, target_os = "macos"))]
 pub(crate) fn change_many_with_privileges(
     requests: &[&PlatformStartupChangeRequest],
     authorization_prompt: Option<&str>,
@@ -327,7 +340,10 @@ fn execute_helper_request(
 }
 
 fn helper_dispatch_items(items: &[HelperRequestItem]) -> Vec<StartupHelperChangeRequest> {
-    items
+    // Only platforms with a privileged change path consume the dispatched
+    // fields; elsewhere the helper keeps one unsupported result per item.
+    #[cfg(any(windows, target_os = "macos"))]
+    let mapped = items
         .iter()
         .map(|item| StartupHelperChangeRequest {
             source_id: item.source_id.clone(),
@@ -335,7 +351,13 @@ fn helper_dispatch_items(items: &[HelperRequestItem]) -> Vec<StartupHelperChange
             expected_artifact_digest: item.expected_artifact_digest.clone(),
             desired_state: item.desired_state.into(),
         })
-        .collect()
+        .collect();
+    #[cfg(not(any(windows, target_os = "macos")))]
+    let mapped = items
+        .iter()
+        .map(|_| StartupHelperChangeRequest {})
+        .collect();
+    mapped
 }
 
 #[cfg(target_os = "macos")]
@@ -368,6 +390,7 @@ fn platform_helper_change_many(
         .collect()
 }
 
+#[cfg(any(windows, target_os = "macos"))]
 pub(crate) fn artifact_digest(artifact: &PlatformStartupArtifact) -> String {
     blake3::hash(format!("{artifact:?}").as_bytes())
         .to_hex()
@@ -427,6 +450,7 @@ fn read_message<T: for<'de> Deserialize<'de>>(path: &Path) -> PlatformResult<T> 
     })
 }
 
+#[cfg(any(test, windows, target_os = "macos"))]
 fn write_private_message<T: Serialize>(path: &Path, message: &T) -> PlatformResult<()> {
     let mut options = OpenOptions::new();
     options.write(true).create_new(true);
@@ -519,6 +543,7 @@ fn response_owner(request_path: &Path) -> PlatformResult<u32> {
         .map_err(|error| PlatformError::io("inspect startup helper response owner", &error))
 }
 
+#[cfg(any(test, windows, target_os = "macos"))]
 fn unique_nonce() -> String {
     let sequence = NEXT_REQUEST_ID.fetch_add(1, Ordering::Relaxed);
     let timestamp = SystemTime::now()
@@ -623,18 +648,6 @@ fn launch_elevated(
     authorization_prompt: Option<&str>,
 ) -> PlatformResult<()> {
     macos_launcher::launch(request, response, authorization_prompt)
-}
-
-#[cfg(not(any(windows, target_os = "macos")))]
-fn launch_elevated(
-    _request: &Path,
-    _response: &Path,
-    _authorization_prompt: Option<&str>,
-) -> PlatformResult<()> {
-    Err(PlatformError::new(
-        PlatformErrorCode::Unsupported,
-        "startup helper is unavailable on this platform",
-    ))
 }
 
 #[cfg(windows)]
@@ -918,6 +931,7 @@ mod tests {
         assert_eq!(error.code(), PlatformErrorCode::InvalidData);
     }
 
+    #[cfg(any(windows, target_os = "macos"))]
     #[test]
     fn privileged_batch_rejects_empty_requests_before_launching() {
         let result = change_many_with_privileges(&[], None);
@@ -959,12 +973,17 @@ mod tests {
 
         assert_eq!(decoded.protocol, "mangodisk-startup-helper-v2");
         assert_eq!(dispatch.len(), 2);
-        assert_eq!(dispatch[0].provider_item_id, "first");
-        assert_eq!(
-            dispatch[0].desired_state,
-            PlatformStartupDesiredState::Removed
-        );
-        assert_eq!(dispatch[1].provider_item_id, "second");
+        // The dispatched field values are consumed only by platforms with a
+        // privileged change path; the wire round-trip above covers Linux.
+        #[cfg(any(windows, target_os = "macos"))]
+        {
+            assert_eq!(dispatch[0].provider_item_id, "first");
+            assert_eq!(
+                dispatch[0].desired_state,
+                PlatformStartupDesiredState::Removed
+            );
+            assert_eq!(dispatch[1].provider_item_id, "second");
+        }
         assert_eq!(
             PlatformStartupConfiguredState::from(WireState::Removed),
             PlatformStartupConfiguredState::NotApplicable

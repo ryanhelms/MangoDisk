@@ -295,6 +295,10 @@ mod tests {
         {
             PlatformConstraint::Macos
         }
+        #[cfg(target_os = "linux")]
+        {
+            PlatformConstraint::Linux
+        }
         #[cfg(windows)]
         {
             PlatformConstraint::Windows

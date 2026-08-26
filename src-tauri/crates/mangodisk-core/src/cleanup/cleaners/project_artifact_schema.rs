@@ -6,7 +6,7 @@ use std::{
 use serde::Deserialize;
 
 const SUPPORTED_SCHEMA_VERSION: u32 = 1;
-const SUPPORTED_PLATFORMS: &[&str] = &["macos", "windows"];
+const SUPPORTED_PLATFORMS: &[&str] = &["linux", "macos", "windows"];
 const SUPPORTED_RISK: &str = "recoverable";
 const MAX_DESCENDANT_DEPTH: usize = 64;
 
@@ -97,7 +97,7 @@ fn validate_rule(source_name: &str, rule: &ProjectArtifactRuleSource) -> Result<
             .any(|platform| !SUPPORTED_PLATFORMS.contains(&platform.as_str()))
     {
         return Err(format!(
-            "{source_name}: platforms must contain only macos or windows"
+            "{source_name}: platforms must contain only linux, macos, or windows"
         ));
     }
     if rule.platforms.iter().collect::<HashSet<_>>().len() != rule.platforms.len() {
@@ -284,7 +284,7 @@ mod tests {
 id = "project.rust-build-artifacts"
 schema_version = 1
 rule_version = 1
-platforms = ["macos", "windows"]
+platforms = ["linux", "macos", "windows"]
 category = "development"
 risk = "recoverable"
 default_selected = false

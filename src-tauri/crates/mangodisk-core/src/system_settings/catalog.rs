@@ -1764,6 +1764,7 @@ const fn with_risk(
 pub(super) fn definitions(platform: SystemSettingsPlatform) -> &'static [SettingDefinition] {
     match platform {
         SystemSettingsPlatform::Macos => MACOS_SETTINGS,
+        SystemSettingsPlatform::Linux => &[],
         SystemSettingsPlatform::Windows => WINDOWS_SETTINGS,
     }
 }
@@ -1791,6 +1792,11 @@ mod tests {
                 definition.selection_kind == SystemSettingSelectionKind::OneClick
             }));
         }
+    }
+
+    #[test]
+    fn linux_catalog_is_empty_until_settings_are_supported() {
+        assert!(definitions(SystemSettingsPlatform::Linux).is_empty());
     }
 
     #[test]

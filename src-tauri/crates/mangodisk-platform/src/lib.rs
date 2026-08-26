@@ -2,7 +2,10 @@ mod command;
 mod contracts;
 mod current;
 mod file_icon;
+#[cfg(any(windows, target_os = "macos"))]
 mod inventory;
+#[cfg(target_os = "linux")]
+mod linux;
 #[cfg(target_os = "macos")]
 mod macos;
 mod startup_helper;

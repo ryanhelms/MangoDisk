@@ -12,6 +12,8 @@ pub(crate) const RULE_SCHEMA_VERSION: u32 = 3;
 pub(crate) enum PlatformConstraint {
     #[cfg(target_os = "macos")]
     Macos,
+    #[cfg(target_os = "linux")]
+    Linux,
     #[cfg(windows)]
     Windows,
 }
@@ -21,6 +23,8 @@ impl PlatformConstraint {
         match self {
             #[cfg(target_os = "macos")]
             Self::Macos => "macos",
+            #[cfg(target_os = "linux")]
+            Self::Linux => "linux",
             #[cfg(windows)]
             Self::Windows => "windows",
         }
@@ -194,6 +198,10 @@ impl CompiledRule {
             #[cfg(target_os = "macos")]
             {
                 PlatformConstraint::Macos
+            }
+            #[cfg(target_os = "linux")]
+            {
+                PlatformConstraint::Linux
             }
             #[cfg(windows)]
             {

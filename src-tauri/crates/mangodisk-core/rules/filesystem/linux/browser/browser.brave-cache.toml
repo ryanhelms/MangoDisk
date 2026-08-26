@@ -1,0 +1,34 @@
+# Brave profile state lives under the XDG config user-data directory. This rule
+# owns only the dedicated XDG cache tree.
+id = "browser.brave-cache"
+schema_version = 3
+rule_version = 1
+platform = "linux"
+category = "browser"
+risk = "safe"
+default_selected = true
+required_stopped_processes = ["brave-browser", "brave"]
+
+[[applicability]]
+kind = "anyOf"
+items = [
+  { kind = "applicationInstalled", identifiers = ["com.brave.Browser", "Brave", "brave-browser"] },
+  { kind = "anyRootExists" },
+]
+
+[[roots]]
+template = "${xdg_cache_home}/BraveSoftware"
+
+[matcher]
+kind = "all"
+
+[execution]
+kind = "deleteMatchingContents"
+requires_app_close = true
+
+[verification]
+lifecycle = "verified"
+evidence = "Brave inherits Chromium's Linux cache directory under the XDG cache BraveSoftware tree, separate from the XDG config user-data profile; cookies, history, passwords, bookmarks, extensions, and other durable profile data remain outside the selected root"
+verified_at = "2026-08-26"
+verified_platform = "linux"
+references = ["https://support.brave.com/hc/en-us/articles/360017903152-How-Do-I-Clear-Cookies-And-Site-Data-In-Brave"]

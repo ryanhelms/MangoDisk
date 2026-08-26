@@ -1,0 +1,28 @@
+id = "system.thumbnail-cache"
+schema_version = 3
+rule_version = 1
+platform = "linux"
+category = "system"
+risk = "safe"
+default_selected = true
+required_stopped_processes = []
+
+[[applicability]]
+kind = "anyRootExists"
+
+[[roots]]
+template = "${xdg_cache_home}/thumbnails"
+
+[matcher]
+kind = "all"
+
+[execution]
+kind = "deleteMatchingContents"
+requires_app_close = false
+
+[verification]
+lifecycle = "verified"
+evidence = "The Freedesktop thumbnail specification stores regenerable preview images under the user cache thumbnails directory; original files remain in their source locations"
+verified_at = "2026-08-26"
+verified_platform = "linux"
+references = ["https://specifications.freedesktop.org/thumbnail-spec/latest/"]

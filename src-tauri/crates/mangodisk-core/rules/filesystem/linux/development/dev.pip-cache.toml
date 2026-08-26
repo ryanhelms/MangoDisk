@@ -1,0 +1,32 @@
+id = "dev.pip-cache"
+schema_version = 3
+rule_version = 1
+platform = "linux"
+category = "development"
+risk = "recoverable"
+default_selected = false
+required_stopped_processes = []
+
+[[applicability]]
+kind = "anyOf"
+items = [
+  { kind = "executableAvailable", names = ["python", "pip"] },
+  { kind = "anyRootExists" },
+]
+
+[[roots]]
+template = "${xdg_cache_home}/pip"
+
+[matcher]
+kind = "all"
+
+[execution]
+kind = "deleteMatchingContents"
+requires_app_close = false
+
+[verification]
+lifecycle = "verified"
+evidence = "pip documents its Unix cache as downloaded HTTP responses and locally built wheels under the XDG cache directory and provides pip cache purge; package environments, configuration, and credentials remain outside the root"
+verified_at = "2026-08-26"
+verified_platform = "linux"
+references = ["https://pip.pypa.io/en/stable/topics/caching/"]

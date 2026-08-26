@@ -260,7 +260,11 @@ fn resolve_root_template(template: &str) -> Result<PathBuf, String> {
         RootVariable::LocalAppData
         | RootVariable::RoamingAppData
         | RootVariable::ProgramFiles
-        | RootVariable::ProgramData => {
+        | RootVariable::ProgramData
+        | RootVariable::XdgCacheHome
+        | RootVariable::XdgConfigHome
+        | RootVariable::XdgDataHome
+        | RootVariable::XdgStateHome => {
             return Err(format!(
                 "variable ${{{}}} is not available on macOS",
                 parts.variable.as_str()
@@ -279,9 +283,36 @@ fn resolve_root_template(template: &str) -> Result<PathBuf, String> {
         #[cfg(windows)]
         RootVariable::UserLibrary
         | RootVariable::ApplicationSupport
-        | RootVariable::DarwinUserCache => {
+        | RootVariable::DarwinUserCache
+        | RootVariable::XdgCacheHome
+        | RootVariable::XdgConfigHome
+        | RootVariable::XdgDataHome
+        | RootVariable::XdgStateHome => {
             return Err(format!(
                 "variable ${{{}}} is not available on Windows",
+                parts.variable.as_str()
+            ));
+        }
+        #[cfg(target_os = "linux")]
+        RootVariable::SystemRoot => PathBuf::from("/"),
+        #[cfg(target_os = "linux")]
+        RootVariable::XdgCacheHome => xdg_root("XDG_CACHE_HOME", ".cache")?,
+        #[cfg(target_os = "linux")]
+        RootVariable::XdgConfigHome => xdg_root("XDG_CONFIG_HOME", ".config")?,
+        #[cfg(target_os = "linux")]
+        RootVariable::XdgDataHome => xdg_root("XDG_DATA_HOME", ".local/share")?,
+        #[cfg(target_os = "linux")]
+        RootVariable::XdgStateHome => xdg_root("XDG_STATE_HOME", ".local/state")?,
+        #[cfg(target_os = "linux")]
+        RootVariable::LocalAppData
+        | RootVariable::RoamingAppData
+        | RootVariable::ProgramFiles
+        | RootVariable::ProgramData
+        | RootVariable::UserLibrary
+        | RootVariable::ApplicationSupport
+        | RootVariable::DarwinUserCache => {
+            return Err(format!(
+                "variable ${{{}}} is not available on Linux",
                 parts.variable.as_str()
             ));
         }
@@ -295,12 +326,25 @@ fn resolve_root_template(template: &str) -> Result<PathBuf, String> {
 fn user_home() -> Result<PathBuf, String> {
     #[cfg(target_os = "macos")]
     let value = env::var_os("HOME");
+    #[cfg(target_os = "linux")]
+    let value = env::var_os("HOME");
     #[cfg(windows)]
     let value = env::var_os("USERPROFILE");
     value
         .map(PathBuf::from)
         .filter(|path| path.is_absolute())
         .ok_or_else(|| "failed to resolve the current user's home directory".to_string())
+}
+
+#[cfg(target_os = "linux")]
+fn xdg_root(name: &str, fallback: &str) -> Result<PathBuf, String> {
+    if let Some(path) = env::var_os(name)
+        .map(PathBuf::from)
+        .filter(|path| path.is_absolute())
+    {
+        return Ok(path);
+    }
+    Ok(user_home()?.join(fallback))
 }
 
 #[cfg(windows)]
@@ -337,6 +381,10 @@ const fn current_source_platform() -> SourcePlatform {
     {
         SourcePlatform::Macos
     }
+    #[cfg(target_os = "linux")]
+    {
+        SourcePlatform::Linux
+    }
     #[cfg(windows)]
     {
         SourcePlatform::Windows
@@ -347,6 +395,8 @@ fn platform_constraint(platform: SourcePlatform) -> Result<PlatformConstraint, S
     match platform {
         #[cfg(target_os = "macos")]
         SourcePlatform::Macos => Ok(PlatformConstraint::Macos),
+        #[cfg(target_os = "linux")]
+        SourcePlatform::Linux => Ok(PlatformConstraint::Linux),
         #[cfg(windows)]
         SourcePlatform::Windows => Ok(PlatformConstraint::Windows),
         _ => Err(format!(

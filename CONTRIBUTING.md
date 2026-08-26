@@ -16,6 +16,11 @@ details.
 
 - Use Node.js 24 and the pnpm version declared in `package.json`.
 - Use the Rust toolchain declared by the repository.
+- On Linux (Debian/Ubuntu), install the WebKitGTK build dependencies before
+  `pnpm tauri:dev`: `libwebkit2gtk-4.1-dev libgtk-3-dev libsoup-3.0-dev
+  libayatana-appindicator3-dev librsvg2-dev libxdo-dev`. Run pnpm through
+  `corepack pnpm`; a distribution-installed pnpm may reject
+  `pnpm-workspace.yaml` with "packages field missing or empty".
 - Keep user-facing text in both locale resources.
 - Use generic deterministic paths in tests.
 - Never commit credentials, personal paths, private file names, raw scan

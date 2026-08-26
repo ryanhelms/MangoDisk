@@ -215,8 +215,11 @@ mangodisk clean --help
 - macOS：Xcode Command Line Tools
 - Windows：Visual Studio 2022 Build Tools（**C++ によるデスクトップ開発**を含む）
 - Windows：Microsoft Edge WebView2 Runtime
+- Linux（Debian/Ubuntu）：`sudo apt install libwebkit2gtk-4.1-dev libgtk-3-dev libsoup-3.0-dev libayatana-appindicator3-dev librsvg2-dev libxdo-dev`
 
 詳細なプラットフォーム要件については、[Tauri 2 の前提条件](https://v2.tauri.app/start/prerequisites/) を参照してください。
+
+Linux では `package.json` で固定された pnpm のバージョンを使うために、`corepack pnpm` 経由で pnpm を実行してください。ディストリビューションが提供する別バージョンの pnpm では、`pnpm-workspace.yaml` が "packages field missing or empty" というエラーで拒否されることがあります。
 
 ### ソースを取得してデスクトップアプリを実行
 

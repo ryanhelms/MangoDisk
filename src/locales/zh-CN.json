@@ -1778,7 +1778,7 @@
     "entries": {
       "system.user-temp": {
         "name": "用户临时文件",
-        "description": "Windows 与应用写入的临时工作文件",
+        "description": "操作系统与应用写入的临时工作文件",
         "impact": "占用中的文件会被跳过；应用需要时会重新创建临时内容。"
       },
       "system.darwin-user-cache": {
@@ -1823,8 +1823,8 @@
       },
       "system.thumbnail-cache": {
         "name": "缩略图与图标缓存",
-        "description": "资源管理器为文件预览和图标生成的缓存数据库",
-        "impact": "下次浏览文件夹时 Windows 会按需重新生成预览和图标。"
+        "description": "文件管理器为文件预览和图标生成的可重建缓存",
+        "impact": "原始文件不会受影响；下次浏览文件夹时会按需重新生成预览和图标。"
       },
       "system.directx-shader-cache": {
         "name": "DirectX 着色器缓存",
@@ -2311,6 +2311,11 @@
         "description": "Yarn 已下载的软件包缓存",
         "impact": "不会删除项目依赖，后续安装时可能重新下载。"
       },
+      "dev.bun-cache": {
+        "name": "Bun 下载缓存",
+        "description": "Bun 已下载的软件包缓存",
+        "impact": "不会删除项目依赖，后续安装时可能重新下载。"
+      },
       "dev.pip-cache": {
         "name": "pip 下载缓存",
         "description": "Python pip 已下载的安装包与轮子缓存",
@@ -2350,6 +2355,11 @@
         "name": "Cargo 与 Rustup 缓存",
         "description": "Cargo 注册表、Git 依赖及 Rustup 下载缓存",
         "impact": "不会删除项目源代码或已安装工具链；后续构建可能重新下载依赖。"
+      },
+      "dev.hex-cache": {
+        "name": "Hex 下载缓存",
+        "description": "Hex 已下载的软件包缓存",
+        "impact": "不会删除项目或 Hex 配置，后续安装时可能重新下载。"
       },
       "dev.cargo-extracted-sources": {
         "name": "Cargo 解压源码缓存",
@@ -2430,6 +2440,11 @@
         "name": "NuGet 包与请求缓存",
         "description": "NuGet 保存的全局包与 HTTP 请求缓存",
         "impact": "不会删除项目源代码，后续还原依赖时可能重新下载。"
+      },
+      "dev.composer-cache": {
+        "name": "Composer 下载缓存",
+        "description": "Composer 已下载的软件包与仓库元数据缓存",
+        "impact": "不会删除项目、vendor 目录或 Composer 配置，后续安装时可能重新下载。"
       },
       "dev.qclaw-compile-cache": {
         "name": "QClaw 编译缓存",

@@ -1,0 +1,34 @@
+# Chromium profile state lives under the XDG config user-data directory. This
+# rule owns only the dedicated XDG cache tree.
+id = "browser.chromium-cache"
+schema_version = 3
+rule_version = 1
+platform = "linux"
+category = "browser"
+risk = "safe"
+default_selected = true
+required_stopped_processes = ["chromium", "chromium-browser"]
+
+[[applicability]]
+kind = "anyOf"
+items = [
+  { kind = "applicationInstalled", identifiers = ["org.chromium.Chromium", "Chromium"] },
+  { kind = "anyRootExists" },
+]
+
+[[roots]]
+template = "${xdg_cache_home}/chromium"
+
+[matcher]
+kind = "all"
+
+[execution]
+kind = "deleteMatchingContents"
+requires_app_close = true
+
+[verification]
+lifecycle = "verified"
+evidence = "Chromium documents the Linux cache directory as a location separate from the XDG config user-data profile; cookies, history, passwords, bookmarks, extensions, and other durable profile data remain outside the selected root"
+verified_at = "2026-08-26"
+verified_platform = "linux"
+references = ["https://chromium.googlesource.com/chromium/src/+/main/docs/user_data_dir.md"]
