@@ -1,0 +1,14 @@
+{
+  "extraKnownMarketplaces": {
+    "bytedesk": {
+      "source": {
+        "source": "directory",
+        "path": "../ByteDeskAI/bytedesk-marketplace"
+      },
+      "autoUpdate": true
+    }
+  },
+  "enabledPlugins": {
+    "design-system@bytedesk": true
+  }
+}

@@ -1,5 +1,17 @@
 # MangoDisk Contribution Guidelines
 
+<!-- bytedesk-design-system:start -->
+## ByteDesk design context
+
+Read design authority in this order:
+
+1. `.context/design-system/DESIGN.md`
+2. `.context/design-system/profiles/mangodisk/DESIGN.md` and adjacent `PRODUCT.md`
+3. This repository's root `DESIGN.md` for local implementation details and explicit exceptions
+
+Managed design-system files are read-only. Canonical changes land in `ByteDeskAI/design-system` first.
+<!-- bytedesk-design-system:end -->
+
 These rules apply to the entire repository. More specific guidance lives in [`src/AGENTS.md`](src/AGENTS.md) and [`src-tauri/AGENTS.md`](src-tauri/AGENTS.md); a child file adds only rules for its own subtree and does not replace this file.
 
 ## Product and architecture

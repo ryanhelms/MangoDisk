@@ -1,0 +1,880 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "$description": "ByteDesk canonical design tokens - the shared family foundation. Dark is the default and light is an equal shipping counterpart. Black Glass + Optical Layering material and governed dark-richness values are shared across products. CSS runtimes consume tokens/css/bytedesk.css; Tailwind v4 apps layer tokens/tailwind/theme.css; generated TypeScript, Rust, and Go adapters live under tokens/platforms/. Hex values are sRGB; tokens with an oklch source note carry it in $description.",
+  "color": {
+    "bg": {
+      "base": {
+        "$type": "color",
+        "$value": "#101316",
+        "$description": "App/page background. The family ground."
+      },
+      "subtle": {
+        "$type": "color",
+        "$value": "#171A1D"
+      },
+      "surface": {
+        "$type": "color",
+        "$value": "#1D2125",
+        "$description": "Cards, panels."
+      },
+      "elevated": {
+        "$type": "color",
+        "$value": "#24282D"
+      },
+      "overlay": {
+        "$type": "color",
+        "$value": "#2B3036",
+        "$description": "Menus, popovers, tooltips."
+      }
+    },
+    "text": {
+      "primary": {
+        "$type": "color",
+        "$value": "#E6E8EB",
+        "$description": "15.5:1 on bg.base"
+      },
+      "secondary": {
+        "$type": "color",
+        "$value": "#A1A8B1",
+        "$description": "10.8:1 on bg.base"
+      },
+      "tertiary": {
+        "$type": "color",
+        "$value": "#7E8792",
+        "$description": "7.9:1 on bg.base, 6.4:1 on bg.surface"
+      },
+      "disabled": {
+        "$type": "color",
+        "$value": "#626A74"
+      },
+      "on-brand": {
+        "$type": "color",
+        "$value": "#FFE2D8",
+        "$description": "Text on brand-orange fills. 3.0:1 vs orange — AA large text only (>=18.66px bold / 24px regular)."
+      }
+    },
+    "brand": {
+      "orange": {
+        "$type": "color",
+        "$value": "#EC4E02",
+        "$description": "ByteDesk brand. Conversion moments, brand marks. 5.1:1 on bg.base."
+      },
+      "orange-muted": {
+        "$type": "color",
+        "$value": "#D96D00"
+      }
+    },
+    "interactive": {
+      "blue": {
+        "$type": "color",
+        "$value": "#0079F2",
+        "$description": "oklch(0.5910 0.2028 256.13). Links, focus, interactive affordances. 4.5:1 on bg.base. Equals blue.500."
+      },
+      "focus": {
+        "$type": "color",
+        "$value": "#71A7EF",
+        "$description": "Visible keyboard focus ring. Equals blue.700."
+      }
+    },
+    "blue": {
+      "$description": "Gateway identity ramp, hue locked at 256.13. Chroma falls at the ends. CSS runtime uses oklch(); hex is the sRGB snapshot.",
+      "50": {
+        "$type": "color",
+        "$value": "#071221",
+        "$description": "oklch(0.1800 0.0350 256.13)"
+      },
+      "100": {
+        "$type": "color",
+        "$value": "#0E2037",
+        "$description": "oklch(0.2400 0.0500 256.13)"
+      },
+      "200": {
+        "$type": "color",
+        "$value": "#193356",
+        "$description": "oklch(0.3200 0.0700 256.13)"
+      },
+      "300": {
+        "$type": "color",
+        "$value": "#1F487C",
+        "$description": "oklch(0.4000 0.1000 256.13)"
+      },
+      "400": {
+        "$type": "color",
+        "$value": "#255DA5",
+        "$description": "oklch(0.4800 0.1300 256.13)"
+      },
+      "500": {
+        "$type": "color",
+        "$value": "#0079F2",
+        "$description": "oklch(0.5910 0.2028 256.13). Canonical Gateway blue."
+      },
+      "600": {
+        "$type": "color",
+        "$value": "#468CE8",
+        "$description": "oklch(0.6400 0.1550 256.13)"
+      },
+      "700": {
+        "$type": "color",
+        "$value": "#71A7EF",
+        "$description": "oklch(0.7200 0.1200 256.13)"
+      },
+      "800": {
+        "$type": "color",
+        "$value": "#9CC0F1",
+        "$description": "oklch(0.8000 0.0800 256.13)"
+      },
+      "900": {
+        "$type": "color",
+        "$value": "#C7D9F2",
+        "$description": "oklch(0.8800 0.0400 256.13)"
+      }
+    },
+    "accent": {
+      "$description": "Role aliases onto the blue ramp. Products remap --bd-accent; these stay the Gateway/interactive scale.",
+      "subtle": {
+        "$type": "color",
+        "$value": "#193356",
+        "$description": "oklch(0.3200 0.0700 256.13) = blue.200"
+      },
+      "muted": {
+        "$type": "color",
+        "$value": "#255DA5",
+        "$description": "oklch(0.4800 0.1300 256.13) = blue.400"
+      },
+      "default": {
+        "$type": "color",
+        "$value": "#0079F2",
+        "$description": "oklch(0.5910 0.2028 256.13) = blue.500"
+      },
+      "emphasis": {
+        "$type": "color",
+        "$value": "#468CE8",
+        "$description": "oklch(0.6400 0.1550 256.13) = blue.600"
+      },
+      "fg": {
+        "$type": "color",
+        "$value": "#E8F1FB",
+        "$description": "oklch(0.9600 0.0150 256.13). Text on accent fills. Never #fff."
+      }
+    },
+    "desk": {
+      "$description": "Per-desk chrome tints for Gateway AppShell (data-bd-desk). Hue shifts inside blue; not a second action colour. Stage canvas stays bg.base.",
+      "sessions": {
+        "$type": "color",
+        "$value": "#193356",
+        "$description": "oklch(0.3200 0.0700 256.13)"
+      },
+      "files": {
+        "$type": "color",
+        "$value": "#013752",
+        "$description": "oklch(0.3200 0.0700 238.13)"
+      },
+      "projects": {
+        "$type": "color",
+        "$value": "#282F56",
+        "$description": "oklch(0.3200 0.0700 274.13)"
+      },
+      "agentic": {
+        "$type": "color",
+        "$value": "#1B3060",
+        "$description": "oklch(0.3200 0.0900 264.13)"
+      },
+      "system": {
+        "$type": "color",
+        "$value": "#1D354B",
+        "$description": "oklch(0.3200 0.0500 248.13)"
+      },
+      "developer": {
+        "$type": "color",
+        "$value": "#2F2D55",
+        "$description": "oklch(0.3200 0.0700 284.13)"
+      }
+    },
+    "semantic": {
+      "success": {
+        "$type": "color",
+        "$value": "#009118",
+        "$description": "oklch(0.5698 0.1865 143.69). 4.6:1 on bg.base"
+      },
+      "success-muted": {
+        "$type": "color",
+        "$value": "#007012",
+        "$description": "oklch(0.4732 0.1540 143.88)"
+      },
+      "success-bg": {
+        "$type": "color",
+        "$value": "#0C2414",
+        "$description": "oklch(0.2400 0.0450 143.69)"
+      },
+      "success-line": {
+        "$type": "color",
+        "$value": "#165C22",
+        "$description": "oklch(0.4000 0.1000 143.69)"
+      },
+      "danger": {
+        "$type": "color",
+        "$value": "#E52222",
+        "$description": "oklch(0.5910 0.2255 27.74). 4.1:1 on bg.base — pair with icon/text, AA large only as text color."
+      },
+      "danger-bg": {
+        "$type": "color",
+        "$value": "#2A1212",
+        "$description": "oklch(0.2400 0.0550 27.74)"
+      },
+      "danger-line": {
+        "$type": "color",
+        "$value": "#7A2424",
+        "$description": "oklch(0.4000 0.1200 27.74)"
+      },
+      "warning": {
+        "$type": "color",
+        "$value": "#DFA700",
+        "$description": "oklch(0.7601 0.1559 84.30). 8.7:1 on bg.base."
+      },
+      "warning-bg": {
+        "$type": "color",
+        "$value": "#241E0C",
+        "$description": "oklch(0.2400 0.0400 84.30)"
+      },
+      "warning-line": {
+        "$type": "color",
+        "$value": "#6B5A14",
+        "$description": "oklch(0.4200 0.0900 84.30)"
+      },
+      "info": {
+        "$type": "color",
+        "$value": "#1DB8CE",
+        "$description": "oklch(0.7190 0.1201 210.37). 8.0:1 on bg.base."
+      },
+      "info-bg": {
+        "$type": "color",
+        "$value": "#0C2226",
+        "$description": "oklch(0.2400 0.0350 210.37)"
+      },
+      "info-line": {
+        "$type": "color",
+        "$value": "#1A5A64",
+        "$description": "oklch(0.4000 0.0700 210.37)"
+      }
+    },
+    "border": {
+      "dimmest": {
+        "$type": "color",
+        "$value": "#272A2C"
+      },
+      "dimmer": {
+        "$type": "color",
+        "$value": "#303438"
+      },
+      "default": {
+        "$type": "color",
+        "$value": "#3A3E42"
+      },
+      "stronger": {
+        "$type": "color",
+        "$value": "#44484C"
+      },
+      "strongest": {
+        "$type": "color",
+        "$value": "#4C4F52"
+      }
+    },
+    "chart": {
+      "$description": "Cross-platform categorical and structural colors for system, session, and agent visualizations. Never rely on hue alone; pair series with labels, markers, line styles, or direct values.",
+      "series-1": {
+        "$type": "color",
+        "$value": "#0079F2",
+        "$description": "Gateway blue"
+      },
+      "series-2": {
+        "$type": "color",
+        "$value": "#1DB8CE",
+        "$description": "Cyan"
+      },
+      "series-3": {
+        "$type": "color",
+        "$value": "#A170EB",
+        "$description": "Violet"
+      },
+      "series-4": {
+        "$type": "color",
+        "$value": "#EA5DA9",
+        "$description": "Pink"
+      },
+      "series-5": {
+        "$type": "color",
+        "$value": "#EC4E02",
+        "$description": "Brand orange"
+      },
+      "series-6": {
+        "$type": "color",
+        "$value": "#009118",
+        "$description": "Green"
+      },
+      "series-7": {
+        "$type": "color",
+        "$value": "#DFA700",
+        "$description": "Amber"
+      },
+      "series-8": {
+        "$type": "color",
+        "$value": "#E52222",
+        "$description": "Red"
+      },
+      "grid": {
+        "$type": "color",
+        "$value": "#31343F"
+      },
+      "axis": {
+        "$type": "color",
+        "$value": "#A2A8B2"
+      },
+      "plot": {
+        "$type": "color",
+        "$value": "#1A1C25"
+      },
+      "selection": {
+        "$type": "color",
+        "$value": "#468CE8"
+      }
+    }
+  },
+  "theme": {
+    "$description": "Shipping dark and light semantic values. Stable color.bg/text/border aliases map to the selected theme at runtime; components never branch on raw theme colors.",
+    "dark": {
+      "canvas": { "$type": "color", "$value": "#101316" },
+      "shell": { "$type": "color", "$value": "#171A1D" },
+      "inset": { "$type": "color", "$value": "#14171A" },
+      "raised": { "$type": "color", "$value": "#1D2125" },
+      "overlay": { "$type": "color", "$value": "#24282D" },
+      "ink-primary": { "$type": "color", "$value": "#E6E8EB" },
+      "ink-secondary": { "$type": "color", "$value": "#A1A8B1" },
+      "ink-tertiary": { "$type": "color", "$value": "#7E8792" },
+      "border-subtle": { "$type": "color", "$value": "#272A2C" },
+      "border-default": { "$type": "color", "$value": "#3A3E42" },
+      "border-strong": { "$type": "color", "$value": "#4C4F52" }
+    },
+    "light": {
+      "canvas": { "$type": "color", "$value": "#ECEDEF" },
+      "shell": { "$type": "color", "$value": "#F8F9FB" },
+      "inset": { "$type": "color", "$value": "#F2F4F7" },
+      "raised": { "$type": "color", "$value": "#FFFFFF" },
+      "overlay": { "$type": "color", "$value": "#FFFFFF" },
+      "ink-primary": { "$type": "color", "$value": "#22252A" },
+      "ink-secondary": { "$type": "color", "$value": "#6B717A" },
+      "ink-tertiary": { "$type": "color", "$value": "#858C96" },
+      "border-subtle": { "$type": "color", "$value": "#E0E3E8" },
+      "border-default": { "$type": "color", "$value": "#CDD2D9" },
+      "border-strong": { "$type": "color", "$value": "#B9C0C9" }
+    }
+  },
+  "material": {
+    "$description": "Black Glass + Optical Layering primitives. Structural material only; do not apply every level to every component.",
+    "blur-shell": { "$type": "dimension", "$value": "18px" },
+    "blur-overlay": { "$type": "dimension", "$value": "24px" },
+    "shell-opacity-dark": { "$type": "number", "$value": 0.94 },
+    "shell-opacity-light": { "$type": "number", "$value": 0.97 },
+    "top-light-dark": { "$type": "color", "$value": "#FFFFFF0A" },
+    "top-light-light": { "$type": "color", "$value": "#FFFFFFCC" },
+    "ambient-blue": { "$type": "color", "$value": "#07182E66" },
+    "ambient-orange": { "$type": "color", "$value": "#EC4E0238" }
+  },
+  "depth": {
+    "$description": "Optical elevation strings map directly to CSS box-shadow and equivalent native shadow structures.",
+    "shell-dark": { "$type": "string", "$value": "inset 0 1px 0 #FFFFFF0A, 0 24px 56px #05080DB8, 0 8px 20px #07182E66" },
+    "shell-light": { "$type": "string", "$value": "inset 0 1px 0 #FFFFFFCC, 0 24px 56px #17203324, 0 8px 20px #315B9B14" },
+    "raised-dark": { "$type": "string", "$value": "inset 0 1px 0 #FFFFFF08, 0 8px 20px #05080D66" },
+    "raised-light": { "$type": "string", "$value": "inset 0 1px 0 #FFFFFFE6, 0 8px 20px #17203317" },
+    "focus-glow": { "$type": "string", "$value": "0 0 0 1px #1B84F3, 0 0 24px #1B84F34D" },
+    "attention-glow": { "$type": "string", "$value": "0 0 20px #EC4E0238" }
+  },
+  "richness": {
+    "$description": "Dark-only governed material calibration. Light mode ignores this preference.",
+    "soft": {
+      "canvas": { "$type": "color", "$value": "#1B1E22" },
+      "shell": { "$type": "color", "$value": "#22262A" },
+      "ambient-strength": { "$type": "number", "$value": 0.55 },
+      "bloom-strength": { "$type": "number", "$value": 0.55 }
+    },
+    "balanced": {
+      "canvas": { "$type": "color", "$value": "#101316" },
+      "shell": { "$type": "color", "$value": "#171A1D" },
+      "ambient-strength": { "$type": "number", "$value": 0.75 },
+      "bloom-strength": { "$type": "number", "$value": 0.75 }
+    },
+    "rich": {
+      "canvas": { "$type": "color", "$value": "#090C0F" },
+      "shell": { "$type": "color", "$value": "#121518" },
+      "ambient-strength": { "$type": "number", "$value": 1 },
+      "bloom-strength": { "$type": "number", "$value": 1 }
+    }
+  },
+  "product": {
+    "$description": "Per-product accent hues. Used for product identification (marks, chips, card gradients, docs), never replacing semantic colors. All >=4.5:1 on bg.base except noted.",
+    "platform": {
+      "$type": "color",
+      "$value": "#EC4E02",
+      "$description": "Flagship carries the brand orange. 5.1:1."
+    },
+    "gateway": {
+      "$type": "color",
+      "$value": "#0079F2",
+      "$description": "4.5:1."
+    },
+    "vault": {
+      "$type": "color",
+      "$value": "#DFA700",
+      "$description": "Keys/amber. oklch(0.76 0.16 85). 8.7:1."
+    },
+    "store": {
+      "$type": "color",
+      "$value": "#009118",
+      "$description": "Commerce/green. 4.6:1."
+    },
+    "workforce": {
+      "$type": "color",
+      "$value": "#A170EB",
+      "$description": "oklch(0.65 0.18 300). 5.5:1."
+    },
+    "agent-browser": {
+      "$type": "color",
+      "$value": "#1DB8CE",
+      "$description": "oklch(0.72 0.12 210). 8.0:1."
+    },
+    "agent-memory": {
+      "$type": "color",
+      "$value": "#EA5DA9",
+      "$description": "oklch(0.68 0.19 350). 6.0:1."
+    },
+    "capture": {
+      "$type": "color",
+      "$value": "#0A84FF",
+      "$description": "Matches the existing capture profile accent. 5.2:1."
+    },
+    "toolbox": {
+      "$type": "color",
+      "$value": "#4C7DFF",
+      "$description": "Toolbox command-shelf identity. Electric cobalt; interaction still uses the shared interactive roles."
+    },
+    "agent-orchestration": {
+      "$type": "color",
+      "$value": "#4C7DFF",
+      "$description": "Conductor's Desk identity. Shares the family electric cobalt; orange remains reserved for actionable decisions."
+    },
+    "mangodisk": {
+      "$type": "color",
+      "$value": "#FF8A3D",
+      "$description": "Storage analysis identity. Warm orange identifies the product without replacing destructive or warning semantics."
+    },
+    "openseo": {
+      "$type": "color",
+      "$value": "#20B8A6",
+      "$description": "Search evidence identity. Teal remains distinct from semantic success and family interaction blue."
+    }
+  },
+  "font": {
+    "sans": {
+      "$type": "fontFamily",
+      "$value": [
+        "IBM Plex Sans",
+        "ui-sans-serif",
+        "system-ui",
+        "-apple-system",
+        "sans-serif"
+      ]
+    },
+    "display": {
+      "$type": "fontFamily",
+      "$value": [
+        "IBM Plex Sans",
+        "ui-sans-serif",
+        "system-ui",
+        "-apple-system",
+        "sans-serif"
+      ]
+    },
+    "mono": {
+      "$type": "fontFamily",
+      "$value": [
+        "IBM Plex Mono",
+        "ui-monospace",
+        "SFMono-Regular",
+        "monospace"
+      ]
+    }
+  },
+  "fontWeight": {
+    "regular": {
+      "$type": "number",
+      "$value": 400
+    },
+    "medium": {
+      "$type": "number",
+      "$value": 500
+    },
+    "semibold": {
+      "$type": "number",
+      "$value": 600
+    },
+    "bold": {
+      "$type": "number",
+      "$value": 700
+    }
+  },
+  "type": {
+    "$description": "Web runtimes use the fluid clamp() values from tokens/css/bytedesk.css. The px values here are the static desktop scale (clamp minimums) for native runtimes.",
+    "display": {
+      "$type": "dimension",
+      "$value": "40px",
+      "web": "clamp(2.5rem, 2rem + 2.5vw, 5.5rem)"
+    },
+    "h1": {
+      "$type": "dimension",
+      "$value": "32px",
+      "web": "clamp(2rem, 1.6rem + 2vw, 3.5rem)"
+    },
+    "h2": {
+      "$type": "dimension",
+      "$value": "24px",
+      "web": "clamp(1.5rem, 1.25rem + 1.25vw, 2.5rem)"
+    },
+    "h3": {
+      "$type": "dimension",
+      "$value": "20px",
+      "web": "clamp(1.25rem, 1.1rem + 0.75vw, 1.875rem)"
+    },
+    "h4": {
+      "$type": "dimension",
+      "$value": "18px",
+      "web": "clamp(1.125rem, 1rem + 0.625vw, 1.5rem)"
+    },
+    "body-lg": {
+      "$type": "dimension",
+      "$value": "17px",
+      "web": "clamp(1.0625rem, 1rem + 0.3125vw, 1.25rem)"
+    },
+    "body": {
+      "$type": "dimension",
+      "$value": "15px",
+      "web": "clamp(0.9375rem, 0.9rem + 0.1875vw, 1.0625rem)"
+    },
+    "body-sm": {
+      "$type": "dimension",
+      "$value": "13px",
+      "web": "clamp(0.8125rem, 0.8rem + 0.125vw, 0.875rem)"
+    },
+    "caption": {
+      "$type": "dimension",
+      "$value": "11px",
+      "web": "clamp(0.6875rem, 0.675rem + 0.0625vw, 0.75rem)"
+    },
+    "console": {
+      "$type": "dimension",
+      "$value": "12.5px",
+      "$description": "Gateway operator-console chrome."
+    },
+    "console-sm": {
+      "$type": "dimension",
+      "$value": "11px",
+      "$description": "Gateway micro-labels and dense metadata."
+    }
+  },
+  "lineHeight": {
+    "tight": {
+      "$type": "number",
+      "$value": 1.2
+    },
+    "compact": {
+      "$type": "number",
+      "$value": 1.35
+    },
+    "body": {
+      "$type": "number",
+      "$value": 1.5
+    }
+  },
+  "letterSpacing": {
+    "tight": {
+      "$type": "dimension",
+      "$value": "-0.02em"
+    },
+    "label": {
+      "$type": "dimension",
+      "$value": "0.04em"
+    },
+    "caps": {
+      "$type": "dimension",
+      "$value": "0.08em"
+    }
+  },
+  "space": {
+    "$description": "Fixed cross-platform spacing ladder. Web marketing section spacing remains fluid and separate.",
+    "0": {
+      "$type": "dimension",
+      "$value": "0px"
+    },
+    "1": {
+      "$type": "dimension",
+      "$value": "2px"
+    },
+    "2": {
+      "$type": "dimension",
+      "$value": "4px"
+    },
+    "3": {
+      "$type": "dimension",
+      "$value": "6px"
+    },
+    "4": {
+      "$type": "dimension",
+      "$value": "8px"
+    },
+    "5": {
+      "$type": "dimension",
+      "$value": "12px"
+    },
+    "6": {
+      "$type": "dimension",
+      "$value": "16px"
+    },
+    "7": {
+      "$type": "dimension",
+      "$value": "20px"
+    },
+    "8": {
+      "$type": "dimension",
+      "$value": "24px"
+    },
+    "9": {
+      "$type": "dimension",
+      "$value": "32px"
+    },
+    "10": {
+      "$type": "dimension",
+      "$value": "40px"
+    },
+    "11": {
+      "$type": "dimension",
+      "$value": "48px"
+    }
+  },
+  "size": {
+    "control": {
+      "compact": {
+        "$type": "dimension",
+        "$value": "28px"
+      },
+      "default": {
+        "$type": "dimension",
+        "$value": "32px"
+      },
+      "touch": {
+        "$type": "dimension",
+        "$value": "44px"
+      }
+    },
+    "row": {
+      "compact": {
+        "$type": "dimension",
+        "$value": "28px"
+      },
+      "default": {
+        "$type": "dimension",
+        "$value": "32px"
+      },
+      "touch": {
+        "$type": "dimension",
+        "$value": "44px"
+      }
+    },
+    "hit-target": {
+      "pointer": {
+        "$type": "dimension",
+        "$value": "28px"
+      },
+      "touch": {
+        "$type": "dimension",
+        "$value": "44px"
+      }
+    },
+    "icon": {
+      "sm": {
+        "$type": "dimension",
+        "$value": "14px"
+      },
+      "md": {
+        "$type": "dimension",
+        "$value": "16px"
+      },
+      "lg": {
+        "$type": "dimension",
+        "$value": "20px"
+      },
+      "xl": {
+        "$type": "dimension",
+        "$value": "24px"
+      }
+    },
+    "shell": {
+      "topbar": {
+        "$type": "dimension",
+        "$value": "44px"
+      },
+      "rail": {
+        "$type": "dimension",
+        "$value": "48px"
+      },
+      "sidebar": {
+        "$type": "dimension",
+        "$value": "196px"
+      },
+      "inspector": {
+        "$type": "dimension",
+        "$value": "360px"
+      },
+      "statusbar": {
+        "$type": "dimension",
+        "$value": "24px"
+      },
+      "commandbar": {
+        "$type": "dimension",
+        "$value": "36px"
+      }
+    },
+    "panel": {
+      "minimum": {
+        "$type": "dimension",
+        "$value": "280px"
+      },
+      "comfortable": {
+        "$type": "dimension",
+        "$value": "360px"
+      },
+      "wide": {
+        "$type": "dimension",
+        "$value": "480px"
+      }
+    },
+    "terminal": {
+      "tab": {
+        "$type": "dimension",
+        "$value": "32px"
+      }
+    },
+    "chart": {
+      "point": {
+        "$type": "dimension",
+        "$value": "6px"
+      },
+      "minimum-height": {
+        "$type": "dimension",
+        "$value": "180px"
+      }
+    }
+  },
+  "breakpoint": {
+    "$description": "Logical viewport widths shared by web and desktop clients. Native clients apply them to content width, not physical pixels.",
+    "compact-max": {
+      "$type": "dimension",
+      "$value": "719px"
+    },
+    "standard-min": {
+      "$type": "dimension",
+      "$value": "720px"
+    },
+    "wide-min": {
+      "$type": "dimension",
+      "$value": "1200px"
+    },
+    "ultrawide-min": {
+      "$type": "dimension",
+      "$value": "1600px"
+    }
+  },
+  "stroke": {
+    "hairline": {
+      "$type": "dimension",
+      "$value": "1px"
+    },
+    "active": {
+      "$type": "dimension",
+      "$value": "2px"
+    },
+    "focus": {
+      "$type": "dimension",
+      "$value": "2px"
+    },
+    "chart": {
+      "$type": "dimension",
+      "$value": "2px"
+    }
+  },
+  "opacity": {
+    "disabled": {
+      "$type": "number",
+      "$value": 0.5
+    },
+    "secondary": {
+      "$type": "number",
+      "$value": 0.72
+    },
+    "scrim": {
+      "$type": "number",
+      "$value": 0.72
+    },
+    "hover": {
+      "$type": "number",
+      "$value": 0.08
+    }
+  },
+  "radius": {
+    "sm": {
+      "$type": "dimension",
+      "$value": "4px"
+    },
+    "md": {
+      "$type": "dimension",
+      "$value": "6px"
+    },
+    "lg": {
+      "$type": "dimension",
+      "$value": "8px"
+    },
+    "xl": {
+      "$type": "dimension",
+      "$value": "12px"
+    },
+    "2xl": {
+      "$type": "dimension",
+      "$value": "16px"
+    },
+    "full": {
+      "$type": "dimension",
+      "$value": "9999px"
+    }
+  },
+  "motion": {
+    "duration-fast": {
+      "$type": "duration",
+      "$value": "150ms"
+    },
+    "duration-base": {
+      "$type": "duration",
+      "$value": "250ms"
+    },
+    "duration-slow": {
+      "$type": "duration",
+      "$value": "400ms"
+    },
+    "ease-out-expo": {
+      "$type": "cubicBezier",
+      "$value": [
+        0.16,
+        1,
+        0.3,
+        1
+      ]
+    },
+    "$description": "Reduced-motion: every consumer honors prefers-reduced-motion by disabling non-essential animation."
+  }
+}

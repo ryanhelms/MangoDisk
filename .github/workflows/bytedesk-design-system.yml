@@ -1,0 +1,28 @@
+name: ByteDesk design system
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  integrity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check out the ByteDesk marketplace
+        uses: actions/checkout@v4
+        with:
+          repository: ByteDeskAI/bytedesk-marketplace
+          path: .bytedesk-marketplace
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check design-system payload freshness
+        run: node .bytedesk-marketplace/design-system/scripts/design-system-sync.mjs --app mangodisk --check
+      - name: Check committed design-system integrity
+        run: node .bytedesk/design-system-check.mjs --dir .context/design-system

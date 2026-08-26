@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 1,
+  "sourceSha": "de482617dfd28db5a0c6afd0ffdd637767dff053",
+  "app": "mangodisk",
+  "files": [
+    {
+      "path": "CONNECTIVITY.md",
+      "sha256": "8a9670c7a4e8b825550ba0e38dddf14d79eb7e9ebd333ace4e3263ae9b4a2576",
+      "size": 8385
+    },
+    {
+      "path": "DESIGN.md",
+      "sha256": "4fb0335ff47d94721bd91518c6d43ac96843f5daa1f9c6e9ea72a70f996001c4",
+      "size": 11074
+    },
+    {
+      "path": "artifacts/family/black-glass-optical-layering/DECISIONS.md",
+      "sha256": "38aa41b8632e682d0d301c636f74e31e5f31c2c77b0483bfd268009c1b84f0bc",
+      "size": 2848
+    },
+    {
+      "path": "artifacts/family/black-glass-optical-layering/README.md",
+      "sha256": "a89cd0de51e0fc6327a75f3b67c60aa0628a5a286e55db462a44a62239585308",
+      "size": 4459
+    },
+    {
+      "path": "artifacts/family/black-glass-optical-layering/reference-dark-primary.png",
+      "sha256": "00d09aab56918d9cb7aa83c3823b729ddef32d44cc40d10efb6bc6e113c72573",
+      "size": 1246630
+    },
+    {
+      "path": "artifacts/family/black-glass-optical-layering/reference-dark-seed.png",
+      "sha256": "d01527aa369f8e5141dcdff8240aaa6203d306c687f54c981879ee504e2ab603",
+      "size": 1092274
+    },
+    {
+      "path": "artifacts/family/black-glass-optical-layering/reference-light-study.png",
+      "sha256": "04125dfb8c36d426955f38150e9dbd4de00c401ebcaf1767e7a17fe1c6d72b90",
+      "size": 1209331
+    },
+    {
+      "path": "artifacts/family/black-glass-optical-layering/reference-product-icons.png",
+      "sha256": "7ef540b6219f16e90d785594192ae77c5bed928b87fcb9870ba213c5b4ee77fd",
+      "size": 1716891
+    },
+    {
+      "path": "artifacts/family/black-glass-optical-layering/reference-theme-parity.png",
+      "sha256": "727926dafb4675c243be4b83ed9fbcbb979197f1e39073142af2de7e2e157482",
+      "size": 1539304
+    },
+    {
+      "path": "assets/products/agent-browser/favicon.svg",
+      "sha256": "ee4b76ddf39b4353f09a7e806273e3e9630ac89812176ab6c7a54e1b52804a72",
+      "size": 535
+    },
+    {
+      "path": "assets/products/capture/favicon.svg",
+      "sha256": "f3a06a68c4cb0e362a65b371c57ab35738818c023b7ccb1d68137bdd138509fc",
+      "size": 330
+    },
+    {
+      "path": "assets/products/omnigent/mark.png",
+      "sha256": "eb1e1a809811f7a4c3df1521add080439a1f09a09197e6aa296d08260fadf029",
+      "size": 26169
+    },
+    {
+      "path": "assets/products/omnigent/mark.svg",
+      "sha256": "ba05b826766c5deab89ddfcc4f16d09cb83fedbee554b52671e35c89c8f9d9fb",
+      "size": 13827
+    },
+    {
+      "path": "assets/products/omnigent/wordmark-reverse.svg",
+      "sha256": "244f35f49c36c82ba2c1a6d414e9d10f5624fb75e6e36a5010c7893e4bfa9d44",
+      "size": 21691
+    },
+    {
+      "path": "assets/products/omnigent/wordmark.svg",
+      "sha256": "2bb542cf4603b12d2281ed6803c3bcd8184f86cf93fc8a24615b1b1b73893b56",
+      "size": 21691
+    },
+    {
+      "path": "assets/products/workforce/icon.svg",
+      "sha256": "f403d62e99ce62bf6fce6389c353cc932ea70f95595290d062c9036ec6f2f579",
+      "size": 271
+    },
+    {
+      "path": "assets/products/workforce/login-organization-departments.png",
+      "sha256": "80486d6248bc8ae1c6a55d117af50ae79fb1170a5ab992f6b86229d55a95f16a",
+      "size": 1068657
+    },
+    {
+      "path": "profiles/mangodisk/DESIGN.md",
+      "sha256": "8cda09ffc673edad6d848558e39f6e803412b4f0c13808a87e5bbaaa6d7297d7",
+      "size": 1803
+    },
+    {
+      "path": "profiles/mangodisk/PRODUCT.md",
+      "sha256": "dd7458f115562fcea641e9ac037beeb4d2b1cda281bedc63e52faa719b1063bf",
+      "size": 927
+    },
+    {
+      "path": "tokens/README.md",
+      "sha256": "1421a06b3c0af3c80645a254b66dbc45404d7addc9055efa5918b00b5d3a667e",
+      "size": 8977
+    },
+    {
+      "path": "tokens/bytedesk.tokens.json",
+      "sha256": "d2e30ea21f14a61c8f88116691e89ba853ecc8acb790b99a4d3e6906424451a8",
+      "size": 24125
+    },
+    {
+      "path": "tokens/css/bytedesk.css",
+      "sha256": "47aa6acf78ed5d3f770038b07bd7c280605fd6076f595a60bea3d54fa8dfc02b",
+      "size": 12316
+    },
+    {
+      "path": "tokens/platforms/README.md",
+      "sha256": "a78001b2c73f3c9fed727a34de86ef89799271f26e2ea89444a6f16af6e29ee6",
+      "size": 1054
+    },
+    {
+      "path": "tokens/platforms/go/bytedesk_tokens.go",
+      "sha256": "88d44819f36be1f67b0c42e0446b6fd01a1691c8bb11c474cc930ddec815ca2e",
+      "size": 23709
+    },
+    {
+      "path": "tokens/platforms/rust/bytedesk_tokens.rs",
+      "sha256": "3e126bdfbfd072c208bee047cd38855f45a04832eb460cda41d9fecd14253b48",
+      "size": 18788
+    },
+    {
+      "path": "tokens/platforms/typescript/bytedesk-tokens.ts",
+      "sha256": "cb16cefcfccfb64144736890b3a5bb8a7cc41271bf34f2079a31de822411d532",
+      "size": 7912
+    },
+    {
+      "path": "tokens/tailwind/theme.css",
+      "sha256": "553d10e3972ad171b9dc09a7bee4d909f6d2aeca88f8d02cad4cc8e226421a27",
+      "size": 6497
+    }
+  ]
+}
