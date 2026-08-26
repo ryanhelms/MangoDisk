@@ -2,6 +2,7 @@ use std::{any::Any, collections::BTreeMap, fmt::Display};
 
 use serde::Serialize;
 
+use mangodisk_acp::{AcpError, AcpErrorCode};
 use mangodisk_core::{CoreError, CoreErrorCode};
 
 #[derive(Debug, Clone, Copy, Serialize)]
@@ -41,6 +42,33 @@ impl CommandError {
         E: Any + Display,
     {
         let diagnostic = error.to_string();
+        if let Some(error) = (&error as &dyn Any).downcast_ref::<AcpError>() {
+            let (code, retryable) = match error.code() {
+                // A catalog id the bridge does not know, or an answer to a
+                // permission prompt that is no longer parked, is a caller bug
+                // and cannot succeed when retried unchanged.
+                AcpErrorCode::ProviderUnknown | AcpErrorCode::PermissionNotPending => {
+                    (CommandErrorCode::InvalidInput, false)
+                }
+                AcpErrorCode::ProviderUnavailable
+                | AcpErrorCode::SpawnFailed
+                | AcpErrorCode::HandshakeFailed
+                | AcpErrorCode::SessionLost
+                | AcpErrorCode::ProviderExited
+                | AcpErrorCode::PromptFailed
+                | AcpErrorCode::Timeout => (CommandErrorCode::OperationFailed, true),
+            };
+            log::error!(
+                "command_failed operation={operation} agent_error={} error={diagnostic}",
+                error.code().as_str()
+            );
+            let mut command_error = Self::new(code, operation, retryable);
+            command_error
+                .details
+                .insert("agentError", error.code().as_str());
+            return command_error;
+        }
+
         if let Some(error) = (&error as &dyn Any).downcast_ref::<CoreError>() {
             let (code, retryable) = match error.code() {
                 CoreErrorCode::InvalidInput => (CommandErrorCode::InvalidInput, false),
@@ -76,6 +104,25 @@ impl CommandError {
     fn task_join(operation: &'static str, error: impl Display) -> Self {
         log::error!("command_worker_join_failed operation={operation} error={error}");
         Self::new(CommandErrorCode::TaskJoinFailed, operation, true)
+    }
+
+    /// Adapter-local failure with a stable reason the UI can localize, used
+    /// when no domain error type carries the cause (for example a missing
+    /// chat sidecar or an unknown session id).
+    pub fn adapter_failure(operation: &'static str, reason: &'static str) -> Self {
+        log::error!("command_failed operation={operation} reason={reason}");
+        let mut error = Self::new(CommandErrorCode::OperationFailed, operation, true);
+        error.details.insert("reason", reason);
+        error
+    }
+
+    /// Transport input referenced something that does not exist (for example
+    /// a closed chat session). Not retryable without changing the request.
+    pub fn invalid_input(operation: &'static str, reason: &'static str) -> Self {
+        log::info!("command_rejected operation={operation} reason={reason}");
+        let mut error = Self::new(CommandErrorCode::InvalidInput, operation, false);
+        error.details.insert("reason", reason);
+        error
     }
 
     fn new(code: CommandErrorCode, operation: &'static str, retryable: bool) -> Self {
@@ -166,5 +213,43 @@ mod tests {
         assert_eq!(json["code"], "operationFailed");
         assert_eq!(json["details"]["reason"], "resourceBusy");
         assert!(!json.to_string().contains("private native diagnostic"));
+    }
+
+    #[test]
+    fn acp_errors_forward_the_stable_agent_code_without_diagnostics() {
+        let error = CommandError::operation(
+            "chat_start_session",
+            AcpError::handshake_failed("provider-private handshake detail"),
+        );
+        let json = serde_json::to_value(error).expect("command errors must serialize");
+
+        assert_eq!(json["code"], "operationFailed");
+        assert_eq!(json["retryable"], true);
+        assert_eq!(json["details"]["agentError"], "handshake_failed");
+        assert!(!json
+            .to_string()
+            .contains("provider-private handshake detail"));
+    }
+
+    #[test]
+    fn acp_caller_bugs_are_not_retryable() {
+        let error = CommandError::operation(
+            "chat_resolve_permission",
+            AcpError::permission_not_pending(7),
+        );
+        let json = serde_json::to_value(error).expect("command errors must serialize");
+
+        assert_eq!(json["code"], "invalidInput");
+        assert_eq!(json["retryable"], false);
+        assert_eq!(json["details"]["agentError"], "permission_not_pending");
+    }
+
+    #[test]
+    fn adapter_failures_carry_a_stable_reason() {
+        let error = CommandError::adapter_failure("chat_start_session", "agentSidecarUnavailable");
+        let json = serde_json::to_value(error).expect("command errors must serialize");
+
+        assert_eq!(json["code"], "operationFailed");
+        assert_eq!(json["details"]["reason"], "agentSidecarUnavailable");
     }
 }

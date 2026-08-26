@@ -41,6 +41,8 @@
     "tauri:build:check": "tauri build --no-bundle",
     "cli:build": "cargo build --release -p mangodisk-cli",
     "cli:test": "cargo test -p mangodisk-cli",
+    "mcp:build": "cargo build --release -p mangodisk-mcp",
+    "mcp:test": "cargo test -p mangodisk-mcp",
     "baseline:cleanup": "cargo run --manifest-path src-tauri/xtask/Cargo.toml --release -- --cleanup-baseline",
     "baseline:compare": "cargo run --manifest-path src-tauri/xtask/Cargo.toml --release -- --compare-cleanup-baselines",
     "benchmark:dataset": "cargo run --manifest-path src-tauri/xtask/Cargo.toml --release -- --generate-benchmark-dataset",

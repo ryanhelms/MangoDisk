@@ -1,8 +1,10 @@
 [workspace]
 members = [
   "src-tauri",
+  "src-tauri/crates/mangodisk-acp",
   "src-tauri/crates/mangodisk-core",
   "src-tauri/crates/mangodisk-cli",
+  "src-tauri/crates/mangodisk-mcp",
   "src-tauri/crates/mangodisk-platform",
   "src-tauri/xtask",
 ]

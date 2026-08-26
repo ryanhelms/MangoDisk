@@ -14,7 +14,7 @@ Keep these domain boundaries stable:
 - `filesystem`: paths, traversal, permanent deletion, identity, and protection primitives;
 - `history` and `reporting`: operation records and machine-readable evidence;
 - `platform`: OS contracts and implementations, not product orchestration;
-- GUI, CLI, and Tauri commands: sibling adapters over the same Core use cases.
+- GUI, CLI, MCP server, and Tauri commands: sibling adapters over the same Core use cases.
 
 `duplicates` is the exact-content duplicate domain. Use `duplicate_files` only for a file-specific entity, use case, command, event, or page. A future similar-photo feature belongs to a separate similarity domain and must not weaken exact duplicate semantics.
 

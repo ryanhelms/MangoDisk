@@ -205,6 +205,39 @@ mangodisk clean --format json --no-progress
 mangodisk clean --help
 ```
 
+## MCP サーバーと AI チャット
+
+MangoDisk には MCP（Model Context Protocol）サーバーが含まれており、AI クライアントからディスク使用状況の確認、スキャンの実行、そして明示的に有効化した場合のみガード付きのクリーンアップ操作を行えます。デスクトップアプリや CLI と同じセーフティファーストのコアエンジンを使用しています。
+
+サーバーのバイナリをビルドします：
+
+```sh
+pnpm mcp:build
+```
+
+次に `target/release/mangodisk-mcp` を stdio MCP サーバーとしてクライアント（例：Claude Desktop、Kimi CLI、Cursor）に登録します：
+
+```json
+{
+  "mcpServers": {
+    "mangodisk": {
+      "command": "/path/to/target/release/mangodisk-mcp"
+    }
+  }
+}
+```
+
+HTTP が必要なクライアント向けに、`mangodisk-mcp --http --port 3939` はループバックのみで streamable HTTP を提供し、bearer トークンを必須とします。`MANGODISK_MCP_TOKEN` を自分で設定するか、起動時に stderr に一度だけ表示されるトークンを使用してください。
+
+安全のデフォルトは製品の他の部分と同じです：
+
+- **既定は読み取り専用**：スキャン、ディスク分析、大容量ファイル・重複ファイルの検出、操作履歴。変更系ツール（クリーンアップ、完全削除、アンインストール、スタートアップ項目、システム設定）は `--enable-mutations` 付きで起動しない限り拒否されます。
+- **ガード付き実行**：すべての変更呼び出しには、対応するプレビュースキャンが発行した一回限りの `executionToken`（10 分で失効）と `confirm: true` が必要です。
+- **プライバシー**：`--include-full-paths` を付けて起動しない限り、ツール応答内のファイルパスは伏せられます。
+- **リアルタイム進捗**：時間のかかるスキャンや実行は、要求したクライアントへ MCP 進捗通知を stdio・HTTP の両方でストリーミングします。
+
+デスクトップアプリには AI チャットパネルもあります。ACP 経由でローカルにインストール済みの認証済みプロバイダ CLI（Claude Code、Codex、Kimi）と通信するため、MangoDisk が API キーを求めたり保存したりすることはありません。エージェントは MangoDisk MCP ツールを使ってディスクに関する質問に答え、変更操作はすべて上記のガード付きフローに加えてアプリ内の承認/拒否プロンプトを通ります。対応するプロバイダ CLI がインストールされていない場合、パネルはサイレントに失敗するのではなく、必要なものを案内します。ローカルビルドではチャット用の sidecar を `target/` から解決するため、チャット機能を開発する際は先に `cargo build -p mangodisk-mcp`（または `pnpm mcp:build`）を一度実行してください。
+
 ## ソースからビルド
 
 ### 前提条件

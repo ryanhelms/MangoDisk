@@ -2,6 +2,7 @@
   "navigation": {
     "system-optimization": "System Optimization",
     "cleanup": "Deep Cleanup",
+    "chat": "AI Assistant",
     "analysis": "Disk Space Analysis",
     "large-files": "Large File Cleanup",
     "duplicate-files": "Duplicate Cleanup",
@@ -11,6 +12,7 @@
     "settings": "Settings"
   },
   "navigationGroups": {
+    "assistant": "Assistant",
     "storage": "Storage",
     "system": "System Tools"
   },
@@ -45,10 +47,18 @@
     },
     "modes": {
       "label": "Recommended preset",
-      "smart": { "name": "Smart recommended" },
-      "performance": { "name": "Performance" },
-      "privacy": { "name": "Privacy" },
-      "manual": { "name": "Custom" }
+      "smart": {
+        "name": "Smart recommended"
+      },
+      "performance": {
+        "name": "Performance"
+      },
+      "privacy": {
+        "name": "Privacy"
+      },
+      "manual": {
+        "name": "Custom"
+      }
     },
     "statuses": {
       "pendingEnable": "Will enable",
@@ -1021,7 +1031,11 @@
       "skip": "Not Now",
       "openSettings": "Open System Settings"
     },
-    "filters": { "all": "All", "enabled": "Enabled", "disabled": "Disabled" },
+    "filters": {
+      "all": "All",
+      "enabled": "Enabled",
+      "disabled": "Disabled"
+    },
     "sourceKinds": {
       "registryRun": "Registry startup",
       "startupFolder": "Startup folder",
@@ -1207,6 +1221,71 @@
   "overview": {
     "startScan": "Start Scan",
     "rescan": "Scan Again"
+  },
+  "chat": {
+    "subtitle": "Ask an AI agent to inspect disk usage and clean up safely",
+    "probing": "Checking for installed AI agents…",
+    "noAgentsTitle": "No AI agent found",
+    "noAgentsDescription": "MangoDisk chats with a locally installed, already signed-in agent CLI. Install and sign in to Claude Code, Codex, or Kimi, then check again",
+    "probeAgain": "Check Again",
+    "startTitle": "Start an assistant session",
+    "startDescription": "The agent reads disk information through MangoDisk's built-in tools. It cannot change anything unless you enable mutations",
+    "providerLabel": "Agent",
+    "mutationsLabel": "Allow cleanup mutations",
+    "mutationsHint": "Off by default. When on, the agent may run cleanup tools after your approval. Applies to newly started sessions",
+    "startSession": "Start Session",
+    "starting": "Starting…",
+    "newSession": "New Session",
+    "sessionEnded": "The agent session has ended. Start a new session to continue",
+    "transcriptEmptyHint": "Ask about disk usage, large files, duplicates, or what is safe to clean",
+    "planTitle": "Plan",
+    "thinkingLabel": "Thinking",
+    "inputLabel": "Message the assistant",
+    "inputPlaceholder": "Ask about your disk…",
+    "inputUnavailablePlaceholder": "The session is not active",
+    "send": "Send",
+    "stop": "Stop",
+    "mutationsOn": "Mutations on",
+    "permissionTitle": "Approval required",
+    "permissionTitleFallback": "The agent requests approval",
+    "permissionToolContext": "Tool: {tool}",
+    "permissionDecline": "Decline",
+    "toolArgsShow": "Show arguments",
+    "toolArgsHide": "Hide arguments",
+    "toolKinds": {
+      "read": "Read",
+      "edit": "Edit",
+      "delete": "Delete",
+      "move": "Move",
+      "search": "Search",
+      "execute": "Run",
+      "think": "Think",
+      "fetch": "Fetch",
+      "switchMode": "Mode",
+      "other": "Tool"
+    },
+    "toolStatuses": {
+      "pending": "Pending",
+      "inProgress": "Running",
+      "completed": "Done",
+      "failed": "Failed",
+      "other": "Unknown"
+    },
+    "errors": {
+      "providerUnknown": "This agent is not supported",
+      "providerUnavailable": "The agent CLI is not installed or not signed in",
+      "spawnFailed": "The agent process could not be started",
+      "handshakeFailed": "The agent did not answer while the session was starting",
+      "sessionLost": "The connection to the agent was lost",
+      "providerExited": "The agent process exited unexpectedly",
+      "promptFailed": "The agent could not complete this request",
+      "timeout": "The agent did not answer in time",
+      "permissionNotPending": "This approval request has already been resolved",
+      "sidecarUnavailable": "MangoDisk's disk tool bridge is missing. Reinstall or rebuild the app",
+      "sessionUnknown": "This session no longer exists",
+      "promptEmpty": "Enter a message first",
+      "unknown": "The assistant request could not be completed"
+    }
   },
   "cleanup": {
     "title": "Deep Cleanup",

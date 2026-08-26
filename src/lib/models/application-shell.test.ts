@@ -48,15 +48,16 @@ describe('application shell layout', () => {
     expect(toggleSidebarLayout(narrow)).toMatchObject({ expanded: true, preferredExpanded: true });
   });
 
-  it('groups storage and system tools by user task', () => {
-    expect(PRIMARY_NAV_GROUPS.map(group => group.id)).toEqual(['storage', 'system']);
-    expect(PRIMARY_NAV_GROUPS[0].items.map(item => item.id)).toEqual([
+  it('groups assistant, storage, and system tools by user task', () => {
+    expect(PRIMARY_NAV_GROUPS.map(group => group.id)).toEqual(['assistant', 'storage', 'system']);
+    expect(PRIMARY_NAV_GROUPS[0].items.map(item => item.id)).toEqual([PAGE_IDS.chat]);
+    expect(PRIMARY_NAV_GROUPS[1].items.map(item => item.id)).toEqual([
       PAGE_IDS.cleanup,
       PAGE_IDS.largeFiles,
       PAGE_IDS.duplicateFiles,
       PAGE_IDS.analysis,
     ]);
-    expect(PRIMARY_NAV_GROUPS[1].items.map(item => item.id)).toEqual([
+    expect(PRIMARY_NAV_GROUPS[2].items.map(item => item.id)).toEqual([
       PAGE_IDS.applicationUninstall,
       PAGE_IDS.startup,
       PAGE_IDS.systemOptimization,

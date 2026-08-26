@@ -2,6 +2,7 @@
   "navigation": {
     "system-optimization": "システム最適化",
     "cleanup": "ディープクリーン",
+    "chat": "AI アシスタント",
     "analysis": "ディスク容量分析",
     "large-files": "大容量ファイル",
     "duplicate-files": "重複ファイル",
@@ -11,6 +12,7 @@
     "settings": "設定"
   },
   "navigationGroups": {
+    "assistant": "アシスタント",
     "storage": "ストレージ",
     "system": "システムツール"
   },
@@ -45,10 +47,18 @@
     },
     "modes": {
       "label": "おすすめ設定",
-      "smart": { "name": "スマート推奨" },
-      "performance": { "name": "パフォーマンス優先" },
-      "privacy": { "name": "プライバシー優先" },
-      "manual": { "name": "カスタム" }
+      "smart": {
+        "name": "スマート推奨"
+      },
+      "performance": {
+        "name": "パフォーマンス優先"
+      },
+      "privacy": {
+        "name": "プライバシー優先"
+      },
+      "manual": {
+        "name": "カスタム"
+      }
     },
     "statuses": {
       "pendingEnable": "有効化予定",
@@ -229,7 +239,10 @@
         "name": "USB 上の .DS_Store を抑止",
         "description": "外部ドライブの macOS メタデータを減らします"
       },
-      "macos_dock_auto-hide": { "name": "Dock を自動的に隠す", "description": "必要なときだけ Dock を表示します" },
+      "macos_dock_auto-hide": {
+        "name": "Dock を自動的に隠す",
+        "description": "必要なときだけ Dock を表示します"
+      },
       "macos_dock_hide-recent-apps": {
         "name": "最近使った App を Dock から隠す",
         "description": "Dock 末尾の最近使った App を表示しません"
@@ -1018,7 +1031,11 @@
       "skip": "今はしない",
       "openSettings": "システム設定を開く"
     },
-    "filters": { "all": "すべて", "enabled": "有効", "disabled": "無効" },
+    "filters": {
+      "all": "すべて",
+      "enabled": "有効",
+      "disabled": "無効"
+    },
     "sourceKinds": {
       "registryRun": "レジストリ起動",
       "startupFolder": "スタートアップフォルダー",
@@ -1204,6 +1221,71 @@
   "overview": {
     "startScan": "スキャン開始",
     "rescan": "再スキャン"
+  },
+  "chat": {
+    "subtitle": "AI アシスタントにディスク使用状況の確認と安全なクリーンアップを依頼できます",
+    "probing": "インストール済みの AI エージェントを確認しています…",
+    "noAgentsTitle": "AI エージェントが見つかりません",
+    "noAgentsDescription": "MangoDisk は、インストール済みでログイン済みのエージェント CLI と対話します。Claude Code、Codex、Kimi のいずれかをインストールしてログインし、もう一度確認してください",
+    "probeAgain": "もう一度確認",
+    "startTitle": "アシスタントセッションを開始",
+    "startDescription": "エージェントは MangoDisk 組み込みのツールを通じてディスク情報を読み取ります。変更操作を有効にしない限り、何も変更されません",
+    "providerLabel": "エージェント",
+    "mutationsLabel": "クリーンアップの変更操作を許可",
+    "mutationsHint": "既定はオフです。オンにすると、エージェントは承認後にクリーンアップツールを実行できます。新しいセッションに適用されます",
+    "startSession": "セッションを開始",
+    "starting": "起動しています…",
+    "newSession": "新しいセッション",
+    "sessionEnded": "エージェントセッションは終了しました。続けるには新しいセッションを開始してください",
+    "transcriptEmptyHint": "ディスク使用状況、大きなファイル、重複ファイル、安全に削除できるものについて尋ねてみましょう",
+    "planTitle": "計画",
+    "thinkingLabel": "思考中",
+    "inputLabel": "アシスタントへのメッセージ",
+    "inputPlaceholder": "ディスクについて尋ねる…",
+    "inputUnavailablePlaceholder": "セッションが有効ではありません",
+    "send": "送信",
+    "stop": "停止",
+    "mutationsOn": "変更操作オン",
+    "permissionTitle": "承認が必要です",
+    "permissionTitleFallback": "エージェントが承認を求めています",
+    "permissionToolContext": "ツール: {tool}",
+    "permissionDecline": "拒否",
+    "toolArgsShow": "引数を表示",
+    "toolArgsHide": "引数を隠す",
+    "toolKinds": {
+      "read": "読み取り",
+      "edit": "編集",
+      "delete": "削除",
+      "move": "移動",
+      "search": "検索",
+      "execute": "実行",
+      "think": "思考",
+      "fetch": "取得",
+      "switchMode": "モード",
+      "other": "ツール"
+    },
+    "toolStatuses": {
+      "pending": "待機中",
+      "inProgress": "実行中",
+      "completed": "完了",
+      "failed": "失敗",
+      "other": "不明"
+    },
+    "errors": {
+      "providerUnknown": "このエージェントはサポートされていません",
+      "providerUnavailable": "エージェント CLI がインストールされていないか、ログインしていません",
+      "spawnFailed": "エージェントプロセスを起動できませんでした",
+      "handshakeFailed": "セッション開始時にエージェントから応答がありませんでした",
+      "sessionLost": "エージェントとの接続が失われました",
+      "providerExited": "エージェントプロセスが予期せず終了しました",
+      "promptFailed": "エージェントがこのリクエストを完了できませんでした",
+      "timeout": "エージェントが時間内に応答しませんでした",
+      "permissionNotPending": "この承認リクエストは既に解決されています",
+      "sidecarUnavailable": "MangoDisk のディスクツールブリッジが見つかりません。アプリを再インストールまたは再ビルドしてください",
+      "sessionUnknown": "このセッションは存在しません",
+      "promptEmpty": "先にメッセージを入力してください",
+      "unknown": "アシスタントのリクエストを完了できませんでした"
+    }
   },
   "cleanup": {
     "title": "ディープクリーン",

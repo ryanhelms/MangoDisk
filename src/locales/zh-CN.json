@@ -2,6 +2,7 @@
   "navigation": {
     "system-optimization": "系统优化",
     "cleanup": "深度清理",
+    "chat": "AI 助手",
     "analysis": "磁盘空间分析",
     "large-files": "大文件清理",
     "duplicate-files": "重复文件清理",
@@ -11,6 +12,7 @@
     "settings": "设置"
   },
   "navigationGroups": {
+    "assistant": "智能助手",
     "storage": "存储空间",
     "system": "系统工具"
   },
@@ -45,10 +47,18 @@
     },
     "modes": {
       "label": "推荐方案",
-      "smart": { "name": "智能推荐" },
-      "performance": { "name": "性能优先" },
-      "privacy": { "name": "隐私优先" },
-      "manual": { "name": "自定义选择" }
+      "smart": {
+        "name": "智能推荐"
+      },
+      "performance": {
+        "name": "性能优先"
+      },
+      "privacy": {
+        "name": "隐私优先"
+      },
+      "manual": {
+        "name": "自定义选择"
+      }
     },
     "statuses": {
       "pendingEnable": "待启用",
@@ -85,9 +95,18 @@
         "name": "显示所有文件扩展名",
         "description": "更容易识别文件真实类型，减少误操作"
       },
-      "macos_finder_show-path-bar": { "name": "显示 Finder 路径栏", "description": "在窗口底部显示当前位置的完整层级" },
-      "macos_finder_show-status-bar": { "name": "显示 Finder 状态栏", "description": "显示项目数量和剩余磁盘空间" },
-      "macos_finder_show-hidden-files": { "name": "显示隐藏文件", "description": "在 Finder 中直接查看隐藏项目" },
+      "macos_finder_show-path-bar": {
+        "name": "显示 Finder 路径栏",
+        "description": "在窗口底部显示当前位置的完整层级"
+      },
+      "macos_finder_show-status-bar": {
+        "name": "显示 Finder 状态栏",
+        "description": "显示项目数量和剩余磁盘空间"
+      },
+      "macos_finder_show-hidden-files": {
+        "name": "显示隐藏文件",
+        "description": "在 Finder 中直接查看隐藏项目"
+      },
       "macos_finder_show-posix-path": {
         "name": "标题栏显示完整路径",
         "description": "在 Finder 标题中显示当前目录路径"
@@ -108,8 +127,14 @@
         "name": "关闭扩展名更改提醒",
         "description": "重命名文件扩展名时不再二次询问"
       },
-      "macos_panels_expand-save": { "name": "展开文件保存面板", "description": "保存文件时直接显示完整目录选择器" },
-      "macos_panels_expand-print": { "name": "展开打印面板", "description": "打印时直接显示完整选项" },
+      "macos_panels_expand-save": {
+        "name": "展开文件保存面板",
+        "description": "保存文件时直接显示完整目录选择器"
+      },
+      "macos_panels_expand-print": {
+        "name": "展开打印面板",
+        "description": "打印时直接显示完整选项"
+      },
       "macos_desktop_prevent-network-ds-store": {
         "name": "不在网络磁盘写入 .DS_Store",
         "description": "减少共享目录中的 macOS 元数据文件"
@@ -118,12 +143,18 @@
         "name": "不在 USB 磁盘写入 .DS_Store",
         "description": "减少移动磁盘中的 macOS 元数据文件"
       },
-      "macos_dock_auto-hide": { "name": "自动隐藏 Dock", "description": "需要时再显示 Dock，扩大可用桌面空间" },
+      "macos_dock_auto-hide": {
+        "name": "自动隐藏 Dock",
+        "description": "需要时再显示 Dock，扩大可用桌面空间"
+      },
       "macos_dock_minimize-to-application": {
         "name": "窗口最小化到应用图标",
         "description": "避免 Dock 生成额外的窗口缩略图"
       },
-      "macos_dock_use-scale-effect": { "name": "使用快速缩放效果", "description": "用更简洁的缩放动画替代神奇效果" },
+      "macos_dock_use-scale-effect": {
+        "name": "使用快速缩放效果",
+        "description": "用更简洁的缩放动画替代神奇效果"
+      },
       "macos_mission-control_keep-space-order": {
         "name": "保持桌面空间顺序",
         "description": "阻止系统按最近使用情况自动重排桌面"
@@ -136,7 +167,10 @@
         "name": "截图不包含窗口阴影",
         "description": "窗口截图边缘更紧凑，文件通常更小"
       },
-      "macos_screenshots_use-png": { "name": "截图使用 PNG", "description": "保持无损画质和透明背景" },
+      "macos_screenshots_use-png": {
+        "name": "截图使用 PNG",
+        "description": "保持无损画质和透明背景"
+      },
       "macos_screenshots_disable-thumbnail": {
         "name": "关闭截图悬浮缩略图",
         "description": "截图后立即保存，不等待右下角预览"
@@ -145,11 +179,26 @@
         "name": "启用完整键盘导航",
         "description": "使用 Tab 键在更多界面控件之间移动"
       },
-      "macos_keyboard_fast-key-repeat": { "name": "加快按键重复速度", "description": "长按按键时更快连续输入字符" },
-      "macos_keyboard_short-repeat-delay": { "name": "缩短按键重复等待", "description": "长按按键后更快开始连续输入" },
-      "macos_text_disable-auto-correct": { "name": "关闭自动纠正", "description": "避免系统自动改写输入内容" },
-      "macos_text_disable-smart-quotes": { "name": "关闭智能引号", "description": "输入时保留普通直引号" },
-      "macos_text_disable-smart-dashes": { "name": "关闭智能破折号", "description": "输入时不自动替换连续连字符" },
+      "macos_keyboard_fast-key-repeat": {
+        "name": "加快按键重复速度",
+        "description": "长按按键时更快连续输入字符"
+      },
+      "macos_keyboard_short-repeat-delay": {
+        "name": "缩短按键重复等待",
+        "description": "长按按键后更快开始连续输入"
+      },
+      "macos_text_disable-auto-correct": {
+        "name": "关闭自动纠正",
+        "description": "避免系统自动改写输入内容"
+      },
+      "macos_text_disable-smart-quotes": {
+        "name": "关闭智能引号",
+        "description": "输入时保留普通直引号"
+      },
+      "macos_text_disable-smart-dashes": {
+        "name": "关闭智能破折号",
+        "description": "输入时不自动替换连续连字符"
+      },
       "macos_text_disable-auto-capitalization": {
         "name": "关闭自动大写",
         "description": "避免系统自动修改英文句首大小写"
@@ -162,14 +211,26 @@
         "name": "显示文件扩展名",
         "description": "更容易识别文件真实类型，减少误操作"
       },
-      "windows_explorer_show-hidden-files": { "name": "显示隐藏文件", "description": "在资源管理器中显示普通隐藏项目" },
+      "windows_explorer_show-hidden-files": {
+        "name": "显示隐藏文件",
+        "description": "在资源管理器中显示普通隐藏项目"
+      },
       "windows_explorer_launch-this-pc": {
         "name": "资源管理器打开此电脑",
         "description": "新窗口默认显示磁盘与常用位置"
       },
-      "windows_explorer_compact-mode": { "name": "使用紧凑文件间距", "description": "在同一窗口中显示更多文件" },
-      "windows_explorer_show-full-path": { "name": "标题栏显示完整路径", "description": "更清楚地识别当前文件夹位置" },
-      "windows_explorer_show-item-checkboxes": { "name": "显示项目复选框", "description": "多选文件时可直接勾选项目" },
+      "windows_explorer_compact-mode": {
+        "name": "使用紧凑文件间距",
+        "description": "在同一窗口中显示更多文件"
+      },
+      "windows_explorer_show-full-path": {
+        "name": "标题栏显示完整路径",
+        "description": "更清楚地识别当前文件夹位置"
+      },
+      "windows_explorer_show-item-checkboxes": {
+        "name": "显示项目复选框",
+        "description": "多选文件时可直接勾选项目"
+      },
       "windows_explorer_hide-recent-files": {
         "name": "隐藏最近使用文件",
         "description": "不在资源管理器主页展示最近打开的文件"
@@ -178,8 +239,14 @@
         "name": "隐藏常用文件夹",
         "description": "不在资源管理器主页展示访问频繁的目录"
       },
-      "windows_taskbar_show-seconds": { "name": "任务栏时钟显示秒", "description": "在系统时钟中显示秒数" },
-      "windows_taskbar_hide-task-view": { "name": "隐藏任务视图按钮", "description": "减少不常用的任务栏按钮" },
+      "windows_taskbar_show-seconds": {
+        "name": "任务栏时钟显示秒",
+        "description": "在系统时钟中显示秒数"
+      },
+      "windows_taskbar_hide-task-view": {
+        "name": "隐藏任务视图按钮",
+        "description": "减少不常用的任务栏按钮"
+      },
       "windows_taskbar_hide-widgets": {
         "name": "关闭 Windows 小组件",
         "description": "移除任务栏入口并禁止打开小组件面板"
@@ -196,7 +263,10 @@
         "name": "隐藏任务栏搜索框",
         "description": "释放任务栏空间，仍可从开始菜单搜索"
       },
-      "windows_taskbar_align-left": { "name": "任务栏图标左对齐", "description": "将开始菜单和应用图标移动到左侧" },
+      "windows_taskbar_align-left": {
+        "name": "任务栏图标左对齐",
+        "description": "将开始菜单和应用图标移动到左侧"
+      },
       "windows_taskbar_disable-animations": {
         "name": "关闭任务栏动画",
         "description": "减少任务栏切换动画并提升响应速度"
@@ -205,13 +275,22 @@
         "name": "优先系统响应速度",
         "description": "减少非必要视觉效果以改善界面响应"
       },
-      "windows_personalization_dark-apps": { "name": "应用使用深色模式", "description": "让支持的应用使用深色界面" },
+      "windows_personalization_dark-apps": {
+        "name": "应用使用深色模式",
+        "description": "让支持的应用使用深色界面"
+      },
       "windows_personalization_dark-system": {
         "name": "系统使用深色模式",
         "description": "让任务栏和系统界面使用深色主题"
       },
-      "windows_gaming_enable-game-mode": { "name": "启用游戏模式", "description": "游戏运行时优先分配系统资源" },
-      "windows_gaming_disable-capture": { "name": "关闭后台游戏录制", "description": "不需要录制时减少后台捕获开销" },
+      "windows_gaming_enable-game-mode": {
+        "name": "启用游戏模式",
+        "description": "游戏运行时优先分配系统资源"
+      },
+      "windows_gaming_disable-capture": {
+        "name": "关闭后台游戏录制",
+        "description": "不需要录制时减少后台捕获开销"
+      },
       "windows_gaming_optimize-windowed-games": {
         "name": "优化窗口化游戏",
         "description": "为兼容游戏启用更低延迟的呈现模式"
@@ -272,7 +351,10 @@
         "name": "启用存储感知",
         "description": "允许 Windows 自动维护临时文件空间"
       },
-      "windows_desktop_reduce-menu-delay": { "name": "缩短菜单响应延迟", "description": "让系统菜单更快响应鼠标停留" },
+      "windows_desktop_reduce-menu-delay": {
+        "name": "缩短菜单响应延迟",
+        "description": "让系统菜单更快响应鼠标停留"
+      },
       "windows_explorer_enable-auto-suggest": {
         "name": "启用资源管理器输入建议",
         "description": "在地址栏和运行窗口输入时显示匹配建议"
@@ -1139,6 +1221,71 @@
   "overview": {
     "startScan": "开始扫描",
     "rescan": "重新扫描"
+  },
+  "chat": {
+    "subtitle": "让 AI 助手检查磁盘占用并安全清理",
+    "probing": "正在检查本机可用的 AI 代理…",
+    "noAgentsTitle": "未找到可用的 AI 代理",
+    "noAgentsDescription": "MangoDisk 通过本机已安装并登录的代理 CLI 进行对话。请先安装并登录 Claude Code、Codex 或 Kimi，然后重新检查",
+    "probeAgain": "重新检查",
+    "startTitle": "开始助手会话",
+    "startDescription": "代理通过 MangoDisk 内置工具读取磁盘信息。除非启用变更操作，否则不会修改任何内容",
+    "providerLabel": "代理",
+    "mutationsLabel": "允许清理变更操作",
+    "mutationsHint": "默认关闭。开启后，代理可在获得你批准后执行清理工具。对新会话生效",
+    "startSession": "开始会话",
+    "starting": "正在启动…",
+    "newSession": "新会话",
+    "sessionEnded": "代理会话已结束。开始新会话以继续",
+    "transcriptEmptyHint": "询问磁盘占用、大文件、重复文件，或哪些内容可以安全清理",
+    "planTitle": "计划",
+    "thinkingLabel": "思考中",
+    "inputLabel": "发送消息给助手",
+    "inputPlaceholder": "询问你的磁盘…",
+    "inputUnavailablePlaceholder": "会话未激活",
+    "send": "发送",
+    "stop": "停止",
+    "mutationsOn": "变更已开启",
+    "permissionTitle": "需要批准",
+    "permissionTitleFallback": "代理请求批准",
+    "permissionToolContext": "工具:{tool}",
+    "permissionDecline": "拒绝",
+    "toolArgsShow": "显示参数",
+    "toolArgsHide": "隐藏参数",
+    "toolKinds": {
+      "read": "读取",
+      "edit": "编辑",
+      "delete": "删除",
+      "move": "移动",
+      "search": "搜索",
+      "execute": "执行",
+      "think": "思考",
+      "fetch": "获取",
+      "switchMode": "模式",
+      "other": "工具"
+    },
+    "toolStatuses": {
+      "pending": "等待中",
+      "inProgress": "进行中",
+      "completed": "已完成",
+      "failed": "失败",
+      "other": "未知"
+    },
+    "errors": {
+      "providerUnknown": "不支持此代理",
+      "providerUnavailable": "代理 CLI 未安装或未登录",
+      "spawnFailed": "无法启动代理进程",
+      "handshakeFailed": "会话启动时代理未响应",
+      "sessionLost": "与代理的连接已断开",
+      "providerExited": "代理进程意外退出",
+      "promptFailed": "代理无法完成此请求",
+      "timeout": "代理未及时响应",
+      "permissionNotPending": "此批准请求已被处理",
+      "sidecarUnavailable": "MangoDisk 磁盘工具桥缺失。请重新安装或重新构建应用",
+      "sessionUnknown": "此会话已不存在",
+      "promptEmpty": "请先输入消息",
+      "unknown": "助手请求无法完成"
+    }
   },
   "cleanup": {
     "title": "深度清理",

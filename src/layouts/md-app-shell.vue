@@ -54,6 +54,7 @@ import MdWindowTitlebar from './components/md-window-titlebar.vue';
 // replacing the current page with an empty async-component placeholder.
 const loadAnalysisPage = () => import('@/pages/analysis/index.vue');
 const loadApplicationUninstallPage = () => import('@/pages/application-uninstall/index.vue');
+const loadChatPage = () => import('@/pages/chat/index.vue');
 const loadDuplicateFilesPage = () => import('@/pages/duplicate-files/index.vue');
 const loadHistoryPage = () => import('@/pages/history/index.vue');
 const loadLargeFilesPage = () => import('@/pages/large-files/index.vue');
@@ -63,6 +64,7 @@ const loadSystemOptimizationPage = () => import('@/pages/system-optimization/ind
 const pageLoaders: Partial<Record<PageId, () => Promise<unknown>>> = {
   [PAGE_IDS.analysis]: loadAnalysisPage,
   [PAGE_IDS.applicationUninstall]: loadApplicationUninstallPage,
+  [PAGE_IDS.chat]: loadChatPage,
   [PAGE_IDS.duplicateFiles]: loadDuplicateFilesPage,
   [PAGE_IDS.history]: loadHistoryPage,
   [PAGE_IDS.largeFiles]: loadLargeFilesPage,
@@ -72,6 +74,7 @@ const pageLoaders: Partial<Record<PageId, () => Promise<unknown>>> = {
 };
 const AnalysisPage = defineAsyncComponent(loadAnalysisPage);
 const ApplicationUninstallPage = defineAsyncComponent(loadApplicationUninstallPage);
+const ChatPage = defineAsyncComponent(loadChatPage);
 const DuplicateFilesPage = defineAsyncComponent(loadDuplicateFilesPage);
 const HistoryPage = defineAsyncComponent(loadHistoryPage);
 const LargeFilesPage = defineAsyncComponent(loadLargeFilesPage);
@@ -804,6 +807,7 @@ function requestCancelDeepCleanup() {
     <div class="content-shell">
       <KeepAlive>
         <SystemOptimizationPage v-if="store.currentPage === PAGE_IDS.systemOptimization" />
+        <ChatPage v-else-if="store.currentPage === PAGE_IDS.chat" />
         <CleanupPage
           v-else-if="store.currentPage === PAGE_IDS.cleanup"
           :disk="store.disk"

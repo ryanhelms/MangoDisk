@@ -205,6 +205,39 @@ mangodisk clean --format json --no-progress
 mangodisk clean --help
 ```
 
+## MCP Server and AI Chat
+
+MangoDisk includes an MCP (Model Context Protocol) server so AI clients can answer questions about disk usage, run scans, and — only when explicitly enabled — perform guarded cleanup operations. It uses the same safety-first Core engine as the desktop app and the CLI.
+
+Build the server binary:
+
+```sh
+pnpm mcp:build
+```
+
+Then register `target/release/mangodisk-mcp` as a stdio MCP server in your client (for example Claude Desktop, Kimi CLI, or Cursor):
+
+```json
+{
+  "mcpServers": {
+    "mangodisk": {
+      "command": "/path/to/target/release/mangodisk-mcp"
+    }
+  }
+}
+```
+
+For clients that require HTTP, `mangodisk-mcp --http --port 3939` serves streamable HTTP on loopback only and requires a bearer token: set `MANGODISK_MCP_TOKEN` yourself, or use the token printed once to stderr at startup.
+
+Safety defaults match the rest of the product:
+
+- **Read-only by default**: scans, disk analysis, large-file and duplicate discovery, and operation history. Mutation tools (cleanup, permanent delete, uninstall, startup items, system settings) fail closed unless the server is started with `--enable-mutations`.
+- **Guarded execution**: every mutation call requires the matching preview scan's single-use `executionToken` (expires after 10 minutes) plus `confirm: true`.
+- **Privacy**: file paths are redacted in tool responses unless the server is started with `--include-full-paths`.
+- **Real-time progress**: long scans and executions stream MCP progress notifications to clients that request them, over both stdio and HTTP.
+
+The desktop app also has an AI chat panel. It talks to a locally installed, already-authenticated provider CLI (Claude Code, Codex, or Kimi) over ACP, so MangoDisk never asks for or stores API keys. The agent uses the MangoDisk MCP tools for disk questions, and every mutation still goes through the guarded flow above plus an in-app approve/deny prompt. If no supported provider CLI is installed, the panel explains what to install instead of failing silently. Local builds resolve the chat sidecar from `target/`, so run `cargo build -p mangodisk-mcp` (or `pnpm mcp:build`) once when developing the chat feature.
+
 ## Build from Source
 
 ### Prerequisites

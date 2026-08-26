@@ -1,0 +1,20 @@
+[package]
+name = "mangodisk-acp"
+version.workspace = true
+description = "MangoDisk Agent Client Protocol bridge for locally authenticated provider CLIs"
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+# Pinned: the ACP Rust SDK is still evolving; upgrade deliberately.
+agent-client-protocol = "=2.0.0"
+log = "0.4.33"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["macros", "process", "io-util", "rt-multi-thread", "sync", "time"] }
+# PATH lookup for provider CLI probing; handles Windows PATHEXT resolution.
+which = "7"
+
+[dev-dependencies]
+tempfile = "3"
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "time"] }

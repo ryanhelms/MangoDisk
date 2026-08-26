@@ -44,6 +44,7 @@ import {
   List,
   Mail,
   MapPin,
+  MessagesSquare,
   Minus,
   Monitor,
   Package,
@@ -168,6 +169,7 @@ const simpleBrand = (icon: SimpleIcon): IconDefinition => ({
 const iconMap: Record<IconName, IconDefinition> = {
   sparkles: lucide(Sparkles),
   rocket: lucide(Rocket),
+  chat: lucide(MessagesSquare),
   brushCleaning: lucide(BrushCleaning),
   chartPie: lucide(ChartPie),
   fileSearch: lucide(FileSearch),

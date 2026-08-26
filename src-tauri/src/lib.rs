@@ -147,6 +147,7 @@ pub fn run() {
     let builder = builder.plugin(tauri_plugin_prevent_default::init());
     builder
         .manage(ApplicationUninstallCatalogCache::default())
+        .manage(commands::chat::ChatSessionRegistry::default())
         .plugin(tauri_plugin_dialog::init())
         .plugin(
             tauri_plugin_log::Builder::new()
@@ -184,6 +185,12 @@ pub fn run() {
             commands::applications::cancel_application_uninstall_catalog_scan,
             commands::applications::execute_application_leftovers,
             commands::applications::cancel_application_leftovers,
+            commands::chat::chat_probe_agents,
+            commands::chat::chat_start_session,
+            commands::chat::chat_send_prompt,
+            commands::chat::chat_cancel,
+            commands::chat::chat_resolve_permission,
+            commands::chat::chat_close_session,
             commands::disk::get_system_disk,
             commands::disk::list_disks,
             commands::cleanup::scan_cleanup_candidates,

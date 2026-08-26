@@ -7,6 +7,7 @@ export const OPERATION_PROGRESS_DELAY_MS = 500;
 export const ICON_NAMES = {
   sparkles: 'sparkles',
   cleanup: 'sparkles',
+  chat: 'chat',
   deepCleanup: 'brushCleaning',
   analysis: 'chartPie',
   largeFiles: 'fileSearch',

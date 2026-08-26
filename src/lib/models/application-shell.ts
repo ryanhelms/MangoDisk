@@ -58,6 +58,7 @@ export const PROJECT_LINKS = {
 export const PAGE_IDS = {
   systemOptimization: 'system-optimization',
   cleanup: 'cleanup',
+  chat: 'chat',
   analysis: 'analysis',
   largeFiles: 'large-files',
   duplicateFiles: 'duplicate-files',
@@ -70,6 +71,11 @@ export const PAGE_IDS = {
 export type PageId = (typeof PAGE_IDS)[keyof typeof PAGE_IDS];
 
 export const PRIMARY_NAV_GROUPS = [
+  {
+    id: 'assistant',
+    titleKey: 'navigationGroups.assistant',
+    items: [{ id: PAGE_IDS.chat, icon: ICON_NAMES.chat }],
+  },
   {
     id: 'storage',
     titleKey: 'navigationGroups.storage',

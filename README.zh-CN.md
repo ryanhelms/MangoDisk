@@ -206,6 +206,39 @@ mangodisk clean --format json --no-progress
 mangodisk clean --help
 ```
 
+## MCP 服务器与 AI 对话
+
+MangoDisk 内置 MCP（Model Context Protocol）服务器，让 AI 客户端可以查询磁盘占用、运行扫描，并——仅在明确启用时——执行受保护的清理操作。它与桌面应用和 CLI 使用同一个安全优先的核心引擎。
+
+构建服务器二进制文件：
+
+```sh
+pnpm mcp:build
+```
+
+然后将 `target/release/mangodisk-mcp` 以 stdio 方式注册到你的 MCP 客户端（例如 Claude Desktop、Kimi CLI 或 Cursor）：
+
+```json
+{
+  "mcpServers": {
+    "mangodisk": {
+      "command": "/path/to/target/release/mangodisk-mcp"
+    }
+  }
+}
+```
+
+对于需要 HTTP 的客户端，`mangodisk-mcp --http --port 3939` 仅在回环地址提供 streamable HTTP 服务，并要求 bearer 令牌：可自行设置 `MANGODISK_MCP_TOKEN`，或使用启动时打印到 stderr 的令牌（仅打印一次）。
+
+安全默认值与产品其他部分一致：
+
+- **默认只读**：扫描、磁盘分析、大文件与重复文件发现、操作历史。变更类工具（清理、永久删除、卸载、启动项、系统设置）在未使用 `--enable-mutations` 启动服务器时会直接拒绝执行。
+- **受保护的执行**：每次变更调用都需要对应预览扫描的一次性 `executionToken`（10 分钟后过期）并附加 `confirm: true`。
+- **隐私**：除非服务器以 `--include-full-paths` 启动，否则工具响应中的文件路径会被脱敏。
+- **实时进度**：长时间运行的扫描和执行会向请求该功能的客户端流式发送 MCP 进度通知，stdio 和 HTTP 传输均支持。
+
+桌面应用还包含 AI 对话面板。它通过 ACP 与本地已安装且已登录的服务商 CLI（Claude Code、Codex 或 Kimi）通信，因此 MangoDisk 从不要求或存储 API 密钥。智能体通过 MangoDisk MCP 工具回答磁盘问题，所有变更操作仍走上述受保护流程，并在应用内弹出批准/拒绝提示。如果未安装受支持的服务商 CLI，面板会说明需要安装什么，而不是静默失败。本地构建会从 `target/` 解析对话功能的 sidecar，因此开发对话功能时请先运行一次 `cargo build -p mangodisk-mcp`（或 `pnpm mcp:build`）。
+
 ## 从源码构建
 
 ### 环境要求

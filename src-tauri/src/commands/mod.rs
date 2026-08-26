@@ -1,6 +1,7 @@
 pub(crate) mod analysis;
 pub(crate) mod app_distribution;
 pub(crate) mod applications;
+pub(crate) mod chat;
 pub(crate) mod cleanup;
 pub(crate) mod disk;
 pub(crate) mod duplicate_files;
