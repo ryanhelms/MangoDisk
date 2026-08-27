@@ -228,7 +228,7 @@ pnpm mcp:build
 }
 ```
 
-对于需要 HTTP 的客户端，`mangodisk-mcp --http --port 3939` 仅在回环地址提供 streamable HTTP 服务，并要求 bearer 令牌：可自行设置 `MANGODISK_MCP_TOKEN`，或使用启动时打印到 stderr 的令牌（仅打印一次）。
+对于需要 HTTP 的客户端，`mangodisk-mcp --http --port 3939` 提供 streamable HTTP 服务并要求 bearer 令牌：可自行设置 `MANGODISK_MCP_TOKEN`，或使用启动时打印到 stderr 的令牌（仅打印一次）。服务器默认仅绑定回环地址；`--bind 0.0.0.0` 会将其暴露到网络（仍要求 bearer 认证，但流量未加密——请仅在可信局域网或隧道后方使用），`--allowed-host <名称>` 可为通过主机名访问的客户端添加允许的 Host 名称。
 
 安全默认值与产品其他部分一致：
 

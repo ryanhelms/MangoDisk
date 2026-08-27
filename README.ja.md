@@ -227,7 +227,7 @@ pnpm mcp:build
 }
 ```
 
-HTTP が必要なクライアント向けに、`mangodisk-mcp --http --port 3939` はループバックのみで streamable HTTP を提供し、bearer トークンを必須とします。`MANGODISK_MCP_TOKEN` を自分で設定するか、起動時に stderr に一度だけ表示されるトークンを使用してください。
+HTTP が必要なクライアント向けに、`mangodisk-mcp --http --port 3939` は streamable HTTP を提供し、bearer トークンを必須とします。`MANGODISK_MCP_TOKEN` を自分で設定するか、起動時に stderr に一度だけ表示されるトークンを使用してください。サーバーは既定でループバックのみにバインドします。`--bind 0.0.0.0` でネットワークに公開できます（bearer 認証は引き続き必須ですが、通信は暗号化されません。信頼できる LAN またはトンネル経由のみにしてください）。`--allowed-host <名前>` で、ホスト名で接続するクライアント向けの許可ホスト名を追加できます。
 
 安全のデフォルトは製品の他の部分と同じです：
 

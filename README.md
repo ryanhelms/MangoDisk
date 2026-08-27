@@ -227,7 +227,7 @@ Then register `target/release/mangodisk-mcp` as a stdio MCP server in your clien
 }
 ```
 
-For clients that require HTTP, `mangodisk-mcp --http --port 3939` serves streamable HTTP on loopback only and requires a bearer token: set `MANGODISK_MCP_TOKEN` yourself, or use the token printed once to stderr at startup.
+For clients that require HTTP, `mangodisk-mcp --http --port 3939` serves streamable HTTP and requires a bearer token: set `MANGODISK_MCP_TOKEN` yourself, or use the token printed once to stderr at startup. The server binds loopback by default; `--bind 0.0.0.0` exposes it to the network (bearer auth still applies, but traffic is unencrypted — only widen on a trusted LAN or behind a tunnel), and `--allowed-host <name>` adds accepted Host names for clients dialing a hostname.
 
 Safety defaults match the rest of the product:
 

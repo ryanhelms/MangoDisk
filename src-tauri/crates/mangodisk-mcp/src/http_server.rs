@@ -24,10 +24,16 @@ use crate::server::{AdapterState, MangoDiskServer};
 /// Environment variable carrying the HTTP bearer token.
 pub(crate) const TOKEN_ENV: &str = "MANGODISK_MCP_TOKEN";
 
-/// Runs the streamable-HTTP transport bound to loopback only. Every request
-/// requires `Authorization: Bearer <token>`; stdio mode has no equivalent
-/// because only the supervising process can reach it.
-pub(crate) async fn serve_http(state: Arc<AdapterState>, port: u16) -> Result<(), String> {
+/// Runs the streamable-HTTP transport, bound to loopback unless the operator
+/// widened it with `--bind`. Every request requires `Authorization: Bearer
+/// <token>`; stdio mode has no equivalent because only the supervising process
+/// can reach it.
+pub(crate) async fn serve_http(
+    state: Arc<AdapterState>,
+    bind: std::net::IpAddr,
+    port: u16,
+    allowed_hosts: Vec<String>,
+) -> Result<(), String> {
     let token = match std::env::var(TOKEN_ENV) {
         Ok(token) if !token.is_empty() => token,
         _ => {
@@ -44,6 +50,16 @@ pub(crate) async fn serve_http(state: Arc<AdapterState>, port: u16) -> Result<()
     // after construction; every other option keeps the rmcp default.
     let mut config = StreamableHttpServerConfig::default();
     config.cancellation_token = cancellation.clone();
+    // DNS-rebinding protection: keep rmcp's loopback defaults, always allow
+    // the bind address itself, and append operator-supplied hosts. An
+    // unspecified bind (0.0.0.0/::) makes the dialed host unpredictable, so
+    // the check is disabled there — the bearer token remains the boundary.
+    if bind.is_unspecified() {
+        config.allowed_hosts.clear();
+    } else {
+        config.allowed_hosts.push(bind.to_string());
+    }
+    config.allowed_hosts.extend(allowed_hosts);
     let mcp_service: StreamableHttpService<MangoDiskServer, LocalSessionManager> =
         StreamableHttpService::new(
             move || Ok(MangoDiskServer::new(state.clone())),
@@ -52,12 +68,20 @@ pub(crate) async fn serve_http(state: Arc<AdapterState>, port: u16) -> Result<()
         );
     let service = BearerAuth::new(mcp_service, token);
 
-    let listener = TcpListener::bind((std::net::Ipv4Addr::LOCALHOST, port))
+    let listener = TcpListener::bind((bind, port))
         .await
         .map_err(|error| format!("failed to bind the MCP HTTP listener: {error}"))?;
     let address = listener
         .local_addr()
         .map_err(|error| format!("failed to read the MCP HTTP listener address: {error}"))?;
+    if !bind.is_loopback() {
+        // Network exposure is an explicit operator choice; make sure it is
+        // visible. Bearer auth still applies, but the wire is not encrypted.
+        log::warn!("mcp_http_non_loopback_bind address={address}");
+        eprintln!(
+            "warning: mangodisk-mcp is reachable from the network at http://{address}/; bearer auth is required but traffic is not encrypted"
+        );
+    }
     // Stderr is a logging channel in HTTP mode, so the machine-readable
     // startup line is safe to print here (unlike stdio mode).
     eprintln!("mangodisk-mcp listening on http://{address}/");
@@ -95,7 +119,33 @@ pub(crate) async fn serve_http(state: Arc<AdapterState>, port: u16) -> Result<()
     Ok(())
 }
 
+/// systemd stops services with SIGTERM while interactive runs end with
+/// Ctrl-C; either one must drain the accept loop instead of dying hard.
 async fn shutdown_signal() {
+    #[cfg(unix)]
+    {
+        use tokio::signal::unix::{signal, SignalKind};
+        match signal(SignalKind::terminate()) {
+            Ok(mut terminate) => {
+                tokio::select! {
+                    result = tokio::signal::ctrl_c() => {
+                        if result.is_err() {
+                            log::warn!("mcp_http_ctrl_c_signal_unavailable");
+                        }
+                    }
+                    _ = terminate.recv() => {}
+                }
+            }
+            Err(error) => {
+                log::warn!("mcp_http_sigterm_unavailable error={error}");
+                if tokio::signal::ctrl_c().await.is_err() {
+                    log::warn!("mcp_http_shutdown_signal_unavailable");
+                    std::future::pending::<()>().await;
+                }
+            }
+        }
+    }
+    #[cfg(not(unix))]
     if tokio::signal::ctrl_c().await.is_err() {
         // A failed signal handler must not spin the accept loop forever.
         log::warn!("mcp_http_shutdown_signal_unavailable");

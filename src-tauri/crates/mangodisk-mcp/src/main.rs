@@ -45,7 +45,7 @@ async fn main() -> std::process::ExitCode {
     );
 
     let result = if cli.http {
-        http_server::serve_http(state, cli.port).await
+        http_server::serve_http(state, cli.bind, cli.port, cli.allowed_hosts).await
     } else {
         serve_stdio(state).await
     };

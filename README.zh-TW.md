@@ -228,7 +228,7 @@ pnpm mcp:build
 }
 ```
 
-對於需要 HTTP 的用戶端，`mangodisk-mcp --http --port 3939` 僅在 loopback 上提供 streamable HTTP 服務，並要求 bearer 權杖：可自行設定 `MANGODISK_MCP_TOKEN`，或使用啟動時印到 stderr 的權杖（僅印一次）。
+對於需要 HTTP 的用戶端，`mangodisk-mcp --http --port 3939` 提供 streamable HTTP 服務並要求 bearer 權杖：可自行設定 `MANGODISK_MCP_TOKEN`，或使用啟動時印到 stderr 的權杖（僅印一次）。伺服器預設僅綁定 loopback；`--bind 0.0.0.0` 會將其暴露到網路（仍要求 bearer 驗證，但流量未加密——請僅在可信區網或隧道後方使用），`--allowed-host <名稱>` 可為透過主機名稱存取的用戶端新增允許的 Host 名稱。
 
 安全預設值與產品其他部分一致：
 
