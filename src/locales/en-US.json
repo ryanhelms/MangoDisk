@@ -3,6 +3,7 @@
     "system-optimization": "System Optimization",
     "cleanup": "Deep Cleanup",
     "chat": "AI Assistant",
+    "processes": "Processes",
     "analysis": "Disk Space Analysis",
     "large-files": "Large File Cleanup",
     "duplicate-files": "Duplicate Cleanup",
@@ -1287,6 +1288,114 @@
       "unknown": "The assistant request could not be completed"
     }
   },
+  "processes": {
+    "subtitle": "Watch live CPU, memory, and disk activity, and end processes safely",
+    "loadingTitle": "Reading process activity…",
+    "loadFailedTitle": "Processes could not be loaded",
+    "loadFailedDescription": "The system process snapshot failed. Try again",
+    "retry": "Try Again",
+    "searchPlaceholder": "Search processes",
+    "userFilterLabel": "User",
+    "userFilterAll": "All users",
+    "treeViewLabel": "Tree view",
+    "summaryCount": "{count} process | {count} processes",
+    "emptyTitle": "No processes match",
+    "emptyDescription": "Try a different search or user filter",
+    "notMeasuredYet": "Not measured yet",
+    "selectAll": "Select all listed processes",
+    "selectRow": "Select {name}",
+    "askAiAboutProcess": "Ask AI about this process",
+    "askAiDiskBusy": "Why is my disk busy?",
+    "endSelected": "End {count} process | End {count} processes",
+    "endProcess": "End process",
+    "columns": {
+      "name": "Name",
+      "pid": "PID",
+      "user": "User",
+      "cpu": "CPU %",
+      "rss": "Memory",
+      "readRate": "Read/s",
+      "writeRate": "Write/s",
+      "openFiles": "Open Files",
+      "application": "Application",
+      "classification": "Type"
+    },
+    "classifications": {
+      "criticalSystem": "Critical System",
+      "systemService": "System Service",
+      "userApplication": "Application",
+      "userBackground": "Background"
+    },
+    "classificationDescriptions": {
+      "criticalSystem": "Essential operating-system process. MangoDisk never ends these",
+      "systemService": "Runs as a system service or under another user account",
+      "userApplication": "Belongs to an installed application",
+      "userBackground": "Runs under your account without an installed application"
+    },
+    "states": {
+      "running": "Running",
+      "sleeping": "Sleeping",
+      "idle": "Idle",
+      "stopped": "Stopped",
+      "zombie": "Zombie",
+      "dead": "Dead",
+      "unknown": "Unknown"
+    },
+    "metricAbsence": {
+      "unsupported": "Not supported on this system",
+      "accessDenied": "Access denied",
+      "notApplicable": "Not applicable",
+      "notAvailable": "Unavailable"
+    },
+    "details": {
+      "title": "Process Details",
+      "parentPid": "Parent PID",
+      "owner": "Owner",
+      "currentUserBadge": "you",
+      "state": "State",
+      "threads": "Threads",
+      "startedAt": "Started",
+      "executable": "Executable",
+      "liveMetrics": "Live Metrics"
+    },
+    "end": {
+      "dialogTitle": "End selected processes?",
+      "dialogDescription": "MangoDisk asks each allowed process to exit. Unsaved work in those applications can be lost",
+      "refusedNote": "{count} process stays untouched | {count} processes stay untouched",
+      "modeLabel": "How to end them",
+      "modes": {
+        "graceful": "Graceful",
+        "force": "Force"
+      },
+      "modeHints": {
+        "graceful": "Ask processes to exit and wait a few seconds",
+        "force": "End immediately without cleanup — only when a process ignores a graceful request"
+      },
+      "confirmCheckbox": "I understand these processes will be asked to exit",
+      "confirmCheckboxForce": "I understand these processes will be ended immediately and unsaved work can be lost",
+      "confirmAction": "End {count} process | End {count} processes",
+      "executing": "Ending processes…",
+      "resultTitle": "Process End Result",
+      "resultSummary": "{ended} of {requested} process ended | {ended} of {requested} processes ended",
+      "resultRemaining": "{count} still running (pid {pids}) | {count} still running (pids {pids})",
+      "refusals": {
+        "processNotFound": "Already exited",
+        "ownedByOtherUser": "Owned by another user",
+        "ownershipUnknown": "Ownership could not be verified"
+      },
+      "resultStatuses": {
+        "ended": "Ended",
+        "endedAfterForce": "Force ended",
+        "alreadyExited": "Already exited",
+        "stillRunning": "Still running",
+        "permissionDenied": "Permission denied",
+        "unsupported": "Unsupported",
+        "identityChanged": "Process changed",
+        "refused": "Refused",
+        "failed": "Failed"
+      }
+    }
+  },
   "cleanup": {
     "title": "Deep Cleanup",
     "diskUsageSummary": "{available} available",
@@ -1679,7 +1788,8 @@
       "duplicateFileCleanup": "Duplicate File Cleanup",
       "applicationUninstall": "App Uninstaller",
       "startupManagement": "Startup Management",
-      "systemOptimization": "System Optimization"
+      "systemOptimization": "System Optimization",
+      "processControl": "Process Control"
     },
     "operation": "Operation",
     "planned": "Planned",
@@ -1705,10 +1815,12 @@
     "uninstallRecordSummary": "{items} app selected · {files} uninstalled | {items} apps selected · {files} uninstalled",
     "startupRecordSummary": "{selected} selected · {changed} changed",
     "systemOptimizationRecordSummary": "{selected} selected · {changed} changed",
+    "processControlRecordSummary": "{selected} selected · {changed} ended",
     "selectedItems": "Items selected",
     "changedItems": "Items changed",
     "startupItems": "Startup items",
     "systemSettings": "System settings",
+    "processItems": "Processes",
     "systemOptimizationApplied": "Optimization applied",
     "systemOptimizationChangeFailed": "Change failed",
     "systemOptimizationRestored": "Previous value restored",
@@ -1737,6 +1849,12 @@
       "unsupported": "This source does not support the operation",
       "verificationFailed": "The resulting state could not be verified",
       "platformFailure": "The system operation failed"
+    },
+    "processControlStatuses": {
+      "ended": "Ended",
+      "stillRunning": "Still running",
+      "refused": "Refused",
+      "failed": "Failed"
     },
     "applicationLeftoverStatuses": {
       "previewed": "Checks complete; no files were deleted",

@@ -2,6 +2,7 @@ mod applications;
 mod cleanup;
 mod filesystem;
 mod history;
+mod processes;
 mod reporting;
 mod shared;
 mod startup;
@@ -53,10 +54,20 @@ pub use history::{
     ApplicationLeftoverOperationDetails, ApplicationUninstallOperationDetails,
     CleanupOperationDetails, DeepCleanupOperationDetails, FileCleanupHistoryItem,
     FileCleanupHistoryItemStatus, FileCleanupOperationDetails, HistoryService, OperationCategory,
-    OperationDetails, OperationOutcome, OperationRecord, StartupHistoryItem,
+    OperationDetails, OperationOutcome, OperationRecord, ProcessControlHistoryItem,
+    ProcessControlHistoryItemStatus, ProcessControlOperationDetails, StartupHistoryItem,
     StartupHistoryItemStatus, StartupHistoryState, StartupManagementOperationDetails,
     SystemOptimizationHistoryItem, SystemOptimizationHistoryItemStatus,
     SystemOptimizationOperationDetails, OPERATION_RECORD_SCHEMA_VERSION,
+};
+pub use processes::{
+    associate_applications, build_process_tree, classify_process, top_processes_by_cpu,
+    top_processes_by_rss, top_processes_by_write_rate, ProcessApplicationAssociations,
+    ProcessApplicationMatch, ProcessAssociationInventoryStatus, ProcessClassification,
+    ProcessClassificationFacts, ProcessControlService, ProcessEndDecision, ProcessEndItemResult,
+    ProcessEndItemStatus, ProcessEndPlan, ProcessEndPlanItem, ProcessEndRefusal, ProcessEndResult,
+    ProcessInventoryService, ProcessSample, ProcessScanFilter, ProcessSnapshot, ProcessTree,
+    ProcessTreeNode, PROCESS_END_PLAN_SCHEMA_VERSION, PROCESS_SNAPSHOT_SCHEMA_VERSION,
 };
 pub use reporting::{
     BaselineArtifacts, BaselineComparisonArtifacts, BaselineComparisonOptions,

@@ -4,16 +4,25 @@ import { useI18n } from 'vue-i18n';
 import MdIcon from '@/components/icons/md-icon.vue';
 import MdIconMangodisk from '@/components/icons/md-icon-mangodisk.vue';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { APP_NAME, PRIMARY_NAV_GROUPS, SECONDARY_NAV_ITEMS } from '@/lib/models/application-shell';
+import { APP_NAME, PAGE_IDS, PRIMARY_NAV_GROUPS, SECONDARY_NAV_ITEMS } from '@/lib/models/application-shell';
 import type { PageId } from '@/lib/models/application-shell';
 import { ICON_NAMES } from '@/lib/models/ui';
 import { OperatingSystemService } from '@/lib/services/operating-system-service';
 
 const { t } = useI18n({ useScope: 'global' });
 // Application uninstall, startup, and system optimization have no Linux
-// platform adapter yet, so the whole system group stays out of the sidebar.
+// platform adapter yet, so only those items leave the sidebar there; pages
+// with a Linux adapter (such as processes) stay visible on every platform.
+const LINUX_UNSUPPORTED_PAGE_IDS: ReadonlySet<PageId> = new Set([
+  PAGE_IDS.applicationUninstall,
+  PAGE_IDS.startup,
+  PAGE_IDS.systemOptimization,
+]);
 const primaryNavGroups = OperatingSystemService.isLinux()
-  ? PRIMARY_NAV_GROUPS.filter(group => group.id !== 'system')
+  ? PRIMARY_NAV_GROUPS.map(group => ({
+      ...group,
+      items: group.items.filter(item => !LINUX_UNSUPPORTED_PAGE_IDS.has(item.id)),
+    })).filter(group => group.items.length > 0)
   : PRIMARY_NAV_GROUPS;
 
 const props = withDefaults(

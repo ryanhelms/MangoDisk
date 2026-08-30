@@ -60,7 +60,17 @@ function onKeydown(event: KeyboardEvent) {
   }
 }
 
-defineExpose({ focus: focusInput });
+/**
+ * Applies an external pre-fill (Ask-AI handoff). Existing user text is kept
+ * and the seed appended so a handoff never silently discards a draft.
+ */
+function setDraft(text: string) {
+  const existing = draft.value.trim();
+  draft.value = existing ? `${existing}\n\n${text}` : text;
+  void focusInput();
+}
+
+defineExpose({ focus: focusInput, setDraft });
 </script>
 
 <template>

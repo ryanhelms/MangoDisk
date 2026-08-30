@@ -57,6 +57,10 @@ Review installed applications, their sizes, running status, and associated files
 
 Review and manage programs that start automatically on macOS and Windows. Turning off unnecessary startup items can help reduce startup or sign-in delays and background resource usage, and you can turn them back on whenever needed.
 
+### Process Analysis
+
+See what is running on the system in a live process view: CPU, memory, and disk read/write rates per process, a tree view, and application association. Ending a process uses a guarded flow that groups selections by risk — critical system processes are always protected, processes owned by other users are refused with a clear reason, and every action is confirmed first and recorded in Operation History. The built-in AI chat can explain unfamiliar processes and answer live questions such as "why is my disk busy?" using the same typed data, through your own locally installed, already-authenticated AI provider CLI.
+
 ### Disk Space Analysis
 
 Use a treemap and list view to understand storage distribution on a disk or in a selected folder. Browse the hierarchy to find the largest directories and files, then open their locations directly.
@@ -231,7 +235,7 @@ For clients that require HTTP, `mangodisk-mcp --http --port 3939` serves streama
 
 Safety defaults match the rest of the product:
 
-- **Read-only by default**: scans, disk analysis, large-file and duplicate discovery, and operation history. Mutation tools (cleanup, permanent delete, uninstall, startup items, system settings) fail closed unless the server is started with `--enable-mutations`.
+- **Read-only by default**: scans, disk analysis, large-file and duplicate discovery, live process inventory, and operation history. Mutation tools (cleanup, permanent delete, uninstall, process ending, startup items, system settings) fail closed unless the server is started with `--enable-mutations`.
 - **Guarded execution**: every mutation call requires the matching preview scan's single-use `executionToken` (expires after 10 minutes) plus `confirm: true`.
 - **Privacy**: file paths are redacted in tool responses unless the server is started with `--include-full-paths`.
 - **Real-time progress**: long scans and executions stream MCP progress notifications to clients that request them, over both stdio and HTTP.

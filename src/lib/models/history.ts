@@ -5,6 +5,7 @@ import type {
   ApplicationUninstallPlatform,
 } from './application';
 import type { CleanupActionResult, PresentedCleanupActionResult } from './cleanup';
+import type { ProcessEndMode } from './process';
 import type { SystemSettingChangeFailureReason } from './system-settings';
 
 export type OperationCategory =
@@ -13,7 +14,8 @@ export type OperationCategory =
   | 'duplicateFileCleanup'
   | 'applicationUninstall'
   | 'startupManagement'
-  | 'systemOptimization';
+  | 'systemOptimization'
+  | 'processControl';
 export type OperationOutcome = 'completed' | 'completedWithWarnings' | 'cancelled';
 
 interface OperationRecordBase {
@@ -142,13 +144,44 @@ export interface SystemOptimizationOperationRecord extends OperationRecordBase {
   };
 }
 
+/** Coarser per-process audit status recorded by a process-control execution. */
+export type ProcessControlHistoryItemStatus = 'ended' | 'stillRunning' | 'refused' | 'failed';
+
+/** Locale key per recorded process-control item status. */
+export const PROCESS_CONTROL_HISTORY_ITEM_STATUS_LABEL_KEYS: Record<ProcessControlHistoryItemStatus, string> = {
+  ended: 'history.processControlStatuses.ended',
+  stillRunning: 'history.processControlStatuses.stillRunning',
+  refused: 'history.processControlStatuses.refused',
+  failed: 'history.processControlStatuses.failed',
+};
+
+export interface ProcessControlOperationRecord extends OperationRecordBase {
+  category: 'processControl';
+  details: {
+    type: 'processControl';
+    payload: {
+      planId: string;
+      mode: ProcessEndMode;
+      requestedCount: number;
+      endedCount: number;
+      failedCount: number;
+      items: Array<{
+        pid: number;
+        name: string;
+        status: ProcessControlHistoryItemStatus;
+      }>;
+    };
+  };
+}
+
 export type OperationRecord =
   | DeepCleanupOperationRecord
   | LargeFileCleanupOperationRecord
   | DuplicateFileCleanupOperationRecord
   | ApplicationUninstallOperationRecord
   | StartupManagementOperationRecord
-  | SystemOptimizationOperationRecord;
+  | SystemOptimizationOperationRecord
+  | ProcessControlOperationRecord;
 
 export type PresentedDeepCleanupOperationRecord = Omit<DeepCleanupOperationRecord, 'details'> & {
   details: {
@@ -170,4 +203,5 @@ export type PresentedOperationRecord =
   | DuplicateFileCleanupOperationRecord
   | ApplicationUninstallOperationRecord
   | StartupManagementOperationRecord
-  | SystemOptimizationOperationRecord;
+  | SystemOptimizationOperationRecord
+  | ProcessControlOperationRecord;

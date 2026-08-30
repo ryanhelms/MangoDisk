@@ -24,6 +24,7 @@ Keep these domain boundaries stable:
 - `storage`: disk analysis, large-file discovery, and exact duplicate detection;
 - `applications`: installed application identity and application-scoped capabilities;
 - `filesystem`: paths, traversal, permanent deletion, identity, and protection primitives;
+- `processes`: process inventory, analysis (tree, classification, application association), and guarded process termination;
 - `history` and `reporting`: operation records and machine-readable evidence;
 - `platform`: OS contracts and implementations, not product orchestration;
 - GUI, CLI, MCP server, and Tauri commands: sibling adapters over the same Core use cases.

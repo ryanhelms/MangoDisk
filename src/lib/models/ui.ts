@@ -8,6 +8,8 @@ export const ICON_NAMES = {
   sparkles: 'sparkles',
   cleanup: 'sparkles',
   chat: 'chat',
+  processes: 'processes',
+  tree: 'tree',
   deepCleanup: 'brushCleaning',
   analysis: 'chartPie',
   largeFiles: 'fileSearch',

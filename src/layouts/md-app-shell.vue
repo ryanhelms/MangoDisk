@@ -40,6 +40,7 @@ import { useCleanupStore } from '@/stores/cleanup-store';
 import { useDuplicateFilesStore } from '@/stores/duplicate-files-store';
 import { useHistoryStore } from '@/stores/history-store';
 import { useLargeFilesStore } from '@/stores/large-files-store';
+import { useProcessesStore } from '@/stores/processes-store';
 import { useStorageScopeStore } from '@/stores/storage-scope-store';
 import { useStartupStore } from '@/stores/startup-store';
 import { useSystemSettingsStore } from '@/stores/system-settings-store';
@@ -58,6 +59,7 @@ const loadChatPage = () => import('@/pages/chat/index.vue');
 const loadDuplicateFilesPage = () => import('@/pages/duplicate-files/index.vue');
 const loadHistoryPage = () => import('@/pages/history/index.vue');
 const loadLargeFilesPage = () => import('@/pages/large-files/index.vue');
+const loadProcessesPage = () => import('@/pages/processes/index.vue');
 const loadSettingsPage = () => import('@/pages/settings/index.vue');
 const loadStartupPage = () => import('@/pages/startup/index.vue');
 const loadSystemOptimizationPage = () => import('@/pages/system-optimization/index.vue');
@@ -68,6 +70,7 @@ const pageLoaders: Partial<Record<PageId, () => Promise<unknown>>> = {
   [PAGE_IDS.duplicateFiles]: loadDuplicateFilesPage,
   [PAGE_IDS.history]: loadHistoryPage,
   [PAGE_IDS.largeFiles]: loadLargeFilesPage,
+  [PAGE_IDS.processes]: loadProcessesPage,
   [PAGE_IDS.settings]: loadSettingsPage,
   [PAGE_IDS.startup]: loadStartupPage,
   [PAGE_IDS.systemOptimization]: loadSystemOptimizationPage,
@@ -78,6 +81,7 @@ const ChatPage = defineAsyncComponent(loadChatPage);
 const DuplicateFilesPage = defineAsyncComponent(loadDuplicateFilesPage);
 const HistoryPage = defineAsyncComponent(loadHistoryPage);
 const LargeFilesPage = defineAsyncComponent(loadLargeFilesPage);
+const ProcessesPage = defineAsyncComponent(loadProcessesPage);
 const SettingsPage = defineAsyncComponent(loadSettingsPage);
 const StartupPage = defineAsyncComponent(loadStartupPage);
 const SystemOptimizationPage = defineAsyncComponent(loadSystemOptimizationPage);
@@ -113,6 +117,7 @@ const settingsFocusRevision = ref(0);
 const historyStore = useHistoryStore();
 const largeFilesStore = useLargeFilesStore();
 const duplicateFilesStore = useDuplicateFilesStore();
+const processesStore = useProcessesStore();
 const storageScopeStore = useStorageScopeStore();
 const startupStore = useStartupStore();
 const systemSettingsStore = useSystemSettingsStore();
@@ -154,6 +159,8 @@ const exclusiveOperationBusy = computed(
     applicationStore.closingUninstallApplications ||
     applicationStore.preparingUninstall ||
     applicationStore.executingUninstall ||
+    processesStore.preparingEnd ||
+    processesStore.executingEnd ||
     startupStore.scanning ||
     startupStore.preparingChange ||
     startupStore.executingChange ||
@@ -434,6 +441,7 @@ const busyPages = computed<PageId[]>(() => [
     ? [PAGE_IDS.applicationUninstall]
     : []),
   ...(startupStore.scanning || startupStore.preparingChange || startupStore.executingChange ? [PAGE_IDS.startup] : []),
+  ...(processesStore.preparingEnd || processesStore.executingEnd ? [PAGE_IDS.processes] : []),
   ...(systemSettingsStore.scanning || systemSettingsStore.preparing || systemSettingsStore.executing
     ? [PAGE_IDS.systemOptimization]
     : []),
@@ -808,6 +816,7 @@ function requestCancelDeepCleanup() {
       <KeepAlive>
         <SystemOptimizationPage v-if="store.currentPage === PAGE_IDS.systemOptimization" />
         <ChatPage v-else-if="store.currentPage === PAGE_IDS.chat" />
+        <ProcessesPage v-else-if="store.currentPage === PAGE_IDS.processes" />
         <CleanupPage
           v-else-if="store.currentPage === PAGE_IDS.cleanup"
           :disk="store.disk"

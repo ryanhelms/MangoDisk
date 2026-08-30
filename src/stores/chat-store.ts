@@ -42,6 +42,12 @@ interface ChatState {
   sending: boolean;
   lastEventSeq: number | null;
   sessionUnlistener: (() => void) | null;
+  /**
+   * Pending composer pre-fill from another page (for example "Ask AI about
+   * this process"). It survives the start panel until the composer consumes
+   * it; `revision` lets repeated seeds retrigger the watcher.
+   */
+  composerSeed: { text: string; revision: number } | null;
 }
 
 function formatToolArgs(args: unknown): string {
@@ -96,6 +102,7 @@ export const useChatStore = defineStore('chat', {
     sending: false,
     lastEventSeq: null,
     sessionUnlistener: null,
+    composerSeed: null,
   }),
   getters: {
     sessionActive: state => state.sessionPhase === 'active',
@@ -134,6 +141,19 @@ export const useChatStore = defineStore('chat', {
       if (this.providers.some(provider => provider.id === providerId)) {
         this.selectedProviderId = providerId;
       }
+    },
+    /**
+     * Pre-fills the composer from another page's Ask-AI handoff. The seed
+     * waits for the composer to appear (an idle session shows the start panel
+     * first) and is consumed by the chat page once applied.
+     */
+    seedComposer(text: string) {
+      const trimmed = text.trim();
+      if (!trimmed) return;
+      this.composerSeed = { text: trimmed, revision: (this.composerSeed?.revision ?? 0) + 1 };
+    },
+    consumeComposerSeed() {
+      this.composerSeed = null;
     },
     setMutationsEnabled(enabled: boolean) {
       this.mutationsEnabled = enabled;

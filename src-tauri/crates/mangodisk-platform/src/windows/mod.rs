@@ -14,6 +14,7 @@ mod package_reconciliation;
 mod package_sources;
 mod path_identity;
 mod process_control;
+mod process_metrics;
 mod project_markers;
 mod startup;
 mod system_settings;
@@ -244,6 +245,18 @@ impl Platform for WindowsPlatform {
         mode: ApplicationProcessCloseMode,
     ) -> Vec<PlatformResult<ApplicationProcessCloseResult>> {
         process_control::close_many(targets, mode)
+    }
+
+    fn snapshot_processes(&self) -> PlatformResult<Vec<crate::ProcessMetricsSnapshot>> {
+        process_metrics::snapshot_processes()
+    }
+
+    fn end_process(
+        &self,
+        pid: u32,
+        mode: crate::ProcessEndMode,
+    ) -> PlatformResult<crate::ProcessEndStatus> {
+        process_metrics::end_process(pid, mode)
     }
 
     fn is_link_like(&self, metadata: &fs::Metadata) -> bool {

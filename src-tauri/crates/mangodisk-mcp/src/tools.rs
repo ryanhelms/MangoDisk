@@ -1,12 +1,18 @@
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 
 use mangodisk_core::{
-    AnalysisService, ApplicationLeftoverService, ApplicationUninstallBatchSelection,
-    ApplicationUninstallService, CleanupRequest, CleanupScanResult, CleanupScanService,
-    CleanupService, DuplicateFileService, DuplicateFilesResult, HistoryService, LargeFileService,
-    LargeFilesResult, OperationCancellationToken, PermanentDeleteCandidate, StartupDesiredState,
-    StartupService, SystemSettingTargetState, SystemSettingsChangeSelection, SystemSettingsService,
+    associate_applications, classify_process, top_processes_by_cpu, top_processes_by_rss,
+    top_processes_by_write_rate, AnalysisService, ApplicationLeftoverService,
+    ApplicationUninstallBatchSelection, ApplicationUninstallService, CleanupRequest,
+    CleanupScanResult, CleanupScanService, CleanupService, DuplicateFileService,
+    DuplicateFilesResult, HistoryService, LargeFileService, LargeFilesResult,
+    OperationCancellationToken, PermanentDeleteCandidate, ProcessApplicationMatch,
+    ProcessClassification, ProcessClassificationFacts, ProcessControlService, ProcessEndPlan,
+    ProcessEndResult, ProcessInventoryService, ProcessSample, ProcessScanFilter, ProcessSnapshot,
+    StartupDesiredState, StartupService, SystemSettingTargetState, SystemSettingsChangeSelection,
+    SystemSettingsService,
 };
+use mangodisk_platform::ProcessEndMode;
 use rmcp::{
     handler::server::wrapper::Parameters,
     model::{CallToolResult, ErrorData},
@@ -14,7 +20,7 @@ use rmcp::{
     tool, tool_router, RoleServer,
 };
 use schemars::JsonSchema;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
 use crate::{
@@ -23,6 +29,12 @@ use crate::{
     execution_tokens::MutationDomain,
     server::{AdapterState, MangoDiskServer},
 };
+
+/// Default process count for a topBy ranking.
+const DEFAULT_PROCESS_TOP_LIMIT: usize = 10;
+/// Cap for topBy rankings; larger requests are clamped so a client cannot
+/// turn the bounded scan into an unbounded serialization.
+const MAX_PROCESS_TOP_LIMIT: usize = 100;
 
 /// Default minimum size for large-file discovery (100 MiB).
 const DEFAULT_LARGE_FILE_MINIMUM_BYTES: u64 = 100 * 1024 * 1024;
@@ -222,6 +234,132 @@ pub(crate) struct SystemSettingsApplyInput {
     guard: ExecutionGuardInput,
     /// Settings to change. Must be a subset of the scanned settings.
     items: Vec<SystemSettingChangeInput>,
+}
+
+#[derive(Debug, Deserialize, JsonSchema)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub(crate) struct ProcessesScanInput {
+    /// Only include processes whose name contains this text (case-insensitive).
+    #[serde(default)]
+    name_contains: Option<String>,
+    /// Only include processes owned by this account name or numeric uid.
+    #[serde(default)]
+    user: Option<String>,
+    /// Only include processes with at least this much resident memory in bytes.
+    #[serde(default)]
+    min_rss_bytes: Option<u64>,
+    /// Rank the result by one metric and keep only the top entries. Without it the full pid-ordered list is returned.
+    #[serde(default)]
+    top_by: Option<ProcessTopByInput>,
+    /// Maximum processes kept when topBy is set. Defaults to 10; values above 100 are capped. Ignored without topBy.
+    #[serde(default)]
+    limit: Option<u64>,
+}
+
+#[derive(Debug, Clone, Copy, Deserialize, JsonSchema)]
+#[serde(rename_all = "camelCase")]
+pub(crate) enum ProcessTopByInput {
+    Cpu,
+    Rss,
+    WriteRate,
+}
+
+#[derive(Debug, Clone, Copy, Default, Deserialize, JsonSchema)]
+#[serde(rename_all = "camelCase")]
+pub(crate) enum ProcessEndModeInput {
+    /// Ask the process to exit and wait briefly for it to disappear.
+    #[default]
+    Graceful,
+    /// Escalate to an uninterruptible kill for processes still alive after the graceful pass.
+    Force,
+}
+
+impl From<ProcessEndModeInput> for ProcessEndMode {
+    fn from(value: ProcessEndModeInput) -> Self {
+        match value {
+            ProcessEndModeInput::Graceful => Self::Graceful,
+            ProcessEndModeInput::Force => Self::Force,
+        }
+    }
+}
+
+#[derive(Debug, Deserialize, JsonSchema)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub(crate) struct ProcessEndInput {
+    #[serde(flatten)]
+    guard: ExecutionGuardInput,
+    /// Process identifiers from the processes_scan result. Must be a subset of the listed processes.
+    pids: Vec<u32>,
+    /// End mode. Defaults to graceful.
+    #[serde(default)]
+    mode: ProcessEndModeInput,
+    /// Build the plan and report per-process decisions without ending anything.
+    dry_run: bool,
+}
+
+/// One listed process: the Core sample flattened, enriched with the product
+/// classification and the installed-application association when the platform
+/// inventory provides one.
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) struct ProcessListEntry {
+    #[serde(flatten)]
+    sample: ProcessSample,
+    classification: ProcessClassification,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    application_identifier: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    application_name: Option<String>,
+}
+
+/// The Core snapshot metadata with the listed (filtered, optionally ranked)
+/// processes. `ProcessSnapshot` is frozen, so the enrichment lives in
+/// `ProcessListEntry` instead of a patched Core type.
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) struct ProcessesScanOutput {
+    schema_version: u32,
+    snapshot_id: String,
+    captured_at_ms: u64,
+    sample_interval_ms: u64,
+    cpu_ticks_per_second: u64,
+    logical_cpu_count: u32,
+    new_process_count: u64,
+    exited_process_count: u64,
+    processes: Vec<ProcessListEntry>,
+}
+
+/// Outcome of `process_end`: a dry run reports the prepared plan, an execution
+/// reports the Core result whose `remaining_pids` is the final authority.
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) struct ProcessEndOutput {
+    /// True when only the plan was prepared and nothing was ended.
+    dry_run: bool,
+    /// The prepared plan with per-process decisions; present on dry runs.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    plan: Option<ProcessEndPlan>,
+    /// The execution outcome; present when the plan was executed.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    result: Option<ProcessEndResult>,
+}
+
+impl ProcessEndOutput {
+    fn plan_preview(plan: ProcessEndPlan) -> Self {
+        Self {
+            dry_run: true,
+            plan: Some(plan),
+            result: None,
+        }
+    }
+
+    fn executed(result: ProcessEndResult) -> Self {
+        Self {
+            dry_run: false,
+            plan: None,
+            result: Some(result),
+        }
+    }
 }
 
 #[tool_router(vis = "pub(crate)")]
@@ -509,6 +647,45 @@ impl MangoDiskServer {
             Err(error) => return Ok(error),
         };
         Ok(self.respond(&json!({ "records": records }), None))
+    }
+
+    #[tool(
+        description = "Scan running processes with CPU, memory, and IO metrics plus classification and application association. Read-only. The scan takes two counter samples about 500 ms apart, so it is bounded and streams no progress. When mutations are enabled, the response includes an executionToken for process_end covering the listed pids.",
+        annotations(read_only_hint = true)
+    )]
+    async fn processes_scan(
+        &self,
+        Parameters(input): Parameters<ProcessesScanInput>,
+        context: RequestContext<RoleServer>,
+    ) -> Result<CallToolResult, ErrorData> {
+        // Core exposes no process-scan cancellation token; the two-sample scan
+        // is bounded (~500 ms), so there is nothing to cancel or stream.
+        let operation = CoreOperation::new(None, &context);
+        let filter = ProcessScanFilter {
+            name_contains: input.name_contains,
+            user: input.user,
+            min_rss_bytes: input.min_rss_bytes,
+        };
+        let top_by = input.top_by;
+        let limit = input
+            .limit
+            .and_then(|limit| usize::try_from(limit).ok())
+            .unwrap_or(DEFAULT_PROCESS_TOP_LIMIT)
+            .min(MAX_PROCESS_TOP_LIMIT);
+        let output = match operation
+            .run("processes_scan", move |_| {
+                let snapshot = ProcessInventoryService::scan(filter)?;
+                Ok(processes_scan_output(snapshot, top_by, limit))
+            })
+            .await
+        {
+            Ok(output) => output,
+            Err(error) => return Ok(error),
+        };
+        let token = self
+            .state
+            .issue_token(MutationDomain::ProcessEnd, processes_snapshot(&output));
+        Ok(self.respond(&output, token))
     }
 
     #[tool(
@@ -904,6 +1081,62 @@ impl MangoDiskServer {
         };
         Ok(self.respond(&result, None))
     }
+
+    #[tool(
+        description = "End processes listed by processes_scan. Requires --enable-mutations, the scan's executionToken, and confirm: true. Defaults to a graceful end; mode: \"force\" escalates against survivors after a bounded wait. dry_run reports the plan decisions without ending anything. Core hard-refuses itself, pid 0/1, and critical system processes, revalidates process identity before signalling, and reports remainingPids as the final authority. Execution prepares a fresh Core plan inside the call; Core plans expire after 5 minutes while the executionToken lives 10, so a stale or superseded plan fails closed with a typed reason. The operation is bounded to a few seconds and streams no progress.",
+        annotations(destructive_hint = true, read_only_hint = false)
+    )]
+    async fn process_end(
+        &self,
+        Parameters(input): Parameters<ProcessEndInput>,
+        context: RequestContext<RoleServer>,
+    ) -> Result<CallToolResult, ErrorData> {
+        if let Err(error) = self.state.ensure_mutations_enabled() {
+            return Ok(*error);
+        }
+        if let Err(error) = AdapterState::ensure_confirmed(input.guard.confirm) {
+            return Ok(*error);
+        }
+        if let Err(error) = ensure_pids_present(&input.pids) {
+            return Ok(*error);
+        }
+        let snapshot = match self
+            .state
+            .take_token(&input.guard.token, MutationDomain::ProcessEnd)
+        {
+            Ok(snapshot) => snapshot,
+            Err(error) => return Ok(*error),
+        };
+        if let Err(error) = ensure_pids_within_snapshot(&input.pids, &snapshot) {
+            return Ok(*error);
+        }
+        let pids = input.pids;
+        let mode = input.mode;
+        let dry_run = input.dry_run;
+        // Core exposes no process-end cancellation token; the operation is
+        // bounded (graceful wait plus an optional force wait), so the tool
+        // result itself is the completion signal.
+        let operation = CoreOperation::new(None, &context);
+        let result = match operation
+            .run("process_end", move |_| {
+                // prepare_end revalidates every pid against a fresh platform
+                // snapshot and execute_end re-checks identity before
+                // signalling, so the fused call keeps Core's own two-phase
+                // safety chain intact.
+                let plan = ProcessControlService::prepare_end(pids)?;
+                if dry_run {
+                    return Ok(ProcessEndOutput::plan_preview(plan));
+                }
+                let result = ProcessControlService::execute_end(plan, mode.into(), true)?;
+                Ok(ProcessEndOutput::executed(result))
+            })
+            .await
+        {
+            Ok(result) => result,
+            Err(error) => return Ok(error),
+        };
+        Ok(self.respond(&result, None))
+    }
 }
 
 fn cleanup_snapshot(scan: &CleanupScanResult) -> Value {
@@ -923,6 +1156,136 @@ fn large_files_snapshot(result: &LargeFilesResult) -> Value {
 
 fn duplicates_snapshot(result: &DuplicateFilesResult) -> Value {
     json!({ "source": "duplicateFiles", "scanId": result.scan_id })
+}
+
+/// Builds the scan response: optionally ranks and truncates the listed
+/// processes, then enriches each with classification and application
+/// association. Runs inside the blocking Core worker because association reads
+/// the platform application inventory.
+fn processes_scan_output(
+    snapshot: ProcessSnapshot,
+    top_by: Option<ProcessTopByInput>,
+    limit: usize,
+) -> ProcessesScanOutput {
+    let ProcessSnapshot {
+        schema_version,
+        snapshot_id,
+        captured_at_ms,
+        sample_interval_ms,
+        cpu_ticks_per_second,
+        logical_cpu_count,
+        new_process_count,
+        exited_process_count,
+        processes,
+    } = snapshot;
+    let processes: Vec<ProcessSample> = match top_by {
+        Some(ProcessTopByInput::Cpu) => top_processes_by_cpu(&processes, limit)
+            .into_iter()
+            .cloned()
+            .collect(),
+        Some(ProcessTopByInput::Rss) => top_processes_by_rss(&processes, limit)
+            .into_iter()
+            .cloned()
+            .collect(),
+        Some(ProcessTopByInput::WriteRate) => top_processes_by_write_rate(&processes, limit)
+            .into_iter()
+            .cloned()
+            .collect(),
+        None => processes,
+    };
+    let associations = associate_applications(&processes);
+    let matches: HashMap<u32, &ProcessApplicationMatch> = associations
+        .matches
+        .iter()
+        .map(|entry| (entry.pid, entry))
+        .collect();
+    let entries = processes
+        .into_iter()
+        .map(|sample| {
+            let application = matches.get(&sample.pid).copied();
+            let facts = ProcessClassificationFacts::from_sample(
+                &sample,
+                application.is_some_and(|entry| entry.application_identifier.is_some()),
+            );
+            ProcessListEntry {
+                sample,
+                classification: classify_process(&facts),
+                application_identifier: application
+                    .and_then(|entry| entry.application_identifier.clone()),
+                application_name: application.and_then(|entry| entry.application_name.clone()),
+            }
+        })
+        .collect();
+    ProcessesScanOutput {
+        schema_version,
+        snapshot_id,
+        captured_at_ms,
+        sample_interval_ms,
+        cpu_ticks_per_second,
+        logical_cpu_count,
+        new_process_count,
+        exited_process_count,
+        processes: entries,
+    }
+}
+
+/// The token snapshot binds execution to the exact listed processes. pid and
+/// startedAtMs together identify a process; Core revalidates that identity
+/// against a fresh platform snapshot at prepare and execute time.
+fn processes_snapshot(output: &ProcessesScanOutput) -> Value {
+    json!({
+        "processes": output
+            .processes
+            .iter()
+            .map(|entry| json!({ "pid": entry.sample.pid, "startedAtMs": entry.sample.started_at_ms }))
+            .collect::<Vec<_>>(),
+    })
+}
+
+/// Rejects an empty pid selection before the token is consumed so a malformed
+/// call never burns a grant, matching the guard ordering of the other mutation
+/// tools. Boxed for the same cold-path `result_large_err` reason as the other
+/// guard helpers.
+fn ensure_pids_present(pids: &[u32]) -> Result<(), Box<CallToolResult>> {
+    if pids.is_empty() {
+        return Err(Box::new(errors::validation_failure(
+            "process_end",
+            "pids must not be empty".to_string(),
+        )));
+    }
+    Ok(())
+}
+
+/// Pid-set counterpart to `ensure_within_snapshot`: every requested pid must
+/// have been listed by the scan that issued the token. PID-reuse revalidation
+/// itself stays with Core at prepare and execute time.
+fn ensure_pids_within_snapshot(
+    requested: &[u32],
+    snapshot: &Value,
+) -> Result<(), Box<CallToolResult>> {
+    let allowed = snapshot
+        .get("processes")
+        .and_then(Value::as_array)
+        .map(|items| {
+            items
+                .iter()
+                .filter_map(|item| item.get("pid").and_then(Value::as_u64))
+                .collect::<HashSet<_>>()
+        })
+        .unwrap_or_default();
+    if let Some(unknown) = requested
+        .iter()
+        .find(|pid| !allowed.contains(&u64::from(**pid)))
+    {
+        log::info!("mcp_plan_mismatch key=processes");
+        return Err(Box::new(errors::tool_error(
+            errors::PLAN_MISMATCH,
+            format!(
+                "pid {unknown} is not part of the process scan preview; run processes_scan again"
+            ),
+        )));
+    }
+    Ok(())
 }
 
 /// Rejects an execute selection that reaches beyond what the preview scan
@@ -994,6 +1357,87 @@ mod tests {
 
         assert!(
             ensure_within_snapshot(&["a.b".to_string()], &snapshot, "ruleIds", "rule").is_err()
+        );
+    }
+
+    #[test]
+    fn pids_outside_the_snapshot_are_rejected() {
+        let snapshot = json!({ "processes": [{ "pid": 42, "startedAtMs": 7 }] });
+
+        let error = ensure_pids_within_snapshot(&[43], &snapshot)
+            .expect_err("a pid outside the preview must be rejected");
+
+        let json = serde_json::to_value(&error).expect("tool errors must serialize");
+        assert_eq!(json["structuredContent"]["error"]["code"], "planMismatch");
+    }
+
+    #[test]
+    fn pids_inside_the_snapshot_pass() {
+        let snapshot = json!({ "processes": [{ "pid": 42, "startedAtMs": 7 }, { "pid": 7, "startedAtMs": 3 }] });
+
+        assert!(ensure_pids_within_snapshot(&[7, 42], &snapshot).is_ok());
+    }
+
+    #[test]
+    fn a_snapshot_without_listed_processes_allows_no_pid() {
+        let snapshot = json!({});
+
+        assert!(ensure_pids_within_snapshot(&[42], &snapshot).is_err());
+    }
+
+    #[test]
+    fn empty_pid_lists_are_rejected_before_the_token() {
+        let error = ensure_pids_present(&[]).expect_err("an empty pid list must be rejected");
+
+        let json = serde_json::to_value(&error).expect("tool errors must serialize");
+        assert_eq!(json["structuredContent"]["error"]["code"], "invalidInput");
+        assert!(ensure_pids_present(&[42]).is_ok());
+    }
+
+    #[test]
+    fn process_end_input_rejects_an_unknown_mode() {
+        let parsed = serde_json::from_value::<ProcessEndInput>(json!({
+            "token": "mdx_test",
+            "confirm": true,
+            "dryRun": false,
+            "pids": [42],
+            "mode": "obliterate",
+        }));
+
+        assert!(
+            parsed.is_err(),
+            "an unknown mode must fail schema validation"
+        );
+    }
+
+    #[test]
+    fn process_end_input_defaults_to_graceful_and_maps_to_the_platform_mode() {
+        let parsed = serde_json::from_value::<ProcessEndInput>(json!({
+            "token": "mdx_test",
+            "confirm": true,
+            "dryRun": false,
+            "pids": [42],
+        }))
+        .expect("the minimal guarded input must deserialize");
+
+        assert_eq!(parsed.pids, vec![42]);
+        assert!(matches!(parsed.mode, ProcessEndModeInput::Graceful));
+        assert_eq!(ProcessEndMode::from(parsed.mode), ProcessEndMode::Graceful);
+        assert_eq!(
+            ProcessEndMode::from(ProcessEndModeInput::Force),
+            ProcessEndMode::Force
+        );
+    }
+
+    #[test]
+    fn processes_scan_input_rejects_an_unknown_top_by() {
+        let parsed = serde_json::from_value::<ProcessesScanInput>(json!({
+            "topBy": "threads",
+        }));
+
+        assert!(
+            parsed.is_err(),
+            "an unknown topBy metric must fail schema validation"
         );
     }
 }

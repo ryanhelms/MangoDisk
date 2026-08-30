@@ -12,9 +12,10 @@ use super::{
     FastAnalysisQuery, FastAnalysisRecord, FastAnalysisScanError, FastAnalysisSummary,
     FilesystemChangeImpactError, FilesystemChangeImpactOutcome, FilesystemChangeMonitor,
     FilesystemChangeToken, LargeFileCandidateScanError, LargeFileCandidateSummary,
-    PlatformCancellation, PlatformError, PlatformResult, ProjectMarkerCandidateProgress,
-    ProjectMarkerCandidateQuery, ProjectMarkerCandidateScanError, ProjectMarkerCandidateSummary,
-    RunningProcessIdentity, ScanPurpose, SkipReason, SystemInventory, UserDirectories, VolumeInfo,
+    PlatformCancellation, PlatformError, PlatformResult, ProcessEndMode, ProcessEndStatus,
+    ProcessMetricsSnapshot, ProjectMarkerCandidateProgress, ProjectMarkerCandidateQuery,
+    ProjectMarkerCandidateScanError, ProjectMarkerCandidateSummary, RunningProcessIdentity,
+    ScanPurpose, SkipReason, SystemInventory, UserDirectories, VolumeInfo,
 };
 
 pub trait Platform: Send + Sync {
@@ -136,6 +137,25 @@ pub trait Platform: Send + Sync {
             .iter()
             .map(|target| self.close_application_processes(target, mode))
             .collect()
+    }
+    /// Captures one raw per-process counter snapshot for metrics and control.
+    ///
+    /// Implementations return raw counters only; Core takes two snapshots and
+    /// computes rates. A process that exits mid-snapshot is skipped, and every
+    /// individually unavailable metric keeps its typed absence reason.
+    fn snapshot_processes(&self) -> PlatformResult<Vec<ProcessMetricsSnapshot>> {
+        Err(PlatformError::new(
+            super::PlatformErrorCode::Unsupported,
+            "process metrics snapshots are unsupported",
+        ))
+    }
+    /// Requests termination of one process selected by Core.
+    ///
+    /// Implementations must refuse PID 0 and the MangoDisk process itself.
+    /// `Ended` means the operating system accepted the request, not that the
+    /// process is gone; Core verifies liveness from a fresh snapshot.
+    fn end_process(&self, _pid: u32, _mode: ProcessEndMode) -> PlatformResult<ProcessEndStatus> {
+        Ok(ProcessEndStatus::Unsupported)
     }
     /// Classifies entries that must not be opened as ordinary resident files.
     ///

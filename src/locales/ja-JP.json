@@ -3,6 +3,7 @@
     "system-optimization": "システム最適化",
     "cleanup": "ディープクリーン",
     "chat": "AI アシスタント",
+    "processes": "プロセス",
     "analysis": "ディスク容量分析",
     "large-files": "大容量ファイル",
     "duplicate-files": "重複ファイル",
@@ -1287,6 +1288,114 @@
       "unknown": "アシスタントのリクエストを完了できませんでした"
     }
   },
+  "processes": {
+    "subtitle": "CPU・メモリ・ディスクの活動をリアルタイムで確認し、プロセスを安全に終了できます",
+    "loadingTitle": "プロセスの活動を読み込み中…",
+    "loadFailedTitle": "プロセスを読み込めませんでした",
+    "loadFailedDescription": "システムのプロセススナップショットに失敗しました。もう一度お試しください",
+    "retry": "再試行",
+    "searchPlaceholder": "プロセスを検索",
+    "userFilterLabel": "ユーザー",
+    "userFilterAll": "すべてのユーザー",
+    "treeViewLabel": "ツリー表示",
+    "summaryCount": "{count} 件のプロセス",
+    "emptyTitle": "一致するプロセスがありません",
+    "emptyDescription": "別の検索条件やユーザーフィルターをお試しください",
+    "notMeasuredYet": "まだ計測されていません",
+    "selectAll": "表示中のプロセスをすべて選択",
+    "selectRow": "{name} を選択",
+    "askAiAboutProcess": "このプロセスについて AI に尋ねる",
+    "askAiDiskBusy": "ディスクがビジーな理由は？",
+    "endSelected": "{count} 件のプロセスを終了",
+    "endProcess": "プロセスを終了",
+    "columns": {
+      "name": "名前",
+      "pid": "PID",
+      "user": "ユーザー",
+      "cpu": "CPU %",
+      "rss": "メモリ",
+      "readRate": "読取/秒",
+      "writeRate": "書込/秒",
+      "openFiles": "開いているファイル",
+      "application": "アプリケーション",
+      "classification": "種類"
+    },
+    "classifications": {
+      "criticalSystem": "重要システム",
+      "systemService": "システムサービス",
+      "userApplication": "アプリケーション",
+      "userBackground": "バックグラウンド"
+    },
+    "classificationDescriptions": {
+      "criticalSystem": "OS に不可欠なプロセスです。MangoDisk が終了することはありません",
+      "systemService": "システムサービス、または別のユーザーアカウントで実行されています",
+      "userApplication": "インストール済みアプリケーションに属しています",
+      "userBackground": "お使いのアカウントで実行される、アプリケーション以外のプロセスです"
+    },
+    "states": {
+      "running": "実行中",
+      "sleeping": "スリープ",
+      "idle": "アイドル",
+      "stopped": "停止",
+      "zombie": "ゾンビ",
+      "dead": "デッド",
+      "unknown": "不明"
+    },
+    "metricAbsence": {
+      "unsupported": "このシステムでは未対応",
+      "accessDenied": "アクセスが拒否されました",
+      "notApplicable": "該当なし",
+      "notAvailable": "利用できません"
+    },
+    "details": {
+      "title": "プロセスの詳細",
+      "parentPid": "親 PID",
+      "owner": "所有者",
+      "currentUserBadge": "あなた",
+      "state": "状態",
+      "threads": "スレッド",
+      "startedAt": "開始日時",
+      "executable": "実行ファイル",
+      "liveMetrics": "リアルタイム指標"
+    },
+    "end": {
+      "dialogTitle": "選択したプロセスを終了しますか？",
+      "dialogDescription": "MangoDisk は許可された各プロセスに終了を要求します。これらのアプリで保存されていない作業内容は失われる可能性があります",
+      "refusedNote": "{count} 件のプロセスは変更されません",
+      "modeLabel": "終了方法",
+      "modes": {
+        "graceful": "正常終了",
+        "force": "強制終了"
+      },
+      "modeHints": {
+        "graceful": "プロセスに終了を要求し、数秒待ちます",
+        "force": "クリーンアップなしで即時終了します。応答しない場合のみ使用してください"
+      },
+      "confirmCheckbox": "これらのプロセスに終了を要求することを理解しました",
+      "confirmCheckboxForce": "これらのプロセスが即座に強制終了され、保存されていない作業が失われることを理解しました",
+      "confirmAction": "{count} 件のプロセスを終了",
+      "executing": "プロセスを終了中…",
+      "resultTitle": "プロセス終了の結果",
+      "resultSummary": "{requested} 件中 {ended} 件のプロセスを終了しました",
+      "resultRemaining": "{count} 件がまだ実行中です（PID: {pids}）",
+      "refusals": {
+        "processNotFound": "すでに終了しています",
+        "ownedByOtherUser": "別のユーザーが所有しています",
+        "ownershipUnknown": "所有者を確認できません"
+      },
+      "resultStatuses": {
+        "ended": "終了しました",
+        "endedAfterForce": "強制終了しました",
+        "alreadyExited": "すでに終了していました",
+        "stillRunning": "まだ実行中です",
+        "permissionDenied": "アクセスが拒否されました",
+        "unsupported": "未対応",
+        "identityChanged": "プロセスが変わりました",
+        "refused": "拒否されました",
+        "failed": "失敗しました"
+      }
+    }
+  },
   "cleanup": {
     "title": "ディープクリーン",
     "diskUsageSummary": "空き {available}",
@@ -1679,7 +1788,8 @@
       "duplicateFileCleanup": "重複ファイルのクリーンアップ",
       "applicationUninstall": "アプリアンインストーラー",
       "startupManagement": "スタートアップ管理",
-      "systemOptimization": "システム最適化"
+      "systemOptimization": "システム最適化",
+      "processControl": "プロセス管理"
     },
     "operation": "操作",
     "planned": "予定",
@@ -1705,10 +1815,12 @@
     "uninstallRecordSummary": "{items} アプリ選択 · {files} アンインストール済み | {items} アプリ選択 · {files} アンインストール済み",
     "startupRecordSummary": "{selected} 件を選択 · {changed} 件を変更",
     "systemOptimizationRecordSummary": "{selected} 件を選択 · {changed} 件を変更",
+    "processControlRecordSummary": "{selected} 件を選択 · {changed} 件を終了",
     "selectedItems": "選択した項目",
     "changedItems": "変更した項目",
     "startupItems": "スタートアップ項目",
     "systemSettings": "システム設定",
+    "processItems": "プロセス",
     "systemOptimizationApplied": "最適化を適用済み",
     "systemOptimizationChangeFailed": "変更失敗",
     "systemOptimizationRestored": "元の値に復元済み",
@@ -1737,6 +1849,12 @@
       "unsupported": "このソースは操作をサポートしていません",
       "verificationFailed": "変更後の状態を検証できませんでした",
       "platformFailure": "システム操作に失敗しました"
+    },
+    "processControlStatuses": {
+      "ended": "終了しました",
+      "stillRunning": "まだ実行中です",
+      "refused": "拒否されました",
+      "failed": "失敗しました"
     },
     "applicationLeftoverStatuses": {
       "previewed": "チェック完了。ファイルは削除されませんでした",

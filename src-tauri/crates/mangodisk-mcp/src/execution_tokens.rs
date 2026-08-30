@@ -20,6 +20,7 @@ pub(crate) enum MutationDomain {
     ApplicationLeftovers,
     Startup,
     SystemSettings,
+    ProcessEnd,
 }
 
 impl MutationDomain {
@@ -31,6 +32,7 @@ impl MutationDomain {
             Self::ApplicationLeftovers => "applicationLeftovers",
             Self::Startup => "startup",
             Self::SystemSettings => "systemSettings",
+            Self::ProcessEnd => "processEnd",
         }
     }
 }
@@ -204,6 +206,26 @@ mod tests {
             store.take(&token, MutationDomain::Cleanup).is_ok(),
             "a mismatch must not consume the token"
         );
+    }
+
+    #[test]
+    fn process_end_tokens_follow_the_same_domain_rules() {
+        let store = store();
+        let token = store.issue(
+            MutationDomain::ProcessEnd,
+            json!({ "processes": [{ "pid": 42, "startedAtMs": 7 }] }),
+        );
+
+        let error = store
+            .take(&token, MutationDomain::Cleanup)
+            .expect_err("a process end token must not authorize a cleanup");
+        assert_eq!(error, ExecutionTokenError::DomainMismatch);
+
+        let snapshot = store
+            .take(&token, MutationDomain::ProcessEnd)
+            .expect("the token must be consumable in its own domain");
+        assert_eq!(snapshot["processes"][0]["pid"], 42);
+        assert_eq!(MutationDomain::ProcessEnd.as_str(), "processEnd");
     }
 
     #[test]

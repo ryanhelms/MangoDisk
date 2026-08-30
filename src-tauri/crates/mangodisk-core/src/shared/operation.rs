@@ -36,6 +36,7 @@ pub(crate) enum CoordinatedOperationKind {
     StartupChange,
     SystemSettingsScan,
     SystemSettingsChange,
+    ProcessEnd,
 }
 
 impl CoordinatedOperationKind {
@@ -55,6 +56,7 @@ impl CoordinatedOperationKind {
             Self::StartupChange => "startup_change",
             Self::SystemSettingsScan => "system_settings_scan",
             Self::SystemSettingsChange => "system_settings_change",
+            Self::ProcessEnd => "process_end",
         }
     }
 }

@@ -12,7 +12,7 @@ This file applies only to `src-tauri/` and inherits the repository-wide rules in
 - `crates/mangodisk-mcp`: MCP server adapter over Core use cases (stdio, or bearer-authenticated HTTP bound to loopback by default; `--bind`/`--allowed-host` widen network exposure only as an explicit operator choice). The same thin-adapter rules apply; mutation tools must remain behind the guarded-execution token flow, and paths stay redacted unless the operator opts into full paths.
 - `crates/mangodisk-acp`: Agent Client Protocol bridge to locally authenticated provider CLIs for the in-app chat. It is protocol-only: no Core or Tauri dependency, and provider processes must be reaped on session end.
 
-Core is organized around `cleanup`, `storage`, `applications`, `filesystem`, `history`, and `reporting`. `storage::analysis`, `storage::large_files`, and `storage::duplicates` remain separate implementations and must not become a new giant `StorageService`.
+Core is organized around `cleanup`, `storage`, `applications`, `filesystem`, `processes`, `history`, and `reporting`. `storage::analysis`, `storage::large_files`, and `storage::duplicates` remain separate implementations and must not become a new giant `StorageService`.
 
 ## Rust organization and naming
 

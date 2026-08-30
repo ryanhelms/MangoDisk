@@ -15,6 +15,8 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ICON_NAMES } from '@/lib/models/ui';
 import type { ApplicationUninstallApplicationDetails, PresentedOperationRecord } from '@/lib/models/history';
+import { PROCESS_CONTROL_HISTORY_ITEM_STATUS_LABEL_KEYS } from '@/lib/models/history';
+import { PROCESS_END_MODE_LABEL_KEYS } from '@/lib/models/process';
 import type { ApplicationLeftoverActionResult, ApplicationUninstallActionResult } from '@/lib/models/application';
 import { ByteSizeService } from '@/lib/services/byte-size-service';
 import { FormatUtils } from '@/lib/utils/format';
@@ -62,6 +64,9 @@ function releasedBytesLabel(record: PresentedOperationRecord): string {
 }
 
 function operationTitle(record: PresentedOperationRecord): string {
+  // The literal key keeps processControl checkable by the locale-usage gate;
+  // older categories predate that rule and resolve through the dynamic path.
+  if (record.category === 'processControl') return t('history.categories.processControl');
   return t(`history.categories.${record.category}`);
 }
 
@@ -71,11 +76,16 @@ function operationIcon(record: PresentedOperationRecord): string {
   if (record.category === 'duplicateFileCleanup') return ICON_NAMES.duplicateFiles;
   if (record.category === 'startupManagement') return ICON_NAMES.startup;
   if (record.category === 'systemOptimization') return ICON_NAMES.systemOptimization;
+  if (record.category === 'processControl') return ICON_NAMES.processes;
   return ICON_NAMES.uninstall;
 }
 
 function countBasedRecord(record: PresentedOperationRecord): boolean {
-  return record.category === 'startupManagement' || record.category === 'systemOptimization';
+  return (
+    record.category === 'startupManagement' ||
+    record.category === 'systemOptimization' ||
+    record.category === 'processControl'
+  );
 }
 
 function confirmClearHistory() {
@@ -96,6 +106,12 @@ function recordSummary(record: PresentedOperationRecord): string {
   }
   if (record.category === 'systemOptimization') {
     return t('history.systemOptimizationRecordSummary', {
+      selected: FormatUtils.integer(record.selectedItemCount),
+      changed: FormatUtils.integer(record.affectedItemCount),
+    });
+  }
+  if (record.category === 'processControl') {
+    return t('history.processControlRecordSummary', {
       selected: FormatUtils.integer(record.selectedItemCount),
       changed: FormatUtils.integer(record.affectedItemCount),
     });
@@ -137,6 +153,12 @@ function systemOptimizationItemAction(
   return (item.desiredOptimized ?? !restoration)
     ? t('history.systemOptimizationApplied')
     : t('history.systemOptimizationRestored');
+}
+
+function processControlItemMessage(
+  item: Extract<PresentedOperationRecord, { category: 'processControl' }>['details']['payload']['items'][number]
+): string {
+  return t(PROCESS_CONTROL_HISTORY_ITEM_STATUS_LABEL_KEYS[item.status]);
 }
 
 function leftoverActionMessage(action: ApplicationLeftoverActionResult): string {
@@ -312,6 +334,9 @@ function fileCleanupActionMessage(status: 'deleted' | 'failed'): string {
           </div>
           <div class="detail-meta">
             <span>{{ FormatUtils.dateTime(selectedRecord.startedAtMs, locale) }}</span>
+            <span v-if="selectedRecord.details.type === 'processControl'">
+              {{ t(PROCESS_END_MODE_LABEL_KEYS[selectedRecord.details.payload.mode]) }}
+            </span>
             <span>
               {{ t('history.duration') }}
               {{
@@ -340,7 +365,9 @@ function fileCleanupActionMessage(status: 'deleted' | 'failed'): string {
                       ? 'history.systemSettings'
                       : selectedRecord.details.type === 'startupManagement'
                         ? 'history.startupItems'
-                        : 'history.cleanupItems'
+                        : selectedRecord.details.type === 'processControl'
+                          ? 'history.processItems'
+                          : 'history.cleanupItems'
                 )
               }}
             </h3>
@@ -394,6 +421,32 @@ function fileCleanupActionMessage(status: 'deleted' | 'failed'): string {
               </span>
               <span>
                 <strong>{{ systemOptimizationItemAction(item, selectedRecord.details.payload.restoration) }}</strong>
+              </span>
+            </div>
+          </template>
+          <template v-else-if="selectedRecord.details.type === 'processControl'">
+            <div v-for="item in selectedRecord.details.payload.items" :key="item.pid" class="detail-action">
+              <span
+                class="action-status"
+                :class="{ warning: item.status === 'stillRunning' || item.status === 'failed' }"
+              >
+                <MdIcon
+                  :name="
+                    item.status === 'ended'
+                      ? ICON_NAMES.check
+                      : item.status === 'refused'
+                        ? ICON_NAMES.minus
+                        : ICON_NAMES.info
+                  "
+                  :size="13"
+                />
+              </span>
+              <span>
+                <strong>{{ item.name || '—' }}</strong>
+                <small>{{ processControlItemMessage(item) }}</small>
+              </span>
+              <span>
+                <small>PID {{ item.pid }}</small>
               </span>
             </div>
           </template>

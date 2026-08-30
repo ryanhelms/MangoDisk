@@ -1,4 +1,5 @@
 mod directories;
+mod process_metrics;
 mod processes;
 mod volumes;
 
@@ -59,6 +60,18 @@ impl Platform for LinuxPlatform {
 
     fn running_process_names(&self) -> PlatformResult<Vec<String>> {
         processes::running_process_names()
+    }
+
+    fn snapshot_processes(&self) -> PlatformResult<Vec<crate::ProcessMetricsSnapshot>> {
+        process_metrics::snapshot_processes()
+    }
+
+    fn end_process(
+        &self,
+        pid: u32,
+        mode: crate::ProcessEndMode,
+    ) -> PlatformResult<crate::ProcessEndStatus> {
+        process_metrics::end_process(pid, mode)
     }
 
     fn is_link_like(&self, metadata: &fs::Metadata) -> bool {

@@ -3,6 +3,7 @@
     "system-optimization": "系統最佳化",
     "cleanup": "深度清理",
     "chat": "AI 助理",
+    "processes": "處理程序",
     "analysis": "磁碟空間分析",
     "large-files": "大型檔案清理",
     "duplicate-files": "重複檔案清理",
@@ -1287,6 +1288,114 @@
       "unknown": "助理請求無法完成"
     }
   },
+  "processes": {
+    "subtitle": "即時檢視 CPU、記憶體與磁碟活動，並安全地結束處理程序",
+    "loadingTitle": "正在讀取處理程序活動…",
+    "loadFailedTitle": "無法載入處理程序清單",
+    "loadFailedDescription": "系統處理程序快照失敗，請重試",
+    "retry": "重試",
+    "searchPlaceholder": "搜尋處理程序",
+    "userFilterLabel": "使用者",
+    "userFilterAll": "所有使用者",
+    "treeViewLabel": "樹狀檢視",
+    "summaryCount": "{count} 個處理程序",
+    "emptyTitle": "沒有符合的處理程序",
+    "emptyDescription": "請嘗試其他搜尋字詞或使用者篩選",
+    "notMeasuredYet": "尚未測量",
+    "selectAll": "選取所有列出的處理程序",
+    "selectRow": "選取 {name}",
+    "askAiAboutProcess": "向 AI 詢問此處理程序",
+    "askAiDiskBusy": "磁碟為什麼忙碌？",
+    "endSelected": "結束 {count} 個處理程序",
+    "endProcess": "結束處理程序",
+    "columns": {
+      "name": "名稱",
+      "pid": "PID",
+      "user": "使用者",
+      "cpu": "CPU %",
+      "rss": "記憶體",
+      "readRate": "讀取/秒",
+      "writeRate": "寫入/秒",
+      "openFiles": "開啟的檔案",
+      "application": "應用程式",
+      "classification": "類型"
+    },
+    "classifications": {
+      "criticalSystem": "關鍵系統",
+      "systemService": "系統服務",
+      "userApplication": "應用程式",
+      "userBackground": "背景"
+    },
+    "classificationDescriptions": {
+      "criticalSystem": "作業系統必需的處理程序，MangoDisk 絕不會結束它們",
+      "systemService": "以系統服務或其他使用者帳戶執行",
+      "userApplication": "屬於某個已安裝的應用程式",
+      "userBackground": "以你的帳戶執行，但不屬於已安裝的應用程式"
+    },
+    "states": {
+      "running": "執行中",
+      "sleeping": "睡眠",
+      "idle": "閒置",
+      "stopped": "已停止",
+      "zombie": "殭屍",
+      "dead": "已終止",
+      "unknown": "未知"
+    },
+    "metricAbsence": {
+      "unsupported": "此系統不支援",
+      "accessDenied": "存取被拒",
+      "notApplicable": "不適用",
+      "notAvailable": "無法使用"
+    },
+    "details": {
+      "title": "處理程序詳細資料",
+      "parentPid": "父處理程序 PID",
+      "owner": "擁有者",
+      "currentUserBadge": "你",
+      "state": "狀態",
+      "threads": "執行緒",
+      "startedAt": "啟動時間",
+      "executable": "可執行檔",
+      "liveMetrics": "即時指標"
+    },
+    "end": {
+      "dialogTitle": "結束選取的處理程序？",
+      "dialogDescription": "MangoDisk 會要求每個允許的處理程序結束，這些應用程式中未儲存的工作可能會遺失",
+      "refusedNote": "{count} 個處理程序將維持不變",
+      "modeLabel": "結束方式",
+      "modes": {
+        "graceful": "正常結束",
+        "force": "強制結束"
+      },
+      "modeHints": {
+        "graceful": "要求處理程序結束並等待幾秒",
+        "force": "立即結束，不等待清理——僅當處理程序沒有回應時使用"
+      },
+      "confirmCheckbox": "我明白這些處理程序將被要求結束",
+      "confirmCheckboxForce": "我明白這些處理程序將被立即結束，未儲存的工作可能遺失",
+      "confirmAction": "結束 {count} 個處理程序",
+      "executing": "正在結束處理程序…",
+      "resultTitle": "處理程序結束結果",
+      "resultSummary": "已結束 {requested} 個中的 {ended} 個處理程序",
+      "resultRemaining": "{count} 個仍在執行（PID：{pids}）",
+      "refusals": {
+        "processNotFound": "已結束",
+        "ownedByOtherUser": "屬於其他使用者",
+        "ownershipUnknown": "無法確認擁有者"
+      },
+      "resultStatuses": {
+        "ended": "已結束",
+        "endedAfterForce": "已強制結束",
+        "alreadyExited": "已自行結束",
+        "stillRunning": "仍在執行",
+        "permissionDenied": "權限不足",
+        "unsupported": "不支援",
+        "identityChanged": "處理程序已變更",
+        "refused": "已拒絕",
+        "failed": "失敗"
+      }
+    }
+  },
   "cleanup": {
     "title": "深度清理",
     "diskUsageSummary": "{available} 可用",
@@ -1679,7 +1788,8 @@
       "duplicateFileCleanup": "重複檔案清理",
       "applicationUninstall": "解除安裝應用程式",
       "startupManagement": "啟動項目管理",
-      "systemOptimization": "系統最佳化"
+      "systemOptimization": "系統最佳化",
+      "processControl": "處理程序管理"
     },
     "operation": "操作",
     "planned": "計畫",
@@ -1705,10 +1815,12 @@
     "uninstallRecordSummary": "選擇 {items} 個應用程式 · 已解除安裝 {files} 個",
     "startupRecordSummary": "選擇 {selected} 項 · 已變更 {changed} 項",
     "systemOptimizationRecordSummary": "選擇 {selected} 項 · 已變更 {changed} 項",
+    "processControlRecordSummary": "選取 {selected} 項 · 已結束 {changed} 項",
     "selectedItems": "已選取項目",
     "changedItems": "已變更項目",
     "startupItems": "啟動項目",
     "systemSettings": "系統設定",
+    "processItems": "處理程序",
     "systemOptimizationApplied": "已套用最佳化",
     "systemOptimizationChangeFailed": "變更失敗",
     "systemOptimizationRestored": "已復原原始值",
@@ -1737,6 +1849,12 @@
       "unsupported": "此來源不支援該操作",
       "verificationFailed": "無法驗證變更後的狀態",
       "platformFailure": "系統操作失敗"
+    },
+    "processControlStatuses": {
+      "ended": "已結束",
+      "stillRunning": "仍在執行",
+      "refused": "已拒絕",
+      "failed": "失敗"
     },
     "applicationLeftoverStatuses": {
       "previewed": "檢查完成，未刪除檔案",

@@ -3,6 +3,7 @@ mod directory_aggregate;
 mod disk_cleanup;
 mod error;
 mod platform;
+mod process_metrics;
 mod processes;
 mod scan;
 mod startup;
@@ -31,6 +32,10 @@ pub use disk_cleanup::{
 };
 pub use error::{PlatformError, PlatformErrorCode, PlatformMutationState, PlatformResult};
 pub use platform::Platform;
+pub use process_metrics::{
+    ProcessEndMode, ProcessEndStatus, ProcessMetric, ProcessMetricAbsence, ProcessMetricsSnapshot,
+    ProcessState,
+};
 pub use processes::{
     ApplicationProcessCloseMode, ApplicationProcessCloseResult, ApplicationProcessTarget,
     RunningProcessIdentity,

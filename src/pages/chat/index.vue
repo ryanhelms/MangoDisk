@@ -92,6 +92,19 @@ const transcriptRevision = computed(() =>
   )
 );
 
+// Ask-AI handoffs seed the composer through the chat store. The composer only
+// exists for an active or ended session, so a seed may wait behind the start
+// panel; this watcher applies it as soon as the composer is rendered.
+watch(
+  [() => chatStore.composerSeed, composerElement],
+  ([seed, composer]) => {
+    if (!seed || !composer) return;
+    composer.setDraft(seed.text);
+    chatStore.consumeComposerSeed();
+  },
+  { flush: 'post' }
+);
+
 watch(transcriptRevision, async () => {
   await nextTick();
   const element = timelineElement.value;

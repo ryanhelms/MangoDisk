@@ -3,6 +3,7 @@
     "system-optimization": "系统优化",
     "cleanup": "深度清理",
     "chat": "AI 助手",
+    "processes": "进程",
     "analysis": "磁盘空间分析",
     "large-files": "大文件清理",
     "duplicate-files": "重复文件清理",
@@ -1287,6 +1288,114 @@
       "unknown": "助手请求无法完成"
     }
   },
+  "processes": {
+    "subtitle": "实时查看 CPU、内存和磁盘活动，并安全地结束进程",
+    "loadingTitle": "正在读取进程活动…",
+    "loadFailedTitle": "无法加载进程列表",
+    "loadFailedDescription": "系统进程快照失败，请重试",
+    "retry": "重试",
+    "searchPlaceholder": "搜索进程",
+    "userFilterLabel": "用户",
+    "userFilterAll": "所有用户",
+    "treeViewLabel": "树形视图",
+    "summaryCount": "{count} 个进程",
+    "emptyTitle": "没有匹配的进程",
+    "emptyDescription": "试试其他搜索词或用户筛选",
+    "notMeasuredYet": "尚未测量",
+    "selectAll": "选择所有列出的进程",
+    "selectRow": "选择 {name}",
+    "askAiAboutProcess": "向 AI 询问此进程",
+    "askAiDiskBusy": "磁盘为什么繁忙？",
+    "endSelected": "结束 {count} 个进程",
+    "endProcess": "结束进程",
+    "columns": {
+      "name": "名称",
+      "pid": "PID",
+      "user": "用户",
+      "cpu": "CPU %",
+      "rss": "内存",
+      "readRate": "读取/秒",
+      "writeRate": "写入/秒",
+      "openFiles": "打开的文件",
+      "application": "应用",
+      "classification": "类型"
+    },
+    "classifications": {
+      "criticalSystem": "关键系统",
+      "systemService": "系统服务",
+      "userApplication": "应用程序",
+      "userBackground": "后台"
+    },
+    "classificationDescriptions": {
+      "criticalSystem": "操作系统必需的进程，MangoDisk 永远不会结束它们",
+      "systemService": "以系统服务或其他用户身份运行",
+      "userApplication": "属于某个已安装的应用程序",
+      "userBackground": "以你的账户运行，但不属于已安装的应用程序"
+    },
+    "states": {
+      "running": "运行中",
+      "sleeping": "睡眠",
+      "idle": "空闲",
+      "stopped": "已停止",
+      "zombie": "僵尸",
+      "dead": "已终止",
+      "unknown": "未知"
+    },
+    "metricAbsence": {
+      "unsupported": "此系统不支持",
+      "accessDenied": "访问被拒绝",
+      "notApplicable": "不适用",
+      "notAvailable": "不可用"
+    },
+    "details": {
+      "title": "进程详情",
+      "parentPid": "父进程 PID",
+      "owner": "所有者",
+      "currentUserBadge": "你",
+      "state": "状态",
+      "threads": "线程",
+      "startedAt": "启动时间",
+      "executable": "可执行文件",
+      "liveMetrics": "实时指标"
+    },
+    "end": {
+      "dialogTitle": "结束选中的进程？",
+      "dialogDescription": "MangoDisk 会请求每个允许的进程退出，这些应用中未保存的工作可能会丢失",
+      "refusedNote": "{count} 个进程将保持不动",
+      "modeLabel": "结束方式",
+      "modes": {
+        "graceful": "正常结束",
+        "force": "强制结束"
+      },
+      "modeHints": {
+        "graceful": "请求进程退出并等待几秒",
+        "force": "立即结束，不等待清理——仅当进程无响应时使用"
+      },
+      "confirmCheckbox": "我明白这些进程将被请求退出",
+      "confirmCheckboxForce": "我明白这些进程将被立即结束，未保存的工作可能丢失",
+      "confirmAction": "结束 {count} 个进程",
+      "executing": "正在结束进程…",
+      "resultTitle": "进程结束结果",
+      "resultSummary": "已结束 {requested} 个中的 {ended} 个进程",
+      "resultRemaining": "{count} 个仍在运行（PID：{pids}）",
+      "refusals": {
+        "processNotFound": "已退出",
+        "ownedByOtherUser": "属于其他用户",
+        "ownershipUnknown": "无法确认所有者"
+      },
+      "resultStatuses": {
+        "ended": "已结束",
+        "endedAfterForce": "已强制结束",
+        "alreadyExited": "已自行退出",
+        "stillRunning": "仍在运行",
+        "permissionDenied": "权限不足",
+        "unsupported": "不支持",
+        "identityChanged": "进程已变化",
+        "refused": "已拒绝",
+        "failed": "失败"
+      }
+    }
+  },
   "cleanup": {
     "title": "深度清理",
     "diskUsageSummary": "{available} 可用",
@@ -1679,7 +1788,8 @@
       "duplicateFileCleanup": "重复文件清理",
       "applicationUninstall": "应用卸载",
       "startupManagement": "启动项管理",
-      "systemOptimization": "系统优化"
+      "systemOptimization": "系统优化",
+      "processControl": "进程管理"
     },
     "operation": "操作",
     "planned": "计划",
@@ -1705,10 +1815,12 @@
     "uninstallRecordSummary": "选择 {items} 个应用 · 已卸载 {files} 个",
     "startupRecordSummary": "选择 {selected} 项 · 已变更 {changed} 项",
     "systemOptimizationRecordSummary": "选择 {selected} 项 · 已变更 {changed} 项",
+    "processControlRecordSummary": "选择 {selected} 项 · 已结束 {changed} 项",
     "selectedItems": "已选择项目",
     "changedItems": "已变更项目",
     "startupItems": "启动项",
     "systemSettings": "系统设置",
+    "processItems": "进程",
     "systemOptimizationApplied": "已应用优化",
     "systemOptimizationChangeFailed": "更改失败",
     "systemOptimizationRestored": "已恢复原始值",
@@ -1737,6 +1849,12 @@
       "unsupported": "此来源不支持该操作",
       "verificationFailed": "无法验证变更后的状态",
       "platformFailure": "系统操作失败"
+    },
+    "processControlStatuses": {
+      "ended": "已结束",
+      "stillRunning": "仍在运行",
+      "refused": "已拒绝",
+      "failed": "失败"
     },
     "applicationLeftoverStatuses": {
       "previewed": "检查完成，未删除文件",

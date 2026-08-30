@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+use mangodisk_platform::ProcessEndMode;
+
 use crate::{
     applications::{
         leftovers::ApplicationLeftoverActionResult,
@@ -27,6 +29,7 @@ pub enum OperationCategory {
     ApplicationUninstall,
     StartupManagement,
     SystemOptimization,
+    ProcessControl,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -177,6 +180,42 @@ pub struct SystemOptimizationOperationDetails {
     pub items: Vec<SystemOptimizationHistoryItem>,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub enum ProcessControlHistoryItemStatus {
+    Ended,
+    StillRunning,
+    Refused,
+    Failed,
+}
+
+/// One process recorded by a process-control execution. The pid and process
+/// name are retained as audit evidence; full command lines and executable
+/// paths are never recorded.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ProcessControlHistoryItem {
+    pub pid: u32,
+    pub name: String,
+    pub status: ProcessControlHistoryItemStatus,
+}
+
+/// Machine-readable evidence for one confirmed process-end execution.
+///
+/// The shape is additive to the history schema: records written before this
+/// category existed keep their original variants and remain readable without
+/// migration.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ProcessControlOperationDetails {
+    pub plan_id: String,
+    pub mode: ProcessEndMode,
+    pub requested_count: u64,
+    pub ended_count: u64,
+    pub failed_count: u64,
+    pub items: Vec<ProcessControlHistoryItem>,
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(tag = "type", content = "payload", rename_all = "camelCase")]
 pub enum OperationDetails {
@@ -186,6 +225,7 @@ pub enum OperationDetails {
     ApplicationUninstall(ApplicationUninstallOperationDetails),
     StartupManagement(StartupManagementOperationDetails),
     SystemOptimization(SystemOptimizationOperationDetails),
+    ProcessControl(ProcessControlOperationDetails),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

@@ -58,6 +58,7 @@ describe('application shell layout', () => {
       PAGE_IDS.analysis,
     ]);
     expect(PRIMARY_NAV_GROUPS[2].items.map(item => item.id)).toEqual([
+      PAGE_IDS.processes,
       PAGE_IDS.applicationUninstall,
       PAGE_IDS.startup,
       PAGE_IDS.systemOptimization,

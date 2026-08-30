@@ -59,6 +59,7 @@ export const PAGE_IDS = {
   systemOptimization: 'system-optimization',
   cleanup: 'cleanup',
   chat: 'chat',
+  processes: 'processes',
   analysis: 'analysis',
   largeFiles: 'large-files',
   duplicateFiles: 'duplicate-files',
@@ -90,6 +91,7 @@ export const PRIMARY_NAV_GROUPS = [
     id: 'system',
     titleKey: 'navigationGroups.system',
     items: [
+      { id: PAGE_IDS.processes, icon: ICON_NAMES.processes },
       { id: PAGE_IDS.applicationUninstall, icon: ICON_NAMES.uninstall },
       { id: PAGE_IDS.startup, icon: ICON_NAMES.startup },
       { id: PAGE_IDS.systemOptimization, icon: ICON_NAMES.systemOptimization },

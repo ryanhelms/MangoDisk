@@ -219,6 +219,9 @@ fn validate_operation_record(record: &OperationRecord) -> CoreResult<()> {
         ) | (
             OperationCategory::SystemOptimization,
             OperationDetails::SystemOptimization(_),
+        ) | (
+            OperationCategory::ProcessControl,
+            OperationDetails::ProcessControl(_),
         )
     );
     if !consistent {
@@ -293,6 +296,27 @@ fn validate_operation_record(record: &OperationRecord) -> CoreResult<()> {
         {
             return Err(CoreError::persistence(
                 "system optimization history is inconsistent",
+            ));
+        }
+    }
+    if let OperationDetails::ProcessControl(details) = &record.details {
+        let pids = details
+            .items
+            .iter()
+            .map(|item| item.pid)
+            .collect::<HashSet<_>>();
+        if details.items.is_empty()
+            || pids.len() != details.items.len()
+            || details.requested_count != details.items.len() as u64
+            || details.requested_count != details.ended_count + details.failed_count
+            || record.selected_item_count != details.requested_count
+            || record.affected_item_count != details.ended_count
+            || record.failed_item_count != details.failed_count
+            || record.expected_bytes != 0
+            || record.released_bytes.is_some()
+        {
+            return Err(CoreError::persistence(
+                "process control history is inconsistent",
             ));
         }
     }
@@ -838,6 +862,121 @@ mod tests {
             status: FileCleanupHistoryItemStatus::Deleted,
         });
         assert!(validate_operation_record(&oversized).is_err());
+    }
+
+    fn process_control_record(operation_id: &str, ended: u64, failed: u64) -> OperationRecord {
+        let items = vec![
+            crate::history::ProcessControlHistoryItem {
+                pid: 4242,
+                name: "fixture-app".to_string(),
+                status: crate::history::ProcessControlHistoryItemStatus::Ended,
+            },
+            crate::history::ProcessControlHistoryItem {
+                pid: 4343,
+                name: "fixture-daemon".to_string(),
+                status: crate::history::ProcessControlHistoryItemStatus::StillRunning,
+            },
+        ];
+        let requested = items.len() as u64;
+        OperationRecord {
+            schema_version: OPERATION_RECORD_SCHEMA_VERSION,
+            operation_id: operation_id.to_string(),
+            category: OperationCategory::ProcessControl,
+            started_at_ms: 1,
+            finished_at_ms: 2,
+            outcome: if failed == 0 {
+                OperationOutcome::Completed
+            } else {
+                OperationOutcome::CompletedWithWarnings
+            },
+            dry_run: false,
+            selected_item_count: requested,
+            affected_item_count: ended,
+            expected_bytes: 0,
+            released_bytes: None,
+            released_bytes_is_estimate: false,
+            failed_item_count: failed,
+            details: OperationDetails::ProcessControl(
+                crate::history::ProcessControlOperationDetails {
+                    plan_id: format!("{operation_id}-plan"),
+                    mode: mangodisk_platform::ProcessEndMode::Force,
+                    requested_count: requested,
+                    ended_count: ended,
+                    failed_count: failed,
+                    items,
+                },
+            ),
+        }
+    }
+
+    #[test]
+    fn process_control_history_round_trips_and_validates() {
+        let record = process_control_record("process-end-fixture", 1, 1);
+        let json = serde_json::to_string(&HistoryDocument {
+            schema_version: HISTORY_DOCUMENT_SCHEMA_VERSION,
+            records: vec![record],
+        })
+        .expect("process control history must serialize");
+        let document = serde_json::from_str::<HistoryDocument>(&json)
+            .expect("process control history must deserialize");
+
+        assert_eq!(
+            document.records[0].category,
+            OperationCategory::ProcessControl
+        );
+        assert!(validate_history_document(document).is_ok());
+    }
+
+    #[test]
+    fn process_control_history_rejects_inconsistent_counts() {
+        let record = process_control_record("process-end-broken", 2, 2);
+        assert!(validate_operation_record(&record).is_err());
+
+        let mut mismatched_category = process_control_record("process-end-broken", 1, 1);
+        mismatched_category.category = OperationCategory::StartupManagement;
+        assert!(validate_operation_record(&mismatched_category).is_err());
+    }
+
+    #[test]
+    fn history_written_before_process_control_remains_readable() {
+        // A document captured by a build that predates the ProcessControl
+        // category: identical shape, only earlier variants present.
+        let json = r#"{
+            "schemaVersion": 3,
+            "records": [{
+                "schemaVersion": 2,
+                "operationId": "startup-legacy",
+                "category": "startupManagement",
+                "startedAtMs": 1,
+                "finishedAtMs": 2,
+                "outcome": "completed",
+                "dryRun": false,
+                "selectedItemCount": 1,
+                "affectedItemCount": 1,
+                "expectedBytes": 0,
+                "releasedBytes": null,
+                "releasedBytesIsEstimate": false,
+                "failedItemCount": 0,
+                "details": {
+                    "type": "startupManagement",
+                    "payload": {
+                        "planId": null,
+                        "items": [{
+                            "itemId": "item-1",
+                            "displayName": "Fixture",
+                            "previousState": "enabled",
+                            "desiredState": "disabled",
+                            "status": "changed",
+                            "failureReason": null
+                        }]
+                    }
+                }
+            }]
+        }"#;
+        let document = serde_json::from_str::<HistoryDocument>(json)
+            .expect("history written before ProcessControl must remain readable");
+
+        assert!(validate_history_document(document).is_ok());
     }
 
     #[test]

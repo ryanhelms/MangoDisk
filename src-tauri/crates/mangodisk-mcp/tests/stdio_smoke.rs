@@ -14,7 +14,7 @@ use tokio::{
 
 const READ_TIMEOUT: Duration = Duration::from_secs(30);
 
-const EXPECTED_TOOLS: [&str; 15] = [
+const EXPECTED_TOOLS: [&str; 17] = [
     "cleanup_scan",
     "analyze_storage",
     "find_large_files",
@@ -24,12 +24,14 @@ const EXPECTED_TOOLS: [&str; 15] = [
     "startup_scan",
     "system_settings_scan",
     "operation_history",
+    "processes_scan",
     "cleanup_execute",
     "permanent_delete",
     "application_uninstall_execute",
     "application_leftovers_execute",
     "startup_apply",
     "system_settings_apply",
+    "process_end",
 ];
 
 fn spawn_server(home: &TempDir) -> Child {
@@ -225,6 +227,77 @@ async fn stdio_server_serves_tools_and_fails_mutations_closed() {
         "unexpected cleanup_execute rejection: {rejected}"
     );
 
+    // The process scan is a read tool: it returns the real process table (the
+    // fixture-isolated HOME does not isolate /proc, and reading it is safe)
+    // but issues no execution token while mutations are disabled.
+    send(
+        &mut stdin,
+        json!({
+            "jsonrpc": "2.0",
+            "id": 5,
+            "method": "tools/call",
+            "params": { "name": "processes_scan", "arguments": {} }
+        }),
+    )
+    .await;
+    let scan = read_response_for_id(&mut reader, 5).await;
+    let scan_content = &scan["result"]["structuredContent"];
+    assert_eq!(
+        scan["result"]["isError"], false,
+        "processes_scan must succeed: {scan}"
+    );
+    assert!(scan_content["schemaVersion"].is_number());
+    assert!(scan_content["exitedProcessCount"].is_number());
+    let processes = scan_content["processes"]
+        .as_array()
+        .expect("processes_scan must return a process list");
+    assert!(
+        !processes.is_empty(),
+        "the real process table must not be empty"
+    );
+    for process in processes {
+        assert!(
+            process["classification"].is_string(),
+            "every listed process must carry a classification: {process}"
+        );
+        if let Some(executable) = process["executablePath"].as_str() {
+            assert!(
+                !executable.starts_with('/'),
+                "executable paths must be redacted: {executable}"
+            );
+        }
+    }
+    assert!(
+        scan_content.get("executionToken").is_none(),
+        "a disabled server must not issue tokens: {scan_content}"
+    );
+
+    // process_end fails closed the same way as every other mutation tool.
+    send(
+        &mut stdin,
+        json!({
+            "jsonrpc": "2.0",
+            "id": 6,
+            "method": "tools/call",
+            "params": {
+                "name": "process_end",
+                "arguments": {
+                    "token": "mdx_nonexistent",
+                    "confirm": true,
+                    "dryRun": false,
+                    "pids": [424242]
+                }
+            }
+        }),
+    )
+    .await;
+    let rejected = read_response_for_id(&mut reader, 6).await;
+    assert_eq!(rejected["result"]["isError"], true);
+    assert_eq!(
+        rejected["result"]["structuredContent"]["error"]["code"], "mutationsDisabled",
+        "unexpected process_end rejection: {rejected}"
+    );
+
     // Closing stdin (EOF) is the graceful shutdown path for stdio servers.
     drop(stdin);
     let status = timeout(Duration::from_secs(10), child.wait())
@@ -379,4 +452,264 @@ async fn stdio_mutation_execution_streams_progress() {
         .expect("the server must exit on stdin EOF")
         .expect("the child process must be waitable");
     assert!(status.success(), "unexpected exit status: {status}");
+}
+
+/// Full guarded process-end pass on a real fixture process. Unix-only because
+/// the flow relies on signal semantics (`sleep` accepting SIGTERM) and a
+/// `kill -0` liveness check. Only the fixture pid is ever targeted.
+#[cfg(unix)]
+#[tokio::test(flavor = "multi_thread", worker_threads = 2)]
+async fn stdio_process_end_guarded_flow() {
+    let home = TempDir::new().expect("temp home");
+    let mut fixture = std::process::Command::new("sleep")
+        .arg("300")
+        .spawn()
+        .expect("sleep should start");
+    let fixture_pid = fixture.id();
+    // Reap concurrently so the ended fixture cannot linger as a zombie and
+    // still look alive to Core's verification snapshot.
+    let reaper = std::thread::spawn(move || fixture.wait());
+
+    let mut child = spawn_server_with(&home, &["--enable-mutations"]);
+    let mut stdin = child.stdin.take().expect("stdin pipe");
+    let stdout = child.stdout.take().expect("stdout pipe");
+    let mut reader = BufReader::new(stdout);
+
+    send(
+        &mut stdin,
+        json!({
+            "jsonrpc": "2.0",
+            "id": 1,
+            "method": "initialize",
+            "params": {
+                "protocolVersion": "2025-06-18",
+                "capabilities": {},
+                "clientInfo": { "name": "mcp-process-test", "version": "0.0.0" }
+            }
+        }),
+    )
+    .await;
+    read_response_for_id(&mut reader, 1).await;
+    send(
+        &mut stdin,
+        json!({ "jsonrpc": "2.0", "method": "notifications/initialized" }),
+    )
+    .await;
+
+    // An unfiltered scan lists the fixture and issues the execution token.
+    send(
+        &mut stdin,
+        json!({
+            "jsonrpc": "2.0",
+            "id": 2,
+            "method": "tools/call",
+            "params": { "name": "processes_scan", "arguments": {} }
+        }),
+    )
+    .await;
+    let scan = read_response_for_id(&mut reader, 2).await;
+    let scan_content = &scan["result"]["structuredContent"];
+    assert_eq!(
+        scan["result"]["isError"], false,
+        "processes_scan must succeed: {scan}"
+    );
+    let fixture_entry = scan_content["processes"]
+        .as_array()
+        .expect("processes_scan must return a process list")
+        .iter()
+        .find(|process| process["pid"].as_u64() == Some(u64::from(fixture_pid)))
+        .expect("the fixture process must be listed");
+    assert!(
+        fixture_entry["classification"].is_string(),
+        "the fixture must carry a classification: {fixture_entry}"
+    );
+    let token = scan_content["executionToken"]
+        .as_str()
+        .expect("mutations are enabled, so the scan must issue a token")
+        .to_string();
+
+    // A bogus token is rejected before anything is prepared.
+    send(
+        &mut stdin,
+        json!({
+            "jsonrpc": "2.0",
+            "id": 3,
+            "method": "tools/call",
+            "params": {
+                "name": "process_end",
+                "arguments": {
+                    "token": "mdx_nonexistent",
+                    "confirm": true,
+                    "dryRun": false,
+                    "pids": [fixture_pid]
+                }
+            }
+        }),
+    )
+    .await;
+    let rejected = read_response_for_id(&mut reader, 3).await;
+    assert_eq!(rejected["result"]["isError"], true);
+    assert_eq!(
+        rejected["result"]["structuredContent"]["error"]["code"], "tokenUnknown",
+        "a bogus token must be rejected: {rejected}"
+    );
+
+    // confirm: false is rejected without burning the token.
+    send(
+        &mut stdin,
+        json!({
+            "jsonrpc": "2.0",
+            "id": 4,
+            "method": "tools/call",
+            "params": {
+                "name": "process_end",
+                "arguments": {
+                    "token": token,
+                    "confirm": false,
+                    "dryRun": false,
+                    "pids": [fixture_pid]
+                }
+            }
+        }),
+    )
+    .await;
+    let rejected = read_response_for_id(&mut reader, 4).await;
+    assert_eq!(rejected["result"]["isError"], true);
+    assert_eq!(
+        rejected["result"]["structuredContent"]["error"]["code"], "confirmationRequired",
+        "confirm: false must be rejected: {rejected}"
+    );
+
+    // The guarded end of the fixture succeeds with the intact token.
+    send(
+        &mut stdin,
+        json!({
+            "jsonrpc": "2.0",
+            "id": 5,
+            "method": "tools/call",
+            "params": {
+                "name": "process_end",
+                "arguments": {
+                    "token": token,
+                    "confirm": true,
+                    "dryRun": false,
+                    "pids": [fixture_pid]
+                }
+            }
+        }),
+    )
+    .await;
+    let executed = read_response_for_id(&mut reader, 5).await;
+    let end_content = &executed["result"]["structuredContent"];
+    assert_eq!(
+        executed["result"]["isError"], false,
+        "the guarded process end must succeed: {executed}"
+    );
+    assert_eq!(end_content["dryRun"], false);
+    assert_eq!(end_content["result"]["endedCount"], 1);
+    assert_eq!(
+        end_content["result"]["remainingPids"],
+        json!([]),
+        "remainingPids is the final authority and must be empty: {end_content}"
+    );
+    assert_eq!(end_content["result"]["items"][0]["status"], "ended");
+
+    // Follow-up liveness check outside the tool protocol: the fixture must be
+    // gone. Poll briefly because reaping is asynchronous.
+    let mut gone = false;
+    for _ in 0..50 {
+        let alive = std::process::Command::new("kill")
+            .args(["-0", &fixture_pid.to_string()])
+            .status()
+            .map(|status| status.success())
+            .unwrap_or(false);
+        if !alive {
+            gone = true;
+            break;
+        }
+        tokio::time::sleep(Duration::from_millis(100)).await;
+    }
+    assert!(gone, "the fixture process {fixture_pid} must be gone");
+
+    // The consumed token cannot be replayed.
+    send(
+        &mut stdin,
+        json!({
+            "jsonrpc": "2.0",
+            "id": 6,
+            "method": "tools/call",
+            "params": {
+                "name": "process_end",
+                "arguments": {
+                    "token": token,
+                    "confirm": true,
+                    "dryRun": false,
+                    "pids": [fixture_pid]
+                }
+            }
+        }),
+    )
+    .await;
+    let replayed = read_response_for_id(&mut reader, 6).await;
+    assert_eq!(replayed["result"]["isError"], true);
+    assert_eq!(
+        replayed["result"]["structuredContent"]["error"]["code"], "tokenUnknown",
+        "a consumed token must be single-use: {replayed}"
+    );
+
+    // A fresh scan authorizes only what Core's own guards allow: pid 1 is a
+    // hard refusal surfaced as a typed guard error.
+    send(
+        &mut stdin,
+        json!({
+            "jsonrpc": "2.0",
+            "id": 7,
+            "method": "tools/call",
+            "params": { "name": "processes_scan", "arguments": {} }
+        }),
+    )
+    .await;
+    let rescan = read_response_for_id(&mut reader, 7).await;
+    let fresh_token = rescan["result"]["structuredContent"]["executionToken"]
+        .as_str()
+        .expect("the rescan must issue a token")
+        .to_string();
+    send(
+        &mut stdin,
+        json!({
+            "jsonrpc": "2.0",
+            "id": 8,
+            "method": "tools/call",
+            "params": {
+                "name": "process_end",
+                "arguments": {
+                    "token": fresh_token,
+                    "confirm": true,
+                    "dryRun": false,
+                    "pids": [1]
+                }
+            }
+        }),
+    )
+    .await;
+    let guarded = read_response_for_id(&mut reader, 8).await;
+    assert_eq!(guarded["result"]["isError"], true);
+    assert_eq!(
+        guarded["result"]["structuredContent"]["error"]["code"], "invalidInput",
+        "ending pid 1 must surface Core's typed guard error: {guarded}"
+    );
+
+    drop(stdin);
+    let status = timeout(Duration::from_secs(10), child.wait())
+        .await
+        .expect("the server must exit on stdin EOF")
+        .expect("the child process must be waitable");
+    assert!(status.success(), "unexpected exit status: {status}");
+
+    // Safety net: never leave the fixture behind on assertion failure paths
+    // that skipped the guarded end.
+    let _ = std::process::Command::new("kill")
+        .args(["-9", &fixture_pid.to_string()])
+        .status();
+    let _ = reaper.join();
 }
