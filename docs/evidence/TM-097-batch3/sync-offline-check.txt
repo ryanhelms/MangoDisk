@@ -1,0 +1,3 @@
+design-client: ok: mangodisk@2.2.1, 45 files match lock.json
+
+exit_code=0

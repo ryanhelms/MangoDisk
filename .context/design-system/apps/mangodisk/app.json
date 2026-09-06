@@ -1,0 +1,30 @@
+{
+  "slug": "mangodisk",
+  "name": "MangoDisk",
+  "kind": "desktop",
+  "status": "active",
+  "accent": {
+    "mode": "own",
+    "value": "#FEAF7B",
+    "light": "#7B3D05"
+  },
+  "personality": {
+    "density": "compact",
+    "motion": "calm",
+    "richness": "balanced",
+    "motif": "concentric capacity rings resolving into a navigable treemap",
+    "icon": "a disk platter with a readable scanning eye and layered storage rings"
+  },
+  "source": {
+    "repository": "ByteDeskAI/design-system",
+    "path": "profiles/mangodisk/DESIGN.md",
+    "commit": "5283423bb2d0e2dc0a4f82fc261a638cf98f3b45"
+  },
+  "consumers": [],
+  "resolvedAccent": {
+    "mode": "own",
+    "hex": "#FEAF7B",
+    "light": "#7B3D05",
+    "root": "mangodisk"
+  }
+}

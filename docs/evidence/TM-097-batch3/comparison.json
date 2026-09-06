@@ -1,0 +1,30 @@
+{
+  "wide-light": {
+    "changedPixels": 0,
+    "geometryAndStyleIdentical": true,
+    "localTokensIdentical": true,
+    "beforeSha256": "2cb78549a0a643d9a0099dc61edecc54e524bf1b2b28999c7d193301344f0036",
+    "afterSha256": "2cb78549a0a643d9a0099dc61edecc54e524bf1b2b28999c7d193301344f0036"
+  },
+  "wide-dark": {
+    "changedPixels": 0,
+    "geometryAndStyleIdentical": true,
+    "localTokensIdentical": true,
+    "beforeSha256": "0c3fc595f8562c385e89898405e2b9925ba4f77dfb286b3ba8ee9e09ecb05b4d",
+    "afterSha256": "0c3fc595f8562c385e89898405e2b9925ba4f77dfb286b3ba8ee9e09ecb05b4d"
+  },
+  "minimum-light": {
+    "changedPixels": 0,
+    "geometryAndStyleIdentical": true,
+    "localTokensIdentical": true,
+    "beforeSha256": "1a1b3d69f071ba1249937df8f527a9f14ae6e9966450468ce43210a4c2767b88",
+    "afterSha256": "1a1b3d69f071ba1249937df8f527a9f14ae6e9966450468ce43210a4c2767b88"
+  },
+  "minimum-dark": {
+    "changedPixels": 0,
+    "geometryAndStyleIdentical": true,
+    "localTokensIdentical": true,
+    "beforeSha256": "e6f5b9e46f60e44738a84683e0712f6d95ee44e50b392efd360649f9b0c42155",
+    "afterSha256": "e6f5b9e46f60e44738a84683e0712f6d95ee44e50b392efd360649f9b0c42155"
+  }
+}

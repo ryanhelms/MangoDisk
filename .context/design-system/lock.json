@@ -1,0 +1,190 @@
+{
+  "schemaVersion": 1,
+  "version": "2.2.1",
+  "sourceSha": "c050abca4c35cf3355f897af9e8d3c6e5c9eec61",
+  "app": "mangodisk",
+  "include": [],
+  "status": "current",
+  "files": {
+    "foundation/bytedesk.css": {
+      "sha256": "b021a230d6eb2e7645aa05d864622bc80580f7c8f4cedea7ca562dd9b31f5b6a",
+      "bytes": 19265
+    },
+    "foundation/components.css": {
+      "sha256": "1165f406436bb9390008408c6428a9842787cf4cfa5d632cf2f14362bf15d968",
+      "bytes": 71270
+    },
+    "foundation/tailwind/theme.css": {
+      "sha256": "ba9bed2ef2002d312fe1b68bf338f663fc10f5fb7a7b442b4b5154fe570f037a",
+      "bytes": 6556
+    },
+    "foundation/platforms/typescript/bytedesk-tokens.ts": {
+      "sha256": "5dfa51a328b6907e3ba9572925054048fb2415bca425cab51dbabd2f0c7906a8",
+      "bytes": 9030
+    },
+    "foundation/platforms/rust/bytedesk_tokens.rs": {
+      "sha256": "aa525a0e3017d60ce8c5abc8ca328940fc47db1efce6c2fd529c479bf9ab07b5",
+      "bytes": 21540
+    },
+    "foundation/platforms/go/bytedesk_tokens.go": {
+      "sha256": "b018f21fa5532b7bfa6ce2d6e6473083e6ae10cfcd7d7b9a364e031e3279dcdf",
+      "bytes": 27039
+    },
+    "foundation/tokens.json": {
+      "sha256": "9c3f4a3bc1ae86e4f8e7a480c1b368dc029799a78dac2d1dfd5e4c8a88fd3a10",
+      "bytes": 30101
+    },
+    "foundation/fonts.css": {
+      "sha256": "3268f8cb442f4a23c7d17b64bea9c4d302d6f43d3fc7e9fa91b53bf5bf2d5f38",
+      "bytes": 1039
+    },
+    "foundation/DESIGN.md": {
+      "sha256": "b156947bb41cc093d09d767aea0c23016283abff63113ae52971c686fb186b40",
+      "bytes": 13221
+    },
+    "client/go/design.go": {
+      "sha256": "28c572bba1a8a635f98231bb3961fa69fa3f39c69a8595ccfb33be179d0c56e7",
+      "bytes": 6150
+    },
+    "client/go/go.mod": {
+      "sha256": "3690ff313f664c4c3f1283d7ae1c7d6ce46534d9c5afa5c4855948b79539246b",
+      "bytes": 62
+    },
+    "client/rust/Cargo.toml": {
+      "sha256": "a05abe7f65954fb0131d585aec59005c12088c4a03cbde071ea2824ca2028972",
+      "bytes": 383
+    },
+    "client/rust/src/lib.rs": {
+      "sha256": "40d1989a9ddb0cb364294b64d0efd53ee2fe4cd46716bb5c99ebadaecab6c52f",
+      "bytes": 6095
+    },
+    "apps/mangodisk/brand/icon.svg": {
+      "sha256": "ad90fd82c1e4400de1121edb908f1ae133f54086ff8afed4da218c678a752494",
+      "bytes": 702
+    },
+    "apps/mangodisk/brand/icon-light.svg": {
+      "sha256": "9b317f548f1d0d8e7109e3caee3f42da460b013d035e5d43c1f45188f9260ded",
+      "bytes": 742
+    },
+    "apps/mangodisk/brand/icon-mono.svg": {
+      "sha256": "d7da9741ee38bfe6087943543c49f32369b02f06076419ec552dbe4e0894a094",
+      "bytes": 642
+    },
+    "apps/mangodisk/brand/icon-dark.png": {
+      "sha256": "caf504e6b2e9819b8bd67dcd26617363a75555f7586fb1af94e7847fa01c772c",
+      "bytes": 502504
+    },
+    "apps/mangodisk/brand/icon-light.png": {
+      "sha256": "074ea4eac3b4634917adf19f4ba25a15e3338537d3a58b7dc7a0a1406ac031d7",
+      "bytes": 627151
+    },
+    "apps/mangodisk/brand/favicon-16.svg": {
+      "sha256": "d5363c8c8d54f54641616e098342c2dca8fde255919ec6a329bd8f7529c71b07",
+      "bytes": 303
+    },
+    "apps/mangodisk/brand/favicon-16-light.svg": {
+      "sha256": "11f6c2402f19e6d0880f4373cb4580509c9bf3d7ebcea8903ce4eb5d1eecc42c",
+      "bytes": 331
+    },
+    "apps/mangodisk/brand/favicon-32.svg": {
+      "sha256": "805c8df83cde30cea68a1ec7c23fafd49a499fb4a1e998a16b61e7f5a8628686",
+      "bytes": 567
+    },
+    "apps/mangodisk/brand/favicon-32-light.svg": {
+      "sha256": "520ce1d93df1058aa89081a774a48df88415fe424dfc960531c619e644ad40e3",
+      "bytes": 595
+    },
+    "apps/mangodisk/brand/favicon-48.svg": {
+      "sha256": "a8321d4e1ff1d46f277ec8986758033b02cd91b7c4a928842cdc2107043e05d4",
+      "bytes": 574
+    },
+    "apps/mangodisk/brand/favicon-48-light.svg": {
+      "sha256": "67fb9fa2f21416b29ee97d62f2011a7c466272d369098e97f618fbb84083a3d9",
+      "bytes": 602
+    },
+    "apps/mangodisk/brand/icon-16.png": {
+      "sha256": "86491375099c47f4452e20ce5e67002a0af8559bbe0edd93e7d1e28104c2f444",
+      "bytes": 128
+    },
+    "apps/mangodisk/brand/icon-24.png": {
+      "sha256": "081d0983a6ad70e2fbf70f3a8ef33f4d585b2f5ad00b072dca7e00ee2ac3af00",
+      "bytes": 280
+    },
+    "apps/mangodisk/brand/icon-32.png": {
+      "sha256": "dc5ae576fc5f82d96e549ca4c921f68a0d46cecb370a4e45966f5df2c7a2498a",
+      "bytes": 284
+    },
+    "apps/mangodisk/brand/icon-48.png": {
+      "sha256": "bdeaeec8f778563433b461eaf156741f1662f9834b1a8ca0f4dea8bd351af840",
+      "bytes": 395
+    },
+    "apps/mangodisk/brand/icon-64.png": {
+      "sha256": "80c16c7b1c2d5e739de1965f8e55b65f7a7953e3b9ce5d464e05d858ba67904a",
+      "bytes": 3475
+    },
+    "apps/mangodisk/brand/icon-128.png": {
+      "sha256": "12abe5cd393212d1b2b26be05771578c20fef64d35b679064173f16442d2931a",
+      "bytes": 11807
+    },
+    "apps/mangodisk/brand/icon-256.png": {
+      "sha256": "0aff4da47836b31f9a699fb98cc8f96e44b0ece8e4a860f30c5646e02ea1da44",
+      "bytes": 41285
+    },
+    "apps/mangodisk/brand/icon-512.png": {
+      "sha256": "6983e3656dae36136cf0d7d8daac619746007e123ccbaeb089eef82f167c752e",
+      "bytes": 148866
+    },
+    "apps/mangodisk/brand/icon-1024.png": {
+      "sha256": "da5cb4a9ecf202583b01e8760b7c2c3dde40dff20ac84359a777f2d05a13e9c2",
+      "bytes": 554285
+    },
+    "apps/mangodisk/brand/icon.ico": {
+      "sha256": "b14a29f83d4aebc0e76886629bfbae118e6fdf1ddb818c369c0e09212051ef07",
+      "bytes": 57772
+    },
+    "apps/mangodisk/brand/icon.icns": {
+      "sha256": "3d83d52ac6aa893ab156f2f8da2243c6ae64a31a29040de94c68823d378c47ce",
+      "bytes": 760194
+    },
+    "apps/mangodisk/brand/tray-16.png": {
+      "sha256": "86491375099c47f4452e20ce5e67002a0af8559bbe0edd93e7d1e28104c2f444",
+      "bytes": 128
+    },
+    "apps/mangodisk/brand/tray-22.png": {
+      "sha256": "66441ae3ac3081d52398243f1bcd53a9ecd6d6749cf974ae20bb634a44e30545",
+      "bytes": 353
+    },
+    "apps/mangodisk/brand/tray-24.png": {
+      "sha256": "081d0983a6ad70e2fbf70f3a8ef33f4d585b2f5ad00b072dca7e00ee2ac3af00",
+      "bytes": 280
+    },
+    "apps/mangodisk/brand/tray-32.png": {
+      "sha256": "dc5ae576fc5f82d96e549ca4c921f68a0d46cecb370a4e45966f5df2c7a2498a",
+      "bytes": 284
+    },
+    "apps/mangodisk/brand/tray-48.png": {
+      "sha256": "bdeaeec8f778563433b461eaf156741f1662f9834b1a8ca0f4dea8bd351af840",
+      "bytes": 395
+    },
+    "apps/mangodisk/DESIGN.md": {
+      "sha256": "5c59b5e073a2d90ec35ebb453f0037641fbdcdef6817ccdb366fe0248a63e37b",
+      "bytes": 8135
+    },
+    "apps/mangodisk/DESIGN.json": {
+      "sha256": "6e673fa201d2c6ab87542e5514294dbbcbb310918698d70945d8b7b690d249d7",
+      "bytes": 5435
+    },
+    "apps/mangodisk/app.json": {
+      "sha256": "ce771985d73912db93dbd2d851c2e9fe30d4b3208db06daf8a2ebbfaec4f504c",
+      "bytes": 739
+    },
+    "apps/mangodisk/PRODUCT.md": {
+      "sha256": "eaa5b49c3650ac84d1c396cd49e1fe3b30eb2a3fc4afc421a6fbb8593eeff54e",
+      "bytes": 949
+    },
+    "catalog.json": {
+      "sha256": "8c9737f7ad10fc1711c38655a0a3c6abe72abedce08084c4e8efc22058c6aa3d",
+      "bytes": 85851
+    }
+  }
+}

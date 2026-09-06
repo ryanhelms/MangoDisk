@@ -1,0 +1,9 @@
+{
+  "package.json": "b54964b06e57c1590f9133320e7e807071f0a8208263b4741e2cd23f0327f3e5",
+  "pnpm-lock.yaml": "be7d04d44ad66d20ea1e28e8a646279ffdabfcdf271784ee1aa92f6bea3b7372",
+  ".design-system.json": "2c9c4c6bf3168802d48fb112cb1163b13df5628f15c531f54e3539ce16577f56",
+  ".context/design-system/lock.json": "d9025b2913097c8699056bea9d327713f24b1b4e05c36c469c067266bebbf25d",
+  "src/assets/main.css": "c208ea734784fd4ff878cad6ac9ef58c320323b23e14794359fc7c4113801765",
+  "src/lib/services/theme-service.ts": "78d236a9fa7991fe59c656e5b7bcb6a399b769038b98ba6e91ab29cf275cc559",
+  "src/main.ts": "c5b3f32b7cd50d70eee2a5c40a51ec49ef5d4af70e09832564489660d32a226b"
+}

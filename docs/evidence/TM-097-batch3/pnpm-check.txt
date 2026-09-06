@@ -1,0 +1,587 @@
+$ pnpm check:design-system && pnpm check:rule-sources && pnpm check:source-language && pnpm check:generated-ui && pnpm check:identity && pnpm check:frontend && pnpm rust:fmt:check && pnpm rust:clippy && pnpm rust:check
+$ design-client sync --check
+design-client: ok: mangodisk@2.2.1, 45 files match lock.json
+$ node ./scripts/check-rule-sources.mjs
+Validated 295 cleanup rule source files
+$ node ./scripts/check-source-language.mjs
+Source language validation passed
+$ node ./scripts/check-generated-ui-boundaries.mjs
+Generated UI boundary validation passed
+$ node ./scripts/check-product-identity.mjs
+Product identity is consistent.
+$ pnpm check:i18n && pnpm check:style-system && pnpm lint && pnpm format:check && pnpm test && pnpm build
+$ node ./scripts/check-i18n-usage.mjs
+Locale fields are referenced by production code
+$ node ./scripts/check-style-system.mjs
+Style system validation passed
+$ eslint src scripts vite.config.ts vitest.config.ts --max-warnings 0
+$ prettier --check src scripts package.json pnpm-workspace.yaml tsconfig*.json vite.config.ts vitest.config.ts
+Checking formatting...
+All matched files use Prettier code style!
+$ vitest run
+
+ RUN  v4.1.10 <worktree>
+
+
+ Test Files  62 passed (62)
+      Tests  340 passed (340)
+   Start at  22:57:41
+   Duration  1.75s (transform 20.39s, setup 0ms, import 30.40s, tests 1.18s, environment 8ms)
+
+$ vue-tsc --noEmit && vite build
+vite v8.1.4 building client environment for production...
+[2K
+transforming...✓ 9002 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                          6.77 kB │ gzip:   1.93 kB
+dist/assets/md-icon-mangodisk-CMF0lN4B.css               0.07 kB │ gzip:   0.09 kB
+dist/assets/md-result-filter-toolbar-B-Qk3cQi.css        0.13 kB │ gzip:   0.13 kB
+dist/assets/md-icon-SaET7zEx.css                         0.13 kB │ gzip:   0.14 kB
+dist/assets/render-batch-DZdQATP-.css                    0.47 kB │ gzip:   0.29 kB
+dist/assets/application-icon-service-CDzYE5ba.css        0.51 kB │ gzip:   0.29 kB
+dist/assets/md-result-table-zIognSFb.css                 0.56 kB │ gzip:   0.30 kB
+dist/assets/md-action-bar-container-B15Kl87v.css         0.57 kB │ gzip:   0.34 kB
+dist/assets/md-cleanup-selection-mode-DHc52U9s.css       0.60 kB │ gzip:   0.30 kB
+dist/assets/md-result-table-hierarchy-C5ps__et.css       0.78 kB │ gzip:   0.35 kB
+dist/assets/md-switch-DoEPviP4.css                       0.89 kB │ gzip:   0.40 kB
+dist/assets/md-category-filter-BRd8olko.css              1.03 kB │ gzip:   0.25 kB
+dist/assets/md-safe-rich-text-DekETZqM.css               2.44 kB │ gzip:   0.70 kB
+dist/assets/md-destructive-action-dialog-BH71wuY4.css    2.46 kB │ gzip:   0.79 kB
+dist/assets/md-result-table-row-CF24BJP8.css             2.58 kB │ gzip:   0.75 kB
+dist/assets/md-cleanup-result-dialog-BUSHHs6x.css        3.06 kB │ gzip:   0.85 kB
+dist/assets/md-result-search-KH4ZvlQb.css                3.38 kB │ gzip:   0.98 kB
+dist/assets/md-file-entry-context-menu-DTweDO_R.css      5.53 kB │ gzip:   1.35 kB
+dist/assets/system-optimization-80r8HcYM.css             5.55 kB │ gzip:   1.31 kB
+dist/assets/md-about-dialog-BBqOpITL.css                 6.16 kB │ gzip:   1.61 kB
+dist/assets/large-files-BXuqvgrk.css                     6.55 kB │ gzip:   1.68 kB
+dist/assets/history-GdTbNno4.css                         7.05 kB │ gzip:   1.68 kB
+dist/assets/md-operation-progress-iQhMQjem.css           7.45 kB │ gzip:   1.93 kB
+dist/assets/settings-idgBkFeT.css                        7.54 kB │ gzip:   1.85 kB
+dist/assets/chat-BWE4O75n.css                            8.43 kB │ gzip:   1.74 kB
+dist/assets/duplicate-files-BrkPoApX.css                10.08 kB │ gzip:   2.30 kB
+dist/assets/startup-CAgodiAD.css                        11.80 kB │ gzip:   2.59 kB
+dist/assets/processes-Cs_2pfos.css                      13.22 kB │ gzip:   2.50 kB
+dist/assets/application-uninstall-OqXXPOHW.css          14.38 kB │ gzip:   2.83 kB
+dist/assets/md-cleanup-rule-groups-CisQSrIf.css         14.43 kB │ gzip:   2.86 kB
+dist/assets/analysis-Xuuyn7m_.css                       20.17 kB │ gzip:   3.53 kB
+dist/assets/index-2_Rk5jb6.css                         134.71 kB │ gzip:  22.84 kB
+dist/assets/app-update-progress-BRZ7I2Hd.js              0.10 kB │ gzip:   0.11 kB
+dist/assets/dist-js-BO13DXOA.js                          0.11 kB │ gzip:   0.12 kB
+dist/assets/md-result-table-row-BF9-GLR1.js              0.26 kB │ gzip:   0.23 kB
+dist/assets/md-action-bar-container-B3RH3fYn.js          0.27 kB │ gzip:   0.23 kB
+dist/assets/large-file-DqgIMAiM.js                       0.28 kB │ gzip:   0.17 kB
+dist/assets/sort-Bs1ho66-.js                             0.35 kB │ gzip:   0.24 kB
+dist/assets/Card-B0JEcJDN.js                             0.39 kB │ gzip:   0.30 kB
+dist/assets/duplicate-file-Comoi5Tt.js                   0.43 kB │ gzip:   0.23 kB
+dist/assets/md-result-table-hierarchy-Ba_dKzgH.js        0.44 kB │ gzip:   0.30 kB
+dist/assets/md-result-filter-toolbar-DTenIh3N.js         0.56 kB │ gzip:   0.37 kB
+dist/assets/md-switch-CajdFlPM.js                        0.64 kB │ gzip:   0.39 kB
+dist/assets/error-B6m3uHji.js                            0.64 kB │ gzip:   0.36 kB
+dist/assets/defineProperty-BbfpZ9Tg.js                   0.70 kB │ gzip:   0.39 kB
+dist/assets/md-file-category-filter-CVD7e6BE.js          0.71 kB │ gzip:   0.43 kB
+dist/assets/path-o6vH50NG.js                             0.88 kB │ gzip:   0.46 kB
+dist/assets/md-result-workspace-CktClVPK.js              0.93 kB │ gzip:   0.46 kB
+dist/assets/md-result-search-Do0RTjgq.js                 0.94 kB │ gzip:   0.55 kB
+dist/assets/md-icon-mangodisk-Jc1GH01R.js                0.96 kB │ gzip:   0.53 kB
+dist/assets/dist-js-DENSaRQ-.js                          1.02 kB │ gzip:   0.49 kB
+dist/assets/md-result-table-BQycAEC1.js                  1.03 kB │ gzip:   0.58 kB
+dist/assets/render-batch-DWVoeX6R.js                     1.17 kB │ gzip:   0.66 kB
+dist/assets/preference-storage-service-kFe6_7fg.js       1.23 kB │ gzip:   0.46 kB
+dist/assets/useTypeahead-D08dnxXm.js                     1.32 kB │ gzip:   0.72 kB
+dist/assets/SelectValue-kfNHKwBq.js                      1.32 kB │ gzip:   0.67 kB
+dist/assets/dist-js-CpNHz4YS.js                          1.50 kB │ gzip:   0.50 kB
+dist/assets/md-cleanup-selection-mode-QTP7h04Y.js        1.58 kB │ gzip:   0.72 kB
+dist/assets/byte-size-service-DAGRGaN3.js                1.62 kB │ gzip:   0.81 kB
+dist/assets/core-DxEK1kPB.js                             1.93 kB │ gzip:   0.82 kB
+dist/assets/process-CzGAM8qj.js                          1.98 kB │ gzip:   0.58 kB
+dist/assets/md-category-filter-BlrZhj4X.js               2.23 kB │ gzip:   1.13 kB
+dist/assets/settings-BP08yZgn.js                         2.24 kB │ gzip:   0.88 kB
+dist/assets/md-selection-action-bar-lWTO2kU5.js          2.31 kB │ gzip:   1.00 kB
+dist/assets/RovingFocusGroup-D2MQI8A4.js                 2.71 kB │ gzip:   1.28 kB
+dist/assets/md-destructive-action-dialog-BiYa-UT9.js     2.75 kB │ gzip:   1.15 kB
+dist/assets/md-cleanup-result-dialog-CkhhiZBd.js         3.43 kB │ gzip:   1.47 kB
+dist/assets/telemetry-CK0pmI8a.js                        3.64 kB │ gzip:   1.04 kB
+dist/assets/Collection-CoqIojTY.js                       4.49 kB │ gzip:   1.89 kB
+dist/assets/md-operation-progress-D11BQx-b.js            4.49 kB │ gzip:   1.78 kB
+dist/assets/application-icon-service-BjEG9aaJ.js         4.56 kB │ gzip:   1.88 kB
+dist/assets/pinia-CULDb2-3.js                            6.00 kB │ gzip:   2.84 kB
+dist/assets/md-about-dialog-DnKwzRUm.js                  8.04 kB │ gzip:   2.57 kB
+dist/assets/utils-Wgt__I1I.js                            8.13 kB │ gzip:   3.40 kB
+dist/assets/settings-CQ2OrCqo.js                         8.82 kB │ gzip:   2.69 kB
+dist/assets/md-result-checkbox-D2IKE_Aj.js               9.22 kB │ gzip:   3.32 kB
+dist/assets/system-optimization-T-9AGA63.js             10.83 kB │ gzip:   3.47 kB
+dist/assets/chat-hav9hpXw.js                            11.36 kB │ gzip:   3.94 kB
+dist/assets/history-BieMnjEU.js                         14.14 kB │ gzip:   3.63 kB
+dist/assets/large-files-Dm5C6D24.js                     14.53 kB │ gzip:   4.84 kB
+dist/assets/TooltipTrigger-BXeUwpRH.js                  15.01 kB │ gzip:   4.51 kB
+dist/assets/Teleport-D5E2u0KP.js                        15.41 kB │ gzip:   5.97 kB
+dist/assets/md-file-entry-context-menu-CexDVOW5.js      20.21 kB │ gzip:   6.44 kB
+dist/assets/processes-CB635DIy.js                       22.91 kB │ gzip:   6.89 kB
+dist/assets/storage-scope-store-ClOcd3JY.js             23.05 kB │ gzip:   7.11 kB
+dist/assets/md-cleanup-rule-groups-C8eNRIaP.js          23.95 kB │ gzip:   6.69 kB
+dist/assets/analysis-Dv4VJe8i.js                        24.12 kB │ gzip:   7.31 kB
+dist/assets/duplicate-files-D4ZZJFca.js                 24.55 kB │ gzip:   7.48 kB
+dist/assets/PopperContent--Van2Sn_.js                   27.41 kB │ gzip:  10.35 kB
+dist/assets/SelectTrigger-BzDKispz.js                   27.89 kB │ gzip:   8.14 kB
+dist/assets/startup-DMGq46fG.js                         32.10 kB │ gzip:   9.42 kB
+dist/assets/application-uninstall-B0SRb0py.js           34.72 kB │ gzip:   9.22 kB
+dist/assets/operating-system-service-CGe2V_I2.js        64.66 kB │ gzip:  24.25 kB
+dist/assets/md-icon-BzBj69fa.js                         68.78 kB │ gzip:  25.39 kB
+dist/assets/md-safe-rich-text-CZKa6hTJ.js               69.43 kB │ gzip:  23.36 kB
+dist/assets/_plugin-vue_export-helper-BlFRI6A_.js      113.20 kB │ gzip:  41.99 kB
+dist/assets/index-Bjnug11S.js                          193.39 kB │ gzip:  53.74 kB
+dist/assets/app-store-ksR48NLy.js                      770.32 kB │ gzip: 155.35 kB
+
+✓ built in 3.94s
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+$ cargo fmt --all -- --check
+$ cargo clippy --workspace --all-targets -- -D warnings
+   Compiling quote v1.0.46
+   Compiling proc-macro2 v1.0.106
+   Compiling unicode-ident v1.0.24
+   Compiling serde_core v1.0.228
+   Compiling syn v2.0.118
+   Compiling serde v1.0.228
+   Compiling equivalent v1.0.2
+   Compiling hashbrown v0.17.1
+   Compiling indexmap v2.14.0
+   Compiling libc v0.2.186
+   Compiling smallvec v1.15.2
+   Compiling heck v0.5.0
+   Compiling serde_derive v1.0.228
+   Compiling pkg-config v0.3.33
+   Compiling zmij v1.0.23
+   Compiling winnow v0.5.40
+   Compiling toml_datetime v0.6.3
+   Compiling serde_spanned v0.6.9
+   Compiling synstructure v0.13.2
+   Compiling toml_edit v0.20.2
+   Compiling autocfg v1.5.1
+   Compiling target-lexicon v0.12.16
+   Compiling zerofrom-derive v0.1.7
+    Checking memchr v2.8.3
+   Compiling cfg-expr v0.15.8
+   Compiling toml v0.8.2
+   Compiling yoke-derive v0.8.2
+   Compiling version-compare v0.2.1
+   Compiling system-deps v6.2.2
+   Compiling zerovec-derive v0.11.3
+    Checking cfg-if v1.0.4
+    Checking pin-project-lite v0.2.17
+   Compiling winnow v1.0.4
+   Compiling displaydoc v0.2.6
+   Compiling toml_parser v1.1.2+spec-1.1.0
+   Compiling version_check v0.9.5
+    Checking futures-core v0.3.34
+   Compiling ident_case v1.0.1
+   Compiling strsim v0.11.1
+   Compiling thiserror v1.0.69
+   Compiling thiserror-impl v1.0.69
+   Compiling syn v3.0.3
+   Compiling siphasher v1.0.3
+   Compiling phf_shared v0.13.1
+   Compiling icu_properties_data v2.2.0
+   Compiling shlex v2.0.1
+   Compiling icu_normalizer_data v2.2.0
+   Compiling find-msvc-tools v0.1.9
+   Compiling cc v1.2.67
+   Compiling serde_spanned v1.1.1
+   Compiling toml_writer v1.1.1+spec-1.1.0
+   Compiling fastrand v2.4.1
+   Compiling phf_generator v0.13.1
+   Compiling serde_derive_internals v0.29.1
+   Compiling stable_deref_trait v1.2.1
+    Checking once_cell v1.21.4
+    Checking futures-io v0.3.34
+    Checking bitflags v2.13.0
+    Checking itoa v1.0.18
+   Compiling zerofrom v0.1.8
+    Checking slab v0.4.12
+   Compiling yoke v0.8.3
+   Compiling semver v1.0.28
+   Compiling thiserror v2.0.18
+   Compiling darling_core v0.23.0
+   Compiling thiserror-impl v2.0.18
+   Compiling zerovec v0.11.6
+   Compiling toml_datetime v1.1.1+spec-1.1.0
+   Compiling darling_macro v0.23.0
+   Compiling parking_lot_core v0.9.12
+   Compiling serde_json v1.0.150
+    Checking futures-sink v0.3.34
+   Compiling darling v0.23.0
+   Compiling phf_macros v0.13.1
+   Compiling anyhow v1.0.103
+   Compiling unicode-segmentation v1.13.3
+   Compiling convert_case v0.10.0
+   Compiling serde_with_macros v3.21.0
+   Compiling time-core v0.1.9
+   Compiling num-conv v0.2.2
+   Compiling typeid v1.0.3
+   Compiling unicode-xid v0.2.6
+    Checking futures-channel v0.3.34
+   Compiling derive_more-impl v2.1.1
+   Compiling tinystr v0.8.3
+   Compiling phf_codegen v0.13.1
+   Compiling writeable v0.6.3
+   Compiling litemap v0.8.2
+   Compiling icu_locale_core v2.2.0
+   Compiling potential_utf v0.1.5
+   Compiling zerotrie v0.2.4
+   Compiling futures-macro v0.3.34
+    Checking futures-task v0.3.34
+   Compiling erased-serde v0.4.10
+   Compiling utf8_iter v1.0.4
+   Compiling icu_collections v2.2.0
+   Compiling icu_provider v2.2.0
+    Checking futures-util v0.3.34
+   Compiling new_debug_unreachable v1.0.6
+   Compiling scopeguard v1.2.0
+   Compiling lock_api v0.4.14
+   Compiling phf v0.13.1
+   Compiling string_cache_codegen v0.6.1
+   Compiling glib-sys v0.18.1
+   Compiling getrandom v0.4.3
+   Compiling precomputed-hash v0.1.1
+   Compiling icu_normalizer v2.2.0
+   Compiling icu_properties v2.2.0
+   Compiling web_atoms v0.2.5
+   Compiling parking_lot v0.12.5
+   Compiling ctor-proc-macro v0.0.7
+   Compiling idna_adapter v1.2.2
+   Compiling string_cache v0.9.0
+   Compiling gobject-sys v0.18.0
+    Checking log v0.4.33
+   Compiling dtoa v1.0.11
+   Compiling percent-encoding v2.3.2
+   Compiling dtoa-short v0.3.5
+   Compiling form_urlencoded v1.2.2
+   Compiling uuid v1.23.5
+   Compiling idna v1.1.0
+   Compiling tendril v0.5.1
+   Compiling selectors v0.36.1
+   Compiling aho-corasick v1.1.4
+   Compiling indexmap v1.9.3
+   Compiling cssparser-macros v0.6.1
+   Compiling toml_datetime v0.7.5+spec-1.1.0
+   Compiling unic-common v0.9.0
+   Compiling winnow v0.7.15
+   Compiling unic-char-range v0.9.0
+   Compiling byteorder v1.5.0
+   Compiling regex-syntax v0.8.11
+   Compiling camino v1.2.4
+   Compiling alloc-no-stdlib v2.0.4
+   Compiling alloc-stdlib v0.2.4
+   Compiling toml v0.9.12+spec-1.1.0
+   Compiling regex-automata v0.4.15
+   Compiling unic-char-property v0.9.0
+   Compiling unic-ucd-version v0.9.0
+   Compiling cssparser v0.36.0
+   Compiling markup5ever v0.38.0
+   Compiling url v2.5.8
+   Compiling derive_more v2.1.1
+   Compiling toml v1.1.2+spec-1.1.0
+   Compiling servo_arc v0.4.3
+   Compiling hashbrown v0.12.3
+   Compiling schemars v0.8.22
+   Compiling fnv v1.0.7
+   Compiling rustc-hash v2.1.3
+   Compiling bit-vec v0.8.0
+   Compiling deranged v0.5.8
+   Compiling powerfmt v0.2.0
+   Compiling bit-set v0.8.0
+   Compiling time v0.3.53
+   Compiling cfb v0.7.3
+   Compiling regex v1.13.0
+   Compiling html5ever v0.38.0
+   Compiling unic-ucd-ident v0.9.0
+   Compiling brotli-decompressor v5.0.3
+   Compiling jsonptr v0.6.3
+   Compiling schemars_derive v0.8.22
+   Compiling quick-xml v0.41.0
+   Compiling cargo-platform v0.1.9
+   Compiling dyn-clone v1.0.20
+   Compiling same-file v1.0.6
+   Compiling base64 v0.22.1
+   Compiling dunce v1.0.5
+   Compiling bytes v1.12.1
+   Compiling foldhash v0.2.0
+   Compiling dom_query v0.27.0
+   Compiling http v1.4.2
+   Compiling plist v1.10.0
+   Compiling walkdir v2.5.0
+   Compiling cargo_metadata v0.19.2
+   Compiling json-patch v3.0.1
+   Compiling brotli v8.0.4
+   Compiling urlpattern v0.3.0
+   Compiling serde-untagged v0.1.9
+   Compiling infer v0.19.0
+   Compiling ctor v0.8.0
+    Checking futures-executor v0.3.34
+   Compiling serde_with v3.21.0
+   Compiling gio-sys v0.18.1
+   Compiling glob v0.3.3
+   Compiling tauri-utils v2.9.3
+   Compiling rustc_version v0.4.1
+   Compiling generic-array v0.14.7
+    Checking errno v0.3.14
+    Checking signal-hook-registry v1.4.8
+   Compiling proc-macro-error-attr v1.0.4
+   Compiling gdk-sys v0.18.2
+   Compiling crossbeam-utils v0.8.22
+   Compiling syn v1.0.109
+   Compiling proc-macro-error v1.0.4
+    Checking option-ext v0.2.0
+    Checking dirs-sys v0.5.0
+    Checking rand_core v0.10.1
+    Checking dirs v6.0.0
+   Compiling tokio-macros v2.7.2
+    Checking socket2 v0.6.5
+    Checking mio v1.2.2
+    Checking tokio v1.52.3
+   Compiling atk-sys v0.18.2
+   Compiling gdk-pixbuf-sys v0.18.0
+   Compiling cairo-sys-rs v0.18.2
+   Compiling pango-sys v0.18.0
+   Compiling proc-macro-crate v2.0.2
+   Compiling num-traits v0.2.19
+   Compiling heck v0.4.1
+   Compiling glib-macros v0.18.5
+   Compiling ref-cast v1.0.25
+    Checking glib v0.18.5
+   Compiling tauri-plugin v2.6.3
+   Compiling ref-cast-impl v1.0.25
+    Checking chrono v0.4.45
+   Compiling embed-resource v3.0.11
+   Compiling schemars_derive v1.2.1
+   Compiling gtk-sys v0.18.2
+    Checking schemars v1.2.1
+   Compiling tauri-winres v0.3.6
+   Compiling cargo_toml v0.22.3
+   Compiling gio v0.18.4
+   Compiling tauri-build v2.6.3
+   Compiling tauri v2.11.5
+   Compiling rustix v1.1.4
+   Compiling memoffset v0.9.1
+    Checking linux-raw-sys v0.12.1
+    Checking cairo-rs v0.18.5
+    Checking gdk-pixbuf v0.18.5
+    Checking pango v0.18.3
+   Compiling field-offset v0.3.6
+    Checking tracing-core v0.1.36
+   Compiling toml_edit v0.19.15
+   Compiling tracing-attributes v0.1.31
+    Checking cpufeatures v0.3.0
+   Compiling crc32fast v1.5.0
+   Compiling proc-macro-crate v1.3.1
+    Checking tracing v0.1.44
+    Checking gdk v0.18.2
+   Compiling soup3-sys v0.5.0
+   Compiling javascriptcore-rs-sys v1.1.1
+   Compiling gtk v0.18.2
+   Compiling gtk3-macros v0.18.2
+    Checking atk v0.18.2
+   Compiling time-macros v0.2.31
+   Compiling blake3 v1.8.5
+   Compiling webkit2gtk-sys v2.0.2
+   Compiling x11 v2.21.0
+    Checking num_threads v0.1.7
+    Checking atomic-waker v1.1.2
+    Checking parking v2.2.1
+   Compiling typenum v1.20.1
+   Compiling simd-adler32 v0.3.9
+   Compiling gdkx11-sys v0.18.2
+    Checking arrayvec v0.7.8
+    Checking constant_time_eq v0.4.2
+   Compiling adler2 v2.0.1
+    Checking bitflags v1.3.2
+    Checking arrayref v0.3.9
+   Compiling miniz_oxide v0.8.9
+    Checking concurrent-queue v2.5.0
+    Checking dpi v0.1.2
+   Compiling cookie v0.18.1
+   Compiling x11-dl v2.21.0
+   Compiling libdbus-sys v0.2.7
+    Checking raw-window-handle v0.6.2
+   Compiling flate2 v1.1.9
+    Checking javascriptcore-rs v1.1.2
+    Checking soup3 v0.5.0
+   Compiling block-buffer v0.10.4
+   Compiling crypto-common v0.1.7
+   Compiling fdeflate v0.3.7
+   Compiling png v0.17.16
+   Compiling digest v0.10.7
+    Checking webkit2gtk v2.0.2
+    Checking mangodisk-platform v1.0.6 (<worktree>/src-tauri/crates/mangodisk-platform)
+    Checking crossbeam-channel v0.5.16
+   Compiling dlopen2_derive v0.4.3
+   Compiling wry v0.55.1
+   Compiling cpufeatures v0.2.17
+   Compiling tauri-runtime v2.11.3
+    Checking dlopen2 v0.8.2
+   Compiling sha2 v0.10.9
+    Checking dbus v0.9.12
+   Compiling ico v0.5.0
+    Checking gdkx11 v0.18.2
+    Checking gdkwayland-sys v0.18.2
+   Compiling getrandom v0.3.4
+   Compiling tauri-runtime-wry v2.11.4
+    Checking keyboard-types v0.7.0
+    Checking tao v0.35.3
+   Compiling tauri-codegen v2.6.3
+    Checking event-listener v5.4.1
+    Checking futures-lite v2.6.1
+    Checking http-body v1.1.0
+   Compiling mangodisk-core v1.0.6 (<worktree>/src-tauri/crates/mangodisk-core)
+   Compiling serde_repr v0.1.20
+   Compiling serialize-to-javascript-impl v0.1.2
+    Checking serialize-to-javascript v0.1.2
+   Compiling tauri-macros v2.6.3
+    Checking event-listener-strategy v0.5.4
+    Checking muda v0.19.3
+    Checking fs2 v0.4.3
+    Checking mime v0.3.17
+    Checking tokio-util v0.7.18
+   Compiling async-io v2.6.0
+    Checking tower-service v0.3.3
+   Compiling httparse v1.10.1
+    Checking polling v3.11.0
+   Compiling toml_edit v0.25.12+spec-1.1.0
+   Compiling ring v0.17.14
+   Compiling enumflags2_derive v0.7.12
+    Checking async-task v4.7.1
+    Checking try-lock v0.2.5
+    Checking want v0.3.1
+   Compiling proc-macro-crate v3.5.0
+    Checking h2 v0.4.19
+    Checking async-channel v2.5.0
+    Checking futures v0.3.34
+   Compiling zvariant_utils v3.5.0
+    Checking httpdate v1.0.3
+    Checking zeroize v1.9.0
+    Checking rustls-pki-types v1.15.1
+    Checking hyper v1.10.1
+   Compiling zvariant_derive v5.13.0
+    Checking async-signal v0.2.14
+    Checking async-lock v3.4.2
+    Checking http-body-util v0.1.4
+    Checking piper v0.2.5
+    Checking getrandom v0.2.17
+   Compiling async-trait v0.1.89
+    Checking untrusted v0.9.0
+    Checking ipnet v2.12.0
+   Compiling cfg_aliases v0.2.2
+   Compiling nix v0.31.3
+    Checking hyper-util v0.1.20
+    Checking blocking v1.6.2
+    Checking async-process v2.5.0
+   Compiling rustls v0.23.42
+    Checking utf8parse v0.2.2
+    Checking anstyle-parse v1.0.0
+    Checking rustls-webpki v0.103.13
+   Compiling enumflags2 v0.7.12
+    Checking tempfile v3.27.0
+   Compiling strum_macros v0.28.0
+   Compiling pin-project-internal v1.1.13
+    Checking anstyle-query v1.1.5
+    Checking colorchoice v1.0.5
+    Checking subtle v2.6.1
+    Checking either v1.16.0
+    Checking is_terminal_polyfill v1.70.2
+   Compiling endi v1.1.1
+    Checking anstyle v1.0.14
+   Compiling zvariant v5.13.0
+    Checking anstream v1.0.0
+    Checking strum v0.28.0
+    Checking pin-project v1.1.13
+   Compiling tauri-plugin-fs v2.5.1
+    Checking fixedbitset v0.5.7
+    Checking futures-concurrency v7.7.1
+    Checking agent-client-protocol-schema v1.5.0
+   Compiling zbus_names v4.3.3
+   Compiling agent-client-protocol-derive v2.0.0
+   Compiling darling_core v0.24.1
+    Checking sync_wrapper v1.0.2
+    Checking env_home v0.1.0
+    Checking openssl-probe v0.2.1
+    Checking shell-words v1.1.1
+    Checking jiff-core v0.1.0
+    Checking tower-layer v0.3.3
+    Checking clap_lex v1.1.0
+    Checking clap_builder v4.6.2
+   Compiling darling_macro v0.24.1
+    Checking tower v0.5.3
+    Checking jiff v0.2.33
+    Checking agent-client-protocol v2.0.0
+    Checking rustls-native-certs v0.8.4
+    Checking which v7.0.3
+   Compiling zbus_macros v5.17.0
+    Checking tokio-rustls v0.26.4
+    Checking async-executor v1.14.0
+    Checking async-broadcast v0.7.2
+    Checking env_filter v2.0.0
+   Compiling tauri-plugin-dialog v2.7.1
+   Compiling tauri-plugin-process v2.3.1
+   Compiling tauri-plugin-store v2.4.4
+   Compiling tauri-plugin-window-state v2.4.1
+   Compiling tauri-plugin-opener v2.5.4
+   Compiling tauri-plugin-os v2.3.2
+   Compiling tauri-plugin-updater v2.10.1
+   Compiling tauri-plugin-log v2.9.0
+    Checking is-docker v0.2.0
+    Checking ordered-stream v0.2.0
+   Compiling clap_derive v4.6.1
+   Compiling async-recursion v1.1.1
+    Checking hex v0.4.3
+   Compiling rfd v0.16.0
+    Checking clap v4.6.2
+    Checking zbus v5.17.0
+    Checking is-wsl v0.4.0
+    Checking env_logger v0.11.11
+    Checking hyper-rustls v0.27.9
+    Checking rustls-platform-verifier v0.7.0
+    Checking tower-http v0.6.11
+   Compiling darling v0.24.1
+    Checking chacha20 v0.10.1
+    Checking xattr v1.6.1
+    Checking filetime v0.2.29
+   Compiling strum_macros v0.27.2
+   Compiling rmcp v3.1.4
+    Checking strum v0.27.2
+    Checking tar v0.4.46
+    Checking rand v0.10.2
+   Compiling rmcp-macros v3.1.4
+    Checking reqwest v0.13.4
+    Checking open v5.4.0
+    Checking mangodisk-acp v1.0.6 (<worktree>/src-tauri/crates/mangodisk-acp)
+    Checking os_info v3.15.0
+    Checking itertools v0.14.0
+    Checking sse-stream v0.2.5
+    Checking gethostname v1.1.0
+   Compiling mangodisk v1.0.6 (<worktree>/src-tauri)
+    Checking tokio-stream v0.1.19
+    Checking fern v0.7.1
+    Checking base64 v0.23.1
+    Checking sys-locale v0.3.2
+    Checking minisign-verify v0.2.5
+   Compiling pastey v0.2.3
+    Checking tauri-plugin-prevent-default v2.1.4
+    Checking tauri-plugin-single-instance v2.4.3
+    Checking ctrlc v3.5.2
+    Checking mangodisk-cli v1.0.6 (<worktree>/src-tauri/crates/mangodisk-cli)
+    Checking mangodisk-mcp v1.0.6 (<worktree>/src-tauri/crates/mangodisk-mcp)
+    Checking xtask v1.0.6 (<worktree>/src-tauri/xtask)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 3m 07s
+$ cargo check --workspace --all-targets
+    Checking mangodisk-platform v1.0.6 (<worktree>/src-tauri/crates/mangodisk-platform)
+   Compiling mangodisk-core v1.0.6 (<worktree>/src-tauri/crates/mangodisk-core)
+    Checking mangodisk-acp v1.0.6 (<worktree>/src-tauri/crates/mangodisk-acp)
+   Compiling mangodisk v1.0.6 (<worktree>/src-tauri)
+    Checking mangodisk-mcp v1.0.6 (<worktree>/src-tauri/crates/mangodisk-mcp)
+    Checking xtask v1.0.6 (<worktree>/src-tauri/xtask)
+    Checking mangodisk-cli v1.0.6 (<worktree>/src-tauri/crates/mangodisk-cli)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 17.07s

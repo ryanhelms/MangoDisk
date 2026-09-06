@@ -1,0 +1,24 @@
+{
+  "method": "agent-browser CLI observation",
+  "sidebarExpanded": true,
+  "scanTypeMenuOpenedAndEscaped": true,
+  "settingsNavigation": true,
+  "explicitTheme": {
+    "os": "dark",
+    "local": "light",
+    "shared": "light"
+  },
+  "tokenProbe": {
+    "before": {
+      "paddingPx": 20,
+      "headingX": 260
+    },
+    "changed": {
+      "paddingPx": 24,
+      "headingX": 264
+    },
+    "restoredPaddingPx": 20
+  },
+  "nativeScanStarted": false,
+  "nativeCleanupStarted": false
+}

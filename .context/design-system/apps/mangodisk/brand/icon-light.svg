@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-labelledby="mangodisk-light-title mangodisk-light-desc">
+  <title id="mangodisk-light-title">ByteDesk MangoDisk on light ground</title>
+  <desc id="mangodisk-light-desc">Three connected storage platters form a narrowing ziggurat; the top platter carries a blue lower-rim seam.</desc>
+  <path fill="#22252A" d="M4 20H28C29.105 20 30 20.895 30 22V27C30 28.105 29.105 29 28 29H4C2.895 29 2 28.105 2 27V22C2 20.895 2.895 20 4 20Z"/>
+  <path fill="#22252A" d="M7 12H25C26.105 12 27 12.895 27 14V20H5V14C5 12.895 5.895 12 7 12Z"/>
+  <path fill="#22252A" d="M10 4H22C23.105 4 24 4.895 24 6V12H8V6C8 4.895 8.895 4 10 4Z"/>
+  <path fill="#255DA5" d="M8 10H24V12H8Z"/>
+</svg>
