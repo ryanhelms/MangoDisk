@@ -67,8 +67,27 @@ termination, native dialogs and unrecognized commands are refused. The optional
 it does not prevent the tested startup/navigation surface from rendering.
 
 This is evidence for the **actual Vue UI with isolated backend fixtures**, not
-native Windows/macOS WebView acceptance or disk-operation correctness. macOS and
-Windows were unavailable; those platform checks remain unvalidated locally.
+native WebView acceptance or disk-operation correctness. The native gap is precise:
+
+- **Linux Tauri/WebKitGTK was not built or launched.** The browser fixture was a
+  bounded test choice to avoid native inventory, persistence and update calls;
+  it does not test native rendering, CSP, IPC or window behavior. This was work
+  not performed, not an environmental or authorization blocker. The current host
+  has WebKitGTK 2.52.6, GTK 3.24.41, libsoup 3.4.4 and Xvfb/xdotool/ImageMagick.
+  MCP OSControl is unavailable, but an owned-display fallback is feasible.
+- **macOS WKWebView/bundle and Windows WebView2 were not exercised.** This session
+  runs on Linux, with no Xcode or native Windows execution environment exercised.
+  No remote platform job was dispatched and runner availability was not audited.
+  The workflow declares three OS jobs; that is configuration, not acceptance.
+  There is no evidence of a missing runner or missing operator authorization.
+
+The next verification is a debug native build and launch with isolated app state
+and fixture-backed native inputs, followed by the same theme/navigation captures
+in WebKitGTK. Then run equivalent checks on existing macOS and Windows hosts or
+runners whose availability is confirmed first. Do not provision paid resources.
+No release build or merge is needed. Until those runs exist, native acceptance
+remains an explicit verification gap; Chromium images and Rust checks do not fill it.
+
 Browser interaction evidence uses English. Locale guards and the frontend tests
 passed, but no claim of manual acceptance in every locale is made. No product text
 or layout value changed in this adoption.
