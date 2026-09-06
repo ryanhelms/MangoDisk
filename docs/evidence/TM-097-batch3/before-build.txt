@@ -1,0 +1,111 @@
+$ vue-tsc --noEmit && vite build
+vite v8.1.4 building client environment for production...
+[2K
+transforming...✓ 9002 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                          6.77 kB │ gzip:   1.93 kB
+dist/assets/md-icon-mangodisk-CMF0lN4B.css               0.07 kB │ gzip:   0.09 kB
+dist/assets/md-result-filter-toolbar-B-Qk3cQi.css        0.13 kB │ gzip:   0.13 kB
+dist/assets/md-icon-SaET7zEx.css                         0.13 kB │ gzip:   0.14 kB
+dist/assets/render-batch-DZdQATP-.css                    0.47 kB │ gzip:   0.29 kB
+dist/assets/application-icon-service-CDzYE5ba.css        0.51 kB │ gzip:   0.29 kB
+dist/assets/md-result-table-zIognSFb.css                 0.56 kB │ gzip:   0.30 kB
+dist/assets/md-action-bar-container-B15Kl87v.css         0.57 kB │ gzip:   0.34 kB
+dist/assets/md-cleanup-selection-mode-DHc52U9s.css       0.60 kB │ gzip:   0.30 kB
+dist/assets/md-result-table-hierarchy-C5ps__et.css       0.78 kB │ gzip:   0.35 kB
+dist/assets/md-switch-DoEPviP4.css                       0.89 kB │ gzip:   0.40 kB
+dist/assets/md-category-filter-BRd8olko.css              1.03 kB │ gzip:   0.25 kB
+dist/assets/md-safe-rich-text-DekETZqM.css               2.44 kB │ gzip:   0.70 kB
+dist/assets/md-destructive-action-dialog-BH71wuY4.css    2.46 kB │ gzip:   0.79 kB
+dist/assets/md-result-table-row-CF24BJP8.css             2.58 kB │ gzip:   0.75 kB
+dist/assets/md-cleanup-result-dialog-BUSHHs6x.css        3.06 kB │ gzip:   0.85 kB
+dist/assets/md-result-search-KH4ZvlQb.css                3.38 kB │ gzip:   0.98 kB
+dist/assets/md-file-entry-context-menu-DTweDO_R.css      5.53 kB │ gzip:   1.35 kB
+dist/assets/system-optimization-80r8HcYM.css             5.55 kB │ gzip:   1.31 kB
+dist/assets/md-about-dialog-BBqOpITL.css                 6.16 kB │ gzip:   1.61 kB
+dist/assets/large-files-BXuqvgrk.css                     6.55 kB │ gzip:   1.68 kB
+dist/assets/history-GdTbNno4.css                         7.05 kB │ gzip:   1.68 kB
+dist/assets/md-operation-progress-iQhMQjem.css           7.45 kB │ gzip:   1.93 kB
+dist/assets/settings-idgBkFeT.css                        7.54 kB │ gzip:   1.85 kB
+dist/assets/chat-BWE4O75n.css                            8.43 kB │ gzip:   1.74 kB
+dist/assets/duplicate-files-BrkPoApX.css                10.08 kB │ gzip:   2.30 kB
+dist/assets/startup-CAgodiAD.css                        11.80 kB │ gzip:   2.59 kB
+dist/assets/processes-Cs_2pfos.css                      13.22 kB │ gzip:   2.50 kB
+dist/assets/application-uninstall-OqXXPOHW.css          14.38 kB │ gzip:   2.83 kB
+dist/assets/md-cleanup-rule-groups-CisQSrIf.css         14.43 kB │ gzip:   2.86 kB
+dist/assets/analysis-Xuuyn7m_.css                       20.17 kB │ gzip:   3.53 kB
+dist/assets/index-BzxDBwQA.css                         117.16 kB │ gzip:  19.58 kB
+dist/assets/app-update-progress-BRZ7I2Hd.js              0.10 kB │ gzip:   0.11 kB
+dist/assets/dist-js-BO13DXOA.js                          0.11 kB │ gzip:   0.12 kB
+dist/assets/md-result-table-row-BF9-GLR1.js              0.26 kB │ gzip:   0.23 kB
+dist/assets/md-action-bar-container-B3RH3fYn.js          0.27 kB │ gzip:   0.23 kB
+dist/assets/large-file-DqgIMAiM.js                       0.28 kB │ gzip:   0.17 kB
+dist/assets/sort-Bs1ho66-.js                             0.35 kB │ gzip:   0.24 kB
+dist/assets/Card-B0JEcJDN.js                             0.39 kB │ gzip:   0.30 kB
+dist/assets/duplicate-file-Comoi5Tt.js                   0.43 kB │ gzip:   0.23 kB
+dist/assets/md-result-table-hierarchy-Ba_dKzgH.js        0.44 kB │ gzip:   0.30 kB
+dist/assets/md-result-filter-toolbar-DTenIh3N.js         0.56 kB │ gzip:   0.37 kB
+dist/assets/md-switch-CajdFlPM.js                        0.64 kB │ gzip:   0.39 kB
+dist/assets/error-B6m3uHji.js                            0.64 kB │ gzip:   0.36 kB
+dist/assets/defineProperty-BbfpZ9Tg.js                   0.70 kB │ gzip:   0.39 kB
+dist/assets/md-file-category-filter-CVD7e6BE.js          0.71 kB │ gzip:   0.43 kB
+dist/assets/path-o6vH50NG.js                             0.88 kB │ gzip:   0.46 kB
+dist/assets/md-result-workspace-CktClVPK.js              0.93 kB │ gzip:   0.46 kB
+dist/assets/md-result-search-Do0RTjgq.js                 0.94 kB │ gzip:   0.55 kB
+dist/assets/md-icon-mangodisk-Jc1GH01R.js                0.96 kB │ gzip:   0.53 kB
+dist/assets/dist-js-DENSaRQ-.js                          1.02 kB │ gzip:   0.49 kB
+dist/assets/md-result-table-BQycAEC1.js                  1.03 kB │ gzip:   0.58 kB
+dist/assets/render-batch-BXP0UKy3.js                     1.17 kB │ gzip:   0.66 kB
+dist/assets/preference-storage-service-kFe6_7fg.js       1.23 kB │ gzip:   0.46 kB
+dist/assets/useTypeahead-D08dnxXm.js                     1.32 kB │ gzip:   0.72 kB
+dist/assets/SelectValue-kfNHKwBq.js                      1.32 kB │ gzip:   0.67 kB
+dist/assets/dist-js-CpNHz4YS.js                          1.50 kB │ gzip:   0.50 kB
+dist/assets/md-cleanup-selection-mode-QTP7h04Y.js        1.58 kB │ gzip:   0.72 kB
+dist/assets/byte-size-service-DAGRGaN3.js                1.62 kB │ gzip:   0.81 kB
+dist/assets/core-DxEK1kPB.js                             1.93 kB │ gzip:   0.82 kB
+dist/assets/process-CzGAM8qj.js                          1.98 kB │ gzip:   0.58 kB
+dist/assets/md-category-filter-BlrZhj4X.js               2.23 kB │ gzip:   1.13 kB
+dist/assets/settings-BP08yZgn.js                         2.24 kB │ gzip:   0.88 kB
+dist/assets/md-selection-action-bar-Bp_F3SZ1.js          2.31 kB │ gzip:   1.00 kB
+dist/assets/RovingFocusGroup-D2MQI8A4.js                 2.71 kB │ gzip:   1.28 kB
+dist/assets/md-destructive-action-dialog-CaNl_vUf.js     2.75 kB │ gzip:   1.15 kB
+dist/assets/md-cleanup-result-dialog-CZWc66Vq.js         3.43 kB │ gzip:   1.47 kB
+dist/assets/telemetry-CK0pmI8a.js                        3.64 kB │ gzip:   1.04 kB
+dist/assets/Collection-CoqIojTY.js                       4.49 kB │ gzip:   1.89 kB
+dist/assets/md-operation-progress-D5TSNkJ2.js            4.49 kB │ gzip:   1.78 kB
+dist/assets/application-icon-service-BjEG9aaJ.js         4.56 kB │ gzip:   1.88 kB
+dist/assets/pinia-CULDb2-3.js                            6.00 kB │ gzip:   2.84 kB
+dist/assets/md-about-dialog-DDlMfhpG.js                  8.04 kB │ gzip:   2.57 kB
+dist/assets/utils-Wgt__I1I.js                            8.13 kB │ gzip:   3.40 kB
+dist/assets/settings-gfduD55T.js                         8.82 kB │ gzip:   2.68 kB
+dist/assets/md-result-checkbox-D2IKE_Aj.js               9.22 kB │ gzip:   3.32 kB
+dist/assets/system-optimization-B_15Ao9Q.js             10.83 kB │ gzip:   3.47 kB
+dist/assets/chat-C4gmQK3m.js                            11.36 kB │ gzip:   3.94 kB
+dist/assets/history-BkZZb4ZV.js                         14.14 kB │ gzip:   3.63 kB
+dist/assets/large-files-Btc9LzzW.js                     14.53 kB │ gzip:   4.84 kB
+dist/assets/TooltipTrigger-BXeUwpRH.js                  15.01 kB │ gzip:   4.51 kB
+dist/assets/Teleport-D5E2u0KP.js                        15.41 kB │ gzip:   5.97 kB
+dist/assets/md-file-entry-context-menu-eWsepUZ2.js      20.21 kB │ gzip:   6.44 kB
+dist/assets/processes-CFIxkvQn.js                       22.91 kB │ gzip:   6.89 kB
+dist/assets/storage-scope-store-ClOcd3JY.js             23.05 kB │ gzip:   7.11 kB
+dist/assets/md-cleanup-rule-groups-Ce2a4eLO.js          23.95 kB │ gzip:   6.69 kB
+dist/assets/analysis-B6jWeBu8.js                        24.12 kB │ gzip:   7.31 kB
+dist/assets/duplicate-files-Dw0919O1.js                 24.55 kB │ gzip:   7.47 kB
+dist/assets/PopperContent--Van2Sn_.js                   27.41 kB │ gzip:  10.35 kB
+dist/assets/SelectTrigger-BzDKispz.js                   27.89 kB │ gzip:   8.14 kB
+dist/assets/startup-DsyzYtjq.js                         32.10 kB │ gzip:   9.42 kB
+dist/assets/application-uninstall-CSvtfwSf.js           34.72 kB │ gzip:   9.22 kB
+dist/assets/operating-system-service-CGe2V_I2.js        64.66 kB │ gzip:  24.25 kB
+dist/assets/md-icon-BzBj69fa.js                         68.78 kB │ gzip:  25.39 kB
+dist/assets/md-safe-rich-text-BxthSXW6.js               69.43 kB │ gzip:  23.36 kB
+dist/assets/_plugin-vue_export-helper-BlFRI6A_.js      113.20 kB │ gzip:  41.99 kB
+dist/assets/index-B-Qy4cfN.js                          193.33 kB │ gzip:  53.73 kB
+dist/assets/app-store-Bb2XTpYU.js                      770.20 kB │ gzip: 155.33 kB
+
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 4.14s

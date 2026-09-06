@@ -11,6 +11,7 @@ export class ThemeService {
     ThemeService.stopSystemListener();
     if (theme !== THEME_IDS.system) {
       document.documentElement.dataset.theme = theme;
+      document.documentElement.dataset.bdTheme = theme;
       return;
     }
 
@@ -22,6 +23,7 @@ export class ThemeService {
 
   static applySystemPreference(isDark: boolean): void {
     document.documentElement.dataset.theme = isDark ? THEME_IDS.dark : THEME_IDS.light;
+    document.documentElement.dataset.bdTheme = document.documentElement.dataset.theme;
   }
 
   static stopSystemListener(): void {

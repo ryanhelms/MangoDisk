@@ -9,6 +9,7 @@ import { ApplicationWindowService } from './lib/services/application-window-serv
 import { useAppStore } from './stores/app-store';
 
 document.documentElement.dataset.skin = 'mangodisk';
+document.documentElement.dataset.bdProduct = 'mangodisk';
 
 const app = createApp(App);
 const pinia = createPinia();
